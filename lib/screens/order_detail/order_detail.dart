@@ -1,6 +1,6 @@
 import 'package:demo/models/order.dart';
+import 'package:demo/screens/barcode_scanner/barcode_scanner.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 class OrderDetail extends StatefulWidget {
   const OrderDetail({Key? key, required this.id, required this.title}) : super(key: key);
@@ -14,18 +14,8 @@ class OrderDetail extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<OrderDetail> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
-  void _decrementCounter() {
-    setState(() {
-      _counter--;
-    });
+  void _barcodeScanner() {
+    Navigator.pushNamed(context, BarcodeScanner.routeName);
   }
 
   @override
@@ -43,27 +33,11 @@ class _MyHomePageState extends State<OrderDetail> {
             [...order!.items.map((item) => Text(item.name))],
           ),
         ),
-        floatingActionButton: SpeedDial(
-            icon: Icons.add,
-            activeIcon: Icons.close,
-            spacing: 3,
-            children: [
-              SpeedDialChild(
-                  child: const Icon(Icons.add),
-                  onTap: _incrementCounter,
-                  label: 'Increment'),
-              SpeedDialChild(
-                  child: const Icon(Icons.remove),
-                  onTap: _decrementCounter,
-                  label: 'Decrement')
-            ])
-        /*
-      FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.    
-      */
-        );
+        floatingActionButton: FloatingActionButton(
+          onPressed: _barcodeScanner,
+          tooltip: 'Barcode Scan',
+          child: const Icon(Icons.camera_rear)
+        ) // This trailing comma makes auto-formatting nicer for build methods.            
+      );
   }
 }

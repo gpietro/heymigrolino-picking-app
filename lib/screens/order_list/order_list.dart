@@ -7,6 +7,8 @@ import 'package:intl/intl.dart';
 class OrderList extends StatelessWidget {
   const OrderList({Key? key}) : super(key: key);
   
+  static const routeName = '/';
+
   @override
   Widget build(BuildContext context) {
     final orders = Order.fetchAll();
