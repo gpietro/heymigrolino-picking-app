@@ -8,16 +8,59 @@ import 'package:scandit_flutter_datacapture_core/scandit_flutter_datacapture_cor
 import 'screens/order_list/order_list.dart';
 import 'screens/order_detail/order_detail.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: '.env');
   await ScanditFlutterDataCaptureBarcode.initialize();
-  runApp(const MyApp());
+  runApp(const PickingApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+/// We are using a StatefulWidget such that we only create the [Future] once,
+/// no matter how many times our widget rebuild.
+class PickingApp extends StatefulWidget {
+  const PickingApp({Key? key}) : super(key: key);
+
+  // Create the initialization Future outside of `build`:
+  @override
+  _PickingAppState createState() => _PickingAppState();
+}
+
+class _PickingAppState extends State<PickingApp> {
+  /// The future is part of the state of our widget. We should not call `initializeApp`
+  /// directly inside [build].
+  final Future<FirebaseApp> _initialization = Firebase.initializeApp();
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      // Initialize FlutterFire:
+      future: _initialization,
+      builder: (context, snapshot) {
+        // Check for errors
+        if (snapshot.hasError) {
+          return const Center(
+            child: Text("Something went wrong", textDirection: TextDirection.ltr)            
+          );
+        }
+
+        // Once complete, show your application
+        if (snapshot.connectionState == ConnectionState.done) {
+          return const MyAwesomeApp();
+        }
+
+        // Otherwise, show something whilst waiting for initialization to complete
+        return const Center(
+            child: Text("Loading", textDirection: TextDirection.ltr)            
+          );
+      },
+    );
+  }
+}
+
+class MyAwesomeApp extends StatelessWidget {
+  const MyAwesomeApp({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
   @override
@@ -38,7 +81,9 @@ class MyApp extends StatelessWidget {
           builder = (BuildContext context) => const OrderList();
           break;
         case BarcodeScanner.routeName:
-          builder = (BuildContext context) => BarcodeScanner(DataCaptureContext.forLicenseKey(dotenv.env['SCANDIT_LICENSE_KEY'] ?? ''));
+          builder = (BuildContext context) => BarcodeScanner(
+              DataCaptureContext.forLicenseKey(
+                  dotenv.env['SCANDIT_LICENSE_KEY'] ?? ''));
           break;
         case OrderDetail.routeName:
           final args = settings.arguments as OrderDetailArguments;
@@ -47,8 +92,12 @@ class MyApp extends StatelessWidget {
           break;
         case ItemDetail.routeName:
           final args = settings.arguments as ItemDetailArguments;
-          builder = (BuildContext context) =>
-              ItemDetail(id: args.id, name: 'Coca Cola', price: 1.50, quantity: 3,); // Faking data
+          builder = (BuildContext context) => ItemDetail(
+                id: args.id,
+                name: 'Coca Cola',
+                price: 1.50,
+                quantity: 3,
+              ); // Faking data
           break;
         default:
           throw Exception('Invalid route: ${settings.name}');
