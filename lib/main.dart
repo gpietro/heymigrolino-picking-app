@@ -1,4 +1,6 @@
 import 'package:demo/screens/barcode_scanner/barcode_scanner.dart';
+import 'package:demo/screens/item_detail/item_detail.dart';
+import 'package:demo/screens/item_detail/item_detail_arguments.dart';
 import 'package:demo/screens/order_detail/order_detail_arguments.dart';
 import 'package:flutter/material.dart';
 import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode.dart';
@@ -21,9 +23,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Gooods pending orders',
+        title: 'Bestellung auswählen',
         onGenerateRoute: _routes(),
-        theme: ThemeData(primarySwatch: Colors.red),
+        theme: ThemeData(primarySwatch: Colors.orange),
         // home: const MyHomePage(title: 'Pending orders'),
         home: const OrderList());
   }
@@ -41,7 +43,12 @@ class MyApp extends StatelessWidget {
         case OrderDetail.routeName:
           final args = settings.arguments as OrderDetailArguments;
           builder = (BuildContext context) =>
-              OrderDetail(id: args.id, title: 'Order name');
+              OrderDetail(id: args.id, title: 'Bestellung');
+          break;
+        case ItemDetail.routeName:
+          final args = settings.arguments as ItemDetailArguments;
+          builder = (BuildContext context) =>
+              ItemDetail(id: args.id, name: 'Coca Cola', price: 1.50, quantity: 3,); // Faking data
           break;
         default:
           throw Exception('Invalid route: ${settings.name}');

@@ -1,0 +1,751 @@
+{
+	"order": [{
+		"id": 4008184545458,
+		"admin_graphql_api_id": "gid:\/\/shopify\/Order\/4008184545458",
+		"app_id": 580111,
+		"browser_ip": "185.132.18.53",
+		"buyer_accepts_marketing": false,
+		"cancel_reason": null,
+		"cancelled_at": null,
+		"cart_token": null,
+		"checkout_id": 22602808131762,
+		"checkout_token": "38919afca35c6dc4018b0206801c77af",
+		"client_details": {
+			"accept_language": "de-DE,de;q=0.9,en-US;q=0.8,en;q=0.7",
+			"browser_height": 722,
+			"browser_ip": "185.132.18.53",
+			"browser_width": 1519,
+			"session_hash": null,
+			"user_agent": "Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/92.0.4515.159 Safari\/537.36"
+		},
+		"closed_at": null,
+		"confirmed": true,
+		"contact_email": "gabrielfroelicher@hotmail.com",
+		"created_at": "2021-09-02T17:15:37+02:00",
+		"currency": "CHF",
+		"current_subtotal_price": "28.95",
+		"current_subtotal_price_set": {
+			"shop_money": {
+				"amount": "28.95",
+				"currency_code": "CHF"
+			},
+			"presentment_money": {
+				"amount": "28.95",
+				"currency_code": "CHF"
+			}
+		},
+		"current_total_discounts": "0.00",
+		"current_total_discounts_set": {
+			"shop_money": {
+				"amount": "0.00",
+				"currency_code": "CHF"
+			},
+			"presentment_money": {
+				"amount": "0.00",
+				"currency_code": "CHF"
+			}
+		},
+		"current_total_duties_set": null,
+		"current_total_price": "43.75",
+		"current_total_price_set": {
+			"shop_money": {
+				"amount": "43.75",
+				"currency_code": "CHF"
+			},
+			"presentment_money": {
+				"amount": "43.75",
+				"currency_code": "CHF"
+			}
+		},
+		"current_total_tax": "1.44",
+		"current_total_tax_set": {
+			"shop_money": {
+				"amount": "1.44",
+				"currency_code": "CHF"
+			},
+			"presentment_money": {
+				"amount": "1.44",
+				"currency_code": "CHF"
+			}
+		},
+		"customer_locale": "de",
+		"device_id": null,
+		"discount_codes": [],
+		"email": "gabrielfroelicher@hotmail.com",
+		"estimated_taxes": false,
+		"financial_status": "paid",
+		"fulfillment_status": null,
+		"gateway": "_twint",
+		"landing_site": "\/",
+		"landing_site_ref": null,
+		"location_id": null,
+		"name": "#11430",
+		"note": null,
+		"note_attributes": [{
+			"name": "Agreed to the Terms and Conditions",
+			"value": "2021-09-02 17:13"
+		}],
+		"number": 10430,
+		"order_number": 11430,
+		"order_status_url": "https:\/\/heymigrolino.ch\/52776042674\/orders\/a433794f2683cc91c0318d501eac2506\/authenticate?key=58b49f5df276dce6bee48fa545bdefed",
+		"original_total_duties_set": null,
+		"payment_gateway_names": ["_twint"],
+		"phone": null,
+		"presentment_currency": "CHF",
+		"processed_at": "2021-09-02T17:15:36+02:00",
+		"processing_method": "offsite",
+		"reference": null,
+		"referring_site": "https:\/\/www.google.com\/",
+		"source_identifier": null,
+		"source_name": "web",
+		"source_url": null,
+		"subtotal_price": "28.95",
+		"subtotal_price_set": {
+			"shop_money": {
+				"amount": "28.95",
+				"currency_code": "CHF"
+			},
+			"presentment_money": {
+				"amount": "28.95",
+				"currency_code": "CHF"
+			}
+		},
+		"tags": "",
+		"tax_lines": [{
+			"price": "0.33",
+			"rate": 0.025,
+			"title": "MwSt",
+			"price_set": {
+				"shop_money": {
+					"amount": "0.33",
+					"currency_code": "CHF"
+				},
+				"presentment_money": {
+					"amount": "0.33",
+					"currency_code": "CHF"
+				}
+			},
+			"channel_liable": false
+		}, {
+			"price": "1.11",
+			"rate": 0.077,
+			"title": "MwSt",
+			"price_set": {
+				"shop_money": {
+					"amount": "1.11",
+					"currency_code": "CHF"
+				},
+				"presentment_money": {
+					"amount": "1.11",
+					"currency_code": "CHF"
+				}
+			},
+			"channel_liable": false
+		}],
+		"taxes_included": true,
+		"test": false,
+		"token": "a433794f2683cc91c0318d501eac2506",
+		"total_discounts": "0.00",
+		"total_discounts_set": {
+			"shop_money": {
+				"amount": "0.00",
+				"currency_code": "CHF"
+			},
+			"presentment_money": {
+				"amount": "0.00",
+				"currency_code": "CHF"
+			}
+		},
+		"total_line_items_price": "28.95",
+		"total_line_items_price_set": {
+			"shop_money": {
+				"amount": "28.95",
+				"currency_code": "CHF"
+			},
+			"presentment_money": {
+				"amount": "28.95",
+				"currency_code": "CHF"
+			}
+		},
+		"total_outstanding": "0.00",
+		"total_price": "43.75",
+		"total_price_set": {
+			"shop_money": {
+				"amount": "43.75",
+				"currency_code": "CHF"
+			},
+			"presentment_money": {
+				"amount": "43.75",
+				"currency_code": "CHF"
+			}
+		},
+		"total_price_usd": "47.78",
+		"total_shipping_price_set": {
+			"shop_money": {
+				"amount": "14.80",
+				"currency_code": "CHF"
+			},
+			"presentment_money": {
+				"amount": "14.80",
+				"currency_code": "CHF"
+			}
+		},
+		"total_tax": "1.44",
+		"total_tax_set": {
+			"shop_money": {
+				"amount": "1.44",
+				"currency_code": "CHF"
+			},
+			"presentment_money": {
+				"amount": "1.44",
+				"currency_code": "CHF"
+			}
+		},
+		"total_tip_received": "0.00",
+		"total_weight": 0,
+		"updated_at": "2021-09-02T17:15:43+02:00",
+		"user_id": null,
+		"billing_address": {
+			"first_name": "Gabriel",
+			"address1": "Schaffhauserstrasse",
+			"phone": null,
+			"city": "Winterthur",
+			"zip": "8400",
+			"province": null,
+			"country": "Switzerland",
+			"last_name": "Frölicher",
+			"address2": "6",
+			"company": null,
+			"latitude": 47.5141609,
+			"longitude": 8.7215326,
+			"name": "Gabriel Frölicher",
+			"country_code": "CH",
+			"province_code": null
+		},
+		"customer": {
+			"id": 5027153117362,
+			"email": "gabrielfroelicher@hotmail.com",
+			"accepts_marketing": false,
+			"created_at": "2021-02-26T10:51:55+01:00",
+			"updated_at": "2021-09-02T17:15:41+02:00",
+			"first_name": "Gabriel",
+			"last_name": "Frölicher",
+			"orders_count": 4,
+			"state": "disabled",
+			"total_spent": "156.80",
+			"last_order_id": 4008184545458,
+			"note": null,
+			"verified_email": true,
+			"multipass_identifier": null,
+			"tax_exempt": false,
+			"phone": null,
+			"tags": "",
+			"last_order_name": "#11430",
+			"currency": "CHF",
+			"accepts_marketing_updated_at": "2021-02-26T10:51:55+01:00",
+			"marketing_opt_in_level": null,
+			"tax_exemptions": [],
+			"admin_graphql_api_id": "gid:\/\/shopify\/Customer\/5027153117362",
+			"default_address": {
+				"id": 6192412819634,
+				"customer_id": 5027153117362,
+				"first_name": "Gabriel",
+				"last_name": "Frölicher",
+				"company": null,
+				"address1": "Schaffhauserstrasse",
+				"address2": "6",
+				"city": "Winterthur",
+				"province": null,
+				"country": "Switzerland",
+				"zip": "8400",
+				"phone": null,
+				"name": "Gabriel Frölicher",
+				"province_code": null,
+				"country_code": "CH",
+				"country_name": "Switzerland",
+				"default": true
+			}
+		},
+		"discount_applications": [],
+		"fulfillments": [],
+		"line_items": [{
+			"id": 10407799324850,
+			"admin_graphql_api_id": "gid:\/\/shopify\/LineItem\/10407799324850",
+			"fulfillable_quantity": 2,
+			"fulfillment_service": "manual",
+			"fulfillment_status": null,
+			"gift_card": false,
+			"grams": 0,
+			"name": "Äpfel Gala 1Stk",
+			"origin_location": {
+				"id": 2675608584370,
+				"country_code": "CH",
+				"province_code": "",
+				"name": "HeyMigrolino",
+				"address1": "Nordtrakt Hauptbahnhof",
+				"address2": "",
+				"city": "Zürich",
+				"zip": "8001"
+			},
+			"price": "0.80",
+			"price_set": {
+				"shop_money": {
+					"amount": "0.80",
+					"currency_code": "CHF"
+				},
+				"presentment_money": {
+					"amount": "0.80",
+					"currency_code": "CHF"
+				}
+			},
+			"product_exists": true,
+			"product_id": 6200949702834,
+			"properties": [],
+			"quantity": 2,
+			"requires_shipping": true,
+			"sku": "269400000191",
+			"taxable": true,
+			"title": "Äpfel Gala 1Stk",
+			"total_discount": "0.00",
+			"total_discount_set": {
+				"shop_money": {
+					"amount": "0.00",
+					"currency_code": "CHF"
+				},
+				"presentment_money": {
+					"amount": "0.00",
+					"currency_code": "CHF"
+				}
+			},
+			"variant_id": 38052115775666,
+			"variant_inventory_management": "shopify",
+			"variant_title": "",
+			"vendor": "heymigrolino",
+			"tax_lines": [{
+				"channel_liable": false,
+				"price": "0.04",
+				"price_set": {
+					"shop_money": {
+						"amount": "0.04",
+						"currency_code": "CHF"
+					},
+					"presentment_money": {
+						"amount": "0.04",
+						"currency_code": "CHF"
+					}
+				},
+				"rate": 0.025,
+				"title": "MwSt"
+			}],
+			"duties": [],
+			"discount_allocations": []
+		}, {
+			"id": 10407799357618,
+			"admin_graphql_api_id": "gid:\/\/shopify\/LineItem\/10407799357618",
+			"fulfillable_quantity": 1,
+			"fulfillment_service": "manual",
+			"fulfillment_status": null,
+			"gift_card": false,
+			"grams": 0,
+			"name": "Bowl Chicken Salat 210g",
+			"origin_location": {
+				"id": 2675608584370,
+				"country_code": "CH",
+				"province_code": "",
+				"name": "HeyMigrolino",
+				"address1": "Nordtrakt Hauptbahnhof",
+				"address2": "",
+				"city": "Zürich",
+				"zip": "8001"
+			},
+			"price": "6.95",
+			"price_set": {
+				"shop_money": {
+					"amount": "6.95",
+					"currency_code": "CHF"
+				},
+				"presentment_money": {
+					"amount": "6.95",
+					"currency_code": "CHF"
+				}
+			},
+			"product_exists": true,
+			"product_id": 6193019551922,
+			"properties": [],
+			"quantity": 1,
+			"requires_shipping": true,
+			"sku": "139400000553",
+			"taxable": true,
+			"title": "Bowl Chicken Salat 210g",
+			"total_discount": "0.00",
+			"total_discount_set": {
+				"shop_money": {
+					"amount": "0.00",
+					"currency_code": "CHF"
+				},
+				"presentment_money": {
+					"amount": "0.00",
+					"currency_code": "CHF"
+				}
+			},
+			"variant_id": 38017499168946,
+			"variant_inventory_management": "shopify",
+			"variant_title": "",
+			"vendor": "heymigrolino",
+			"tax_lines": [{
+				"channel_liable": false,
+				"price": "0.17",
+				"price_set": {
+					"shop_money": {
+						"amount": "0.17",
+						"currency_code": "CHF"
+					},
+					"presentment_money": {
+						"amount": "0.17",
+						"currency_code": "CHF"
+					}
+				},
+				"rate": 0.025,
+				"title": "MwSt"
+			}],
+			"duties": [],
+			"discount_allocations": []
+		}, {
+			"id": 10407799390386,
+			"admin_graphql_api_id": "gid:\/\/shopify\/LineItem\/10407799390386",
+			"fulfillable_quantity": 3,
+			"fulfillment_service": "manual",
+			"fulfillment_status": null,
+			"gift_card": false,
+			"grams": 0,
+			"name": "Appenzeller Bier Quöllfrisch Dose 50cl",
+			"origin_location": {
+				"id": 2675608584370,
+				"country_code": "CH",
+				"province_code": "",
+				"name": "HeyMigrolino",
+				"address1": "Nordtrakt Hauptbahnhof",
+				"address2": "",
+				"city": "Zürich",
+				"zip": "8001"
+			},
+			"price": "2.30",
+			"price_set": {
+				"shop_money": {
+					"amount": "2.30",
+					"currency_code": "CHF"
+				},
+				"presentment_money": {
+					"amount": "2.30",
+					"currency_code": "CHF"
+				}
+			},
+			"product_exists": true,
+			"product_id": 6200964808882,
+			"properties": [],
+			"quantity": 3,
+			"requires_shipping": true,
+			"sku": "129400000343",
+			"taxable": true,
+			"title": "Appenzeller Bier Quöllfrisch Dose 50cl",
+			"total_discount": "0.00",
+			"total_discount_set": {
+				"shop_money": {
+					"amount": "0.00",
+					"currency_code": "CHF"
+				},
+				"presentment_money": {
+					"amount": "0.00",
+					"currency_code": "CHF"
+				}
+			},
+			"variant_id": 38052145823922,
+			"variant_inventory_management": "shopify",
+			"variant_title": "",
+			"vendor": "heymigrolino",
+			"tax_lines": [{
+				"channel_liable": false,
+				"price": "0.49",
+				"price_set": {
+					"shop_money": {
+						"amount": "0.49",
+						"currency_code": "CHF"
+					},
+					"presentment_money": {
+						"amount": "0.49",
+						"currency_code": "CHF"
+					}
+				},
+				"rate": 0.077,
+				"title": "MwSt"
+			}],
+			"duties": [],
+			"discount_allocations": []
+		}, {
+			"id": 10407799423154,
+			"admin_graphql_api_id": "gid:\/\/shopify\/LineItem\/10407799423154",
+			"fulfillable_quantity": 1,
+			"fulfillment_service": "manual",
+			"fulfillment_status": null,
+			"gift_card": false,
+			"grams": 0,
+			"name": "Vitamin Well Antioxidant 50cl",
+			"origin_location": {
+				"id": 2675608584370,
+				"country_code": "CH",
+				"province_code": "",
+				"name": "HeyMigrolino",
+				"address1": "Nordtrakt Hauptbahnhof",
+				"address2": "",
+				"city": "Zürich",
+				"zip": "8001"
+			},
+			"price": "2.40",
+			"price_set": {
+				"shop_money": {
+					"amount": "2.40",
+					"currency_code": "CHF"
+				},
+				"presentment_money": {
+					"amount": "2.40",
+					"currency_code": "CHF"
+				}
+			},
+			"product_exists": true,
+			"product_id": 6588183773362,
+			"properties": [],
+			"quantity": 1,
+			"requires_shipping": true,
+			"sku": "129400001071",
+			"taxable": true,
+			"title": "Vitamin Well Antioxidant 50cl",
+			"total_discount": "0.00",
+			"total_discount_set": {
+				"shop_money": {
+					"amount": "0.00",
+					"currency_code": "CHF"
+				},
+				"presentment_money": {
+					"amount": "0.00",
+					"currency_code": "CHF"
+				}
+			},
+			"variant_id": 39475419513010,
+			"variant_inventory_management": "shopify",
+			"variant_title": "",
+			"vendor": "heymigrolino",
+			"tax_lines": [{
+				"channel_liable": false,
+				"price": "0.06",
+				"price_set": {
+					"shop_money": {
+						"amount": "0.06",
+						"currency_code": "CHF"
+					},
+					"presentment_money": {
+						"amount": "0.06",
+						"currency_code": "CHF"
+					}
+				},
+				"rate": 0.025,
+				"title": "MwSt"
+			}],
+			"duties": [],
+			"discount_allocations": []
+		}, {
+			"id": 10407799455922,
+			"admin_graphql_api_id": "gid:\/\/shopify\/LineItem\/10407799455922",
+			"fulfillable_quantity": 1,
+			"fulfillment_service": "manual",
+			"fulfillment_status": null,
+			"gift_card": false,
+			"grams": 0,
+			"name": "Coca-Cola Classic Pet 1.5L",
+			"origin_location": {
+				"id": 2675608584370,
+				"country_code": "CH",
+				"province_code": "",
+				"name": "HeyMigrolino",
+				"address1": "Nordtrakt Hauptbahnhof",
+				"address2": "",
+				"city": "Zürich",
+				"zip": "8001"
+			},
+			"price": "2.50",
+			"price_set": {
+				"shop_money": {
+					"amount": "2.50",
+					"currency_code": "CHF"
+				},
+				"presentment_money": {
+					"amount": "2.50",
+					"currency_code": "CHF"
+				}
+			},
+			"product_exists": true,
+			"product_id": 6200963432626,
+			"properties": [],
+			"quantity": 1,
+			"requires_shipping": true,
+			"sku": "129400000015",
+			"taxable": true,
+			"title": "Coca-Cola Classic Pet 1.5L",
+			"total_discount": "0.00",
+			"total_discount_set": {
+				"shop_money": {
+					"amount": "0.00",
+					"currency_code": "CHF"
+				},
+				"presentment_money": {
+					"amount": "0.00",
+					"currency_code": "CHF"
+				}
+			},
+			"variant_id": 38052143268018,
+			"variant_inventory_management": "shopify",
+			"variant_title": "",
+			"vendor": "heymigrolino",
+			"tax_lines": [{
+				"channel_liable": false,
+				"price": "0.06",
+				"price_set": {
+					"shop_money": {
+						"amount": "0.06",
+						"currency_code": "CHF"
+					},
+					"presentment_money": {
+						"amount": "0.06",
+						"currency_code": "CHF"
+					}
+				},
+				"rate": 0.025,
+				"title": "MwSt"
+			}],
+			"duties": [],
+			"discount_allocations": []
+		}, {
+			"id": 10407799488690,
+			"admin_graphql_api_id": "gid:\/\/shopify\/LineItem\/10407799488690",
+			"fulfillable_quantity": 1,
+			"fulfillment_service": "manual",
+			"fulfillment_status": null,
+			"gift_card": false,
+			"grams": 0,
+			"name": "Parisienne Blonde Box Paket",
+			"origin_location": {
+				"id": 2675608584370,
+				"country_code": "CH",
+				"province_code": "",
+				"name": "HeyMigrolino",
+				"address1": "Nordtrakt Hauptbahnhof",
+				"address2": "",
+				"city": "Zürich",
+				"zip": "8001"
+			},
+			"price": "8.60",
+			"price_set": {
+				"shop_money": {
+					"amount": "8.60",
+					"currency_code": "CHF"
+				},
+				"presentment_money": {
+					"amount": "8.60",
+					"currency_code": "CHF"
+				}
+			},
+			"product_exists": true,
+			"product_id": 6193034461362,
+			"properties": [],
+			"quantity": 1,
+			"requires_shipping": true,
+			"sku": "189400000240",
+			"taxable": true,
+			"title": "Parisienne Blonde Box Paket",
+			"total_discount": "0.00",
+			"total_discount_set": {
+				"shop_money": {
+					"amount": "0.00",
+					"currency_code": "CHF"
+				},
+				"presentment_money": {
+					"amount": "0.00",
+					"currency_code": "CHF"
+				}
+			},
+			"variant_id": 38017560805554,
+			"variant_inventory_management": "shopify",
+			"variant_title": "",
+			"vendor": "heymigrolino",
+			"tax_lines": [{
+				"channel_liable": false,
+				"price": "0.62",
+				"price_set": {
+					"shop_money": {
+						"amount": "0.62",
+						"currency_code": "CHF"
+					},
+					"presentment_money": {
+						"amount": "0.62",
+						"currency_code": "CHF"
+					}
+				},
+				"rate": 0.077,
+				"title": "MwSt"
+			}],
+			"duties": [],
+			"discount_allocations": []
+		}],
+		"refunds": [],
+		"shipping_address": {
+			"first_name": "Gabriel",
+			"address1": "Schaffhauserstrasse",
+			"phone": null,
+			"city": "Winterthur",
+			"zip": "8400",
+			"province": null,
+			"country": "Switzerland",
+			"last_name": "Frölicher",
+			"address2": "6",
+			"company": null,
+			"latitude": 47.5141609,
+			"longitude": 8.7215326,
+			"name": "Gabriel Frölicher",
+			"country_code": "CH",
+			"province_code": null
+		},
+		"shipping_lines": [{
+			"id": 3402382737586,
+			"carrier_identifier": null,
+			"code": "Local Delivery",
+			"delivery_category": null,
+			"discounted_price": "14.80",
+			"discounted_price_set": {
+				"shop_money": {
+					"amount": "14.80",
+					"currency_code": "CHF"
+				},
+				"presentment_money": {
+					"amount": "14.80",
+					"currency_code": "CHF"
+				}
+			},
+			"phone": "+41793780319",
+			"price": "14.80",
+			"price_set": {
+				"shop_money": {
+					"amount": "14.80",
+					"currency_code": "CHF"
+				},
+				"presentment_money": {
+					"amount": "14.80",
+					"currency_code": "CHF"
+				}
+			},
+			"requested_fulfillment_service_id": null,
+			"source": "shopify",
+			"title": "Local Delivery",
+			"tax_lines": [],
+			"discount_allocations": []
+		}]
+	}]
+}

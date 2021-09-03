@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 
 class OrderList extends StatelessWidget {
   const OrderList({Key? key}) : super(key: key);
-  
+
   static const routeName = '/';
 
   @override
@@ -14,7 +14,7 @@ class OrderList extends StatelessWidget {
     final orders = Order.fetchAll();
 
     return Scaffold(
-        appBar: AppBar(title: const Text('Pending orders')),
+        appBar: AppBar(title: const Text('Bestellung auswählen')),
         body: ListView.builder(
             itemCount: orders.length,
             itemBuilder: (context, index) {
@@ -28,14 +28,16 @@ class OrderList extends StatelessWidget {
   }
 
   Widget _itemBuilder(BuildContext context, Order order) {
-    final DateFormat formatter = DateFormat('dd.MM.y H:m');
+    final DateFormat formatter = DateFormat('HH:mm');
     return GestureDetector(
         onTap: () => _onTapOrder(context, order.id),
         key: Key('order_list_item_${order.id}'),
-        child: SizedBox(
-          height: 50.0,
-          child: Text(
-              'order #${order.id} ${formatter.format(order.dateTime)} ${order.items.fold<int>(0, (acc, curr) => acc + curr.quantity)}'),
+        child: Card(
+          child: ListTile(
+            title: Text('Bestellnummer ${order.id}'),
+            subtitle: Text(
+                '${formatter.format(order.dateTime)} Uhr - ${order.items.fold<int>(0, (acc, curr) => acc + curr.quantity)} Produkte (60 CHF)'),
+          ),
         ));
   }
 }

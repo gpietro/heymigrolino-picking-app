@@ -18,7 +18,15 @@ class Order {
       Order(2,DateTime.now(),[
         Item(2, 'Pepsi', 2, 1.50),
         Item(7, 'Emmental', 1, 4.70),
-        Item(30, 'Ticinese', 1, 1.80),
+        Item(30, 'Pane', 1, 1.80),
+        Item(35, 'X', 1, 1.80),
+        Item(39, 'Y', 1, 1.80),
+        Item(30, 'Pane', 1, 1.80),
+        Item(35, 'X', 1, 1.80),
+        Item(39, 'Y', 1, 1.80),
+        Item(30, 'Pane', 1, 1.80),
+        Item(35, 'X', 1, 1.80),
+        Item(39, 'Y', 1, 1.80),
         Item(63, 'IPA Beer', 1, 15.00)
       ]),
       Order(3,DateTime.now(),[
