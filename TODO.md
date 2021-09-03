@@ -1,0 +1,14 @@
+## Tasks
+- [x] integrate firestore
+- [ ] sync orders to firestore (zapier)
+- [ ] read locations and orders from firestore
+- [ ] add state management to match the scanned barcode and productId
+- [ ] add validation on scan (id does exists and  cannot scan more then N products)
+- [ ] add order detail page
+- [ ] complete the location selection menu & and 
+- [ ] the screen with the input field for the order id
+- [ ] sort and group the products by "category"
+- [ ] add a complete screen when all products are scanned
+- [ ] handle missing products
+- [ ] review UI
+- [ ] rename items to products?
