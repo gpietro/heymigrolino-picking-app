@@ -15,6 +15,7 @@ class Order {
         required this.totalPrice,
         required this.locationId,
         required this.products,
+        required this.productIds,
     });
 
     int id;
@@ -23,7 +24,8 @@ class Order {
     String tags;
     String totalPrice;
     int locationId;
-    List<Product> products;
+    Map<String, Product> products;
+    List<int> productIds;
 
     factory Order.fromJson(Map<String, dynamic> json) => Order(
         id: json["id"],
@@ -32,7 +34,8 @@ class Order {
         tags: json["tags"],
         totalPrice: json["totalPrice"],
         locationId: json["locationId"],
-        products: List<Product>.from(json["products"].map((x) => Product.fromJson(x))),
+        products: Map.from(json["products"]).map((k, v) => MapEntry<String, Product>(k, Product.fromJson(v))),
+        productIds: List<int>.from(json["productIds"].map((x) => x)),
     );
 
     Map<String, dynamic> toJson() => {
@@ -42,6 +45,7 @@ class Order {
         "tags": tags,
         "totalPrice": totalPrice,
         "locationId": locationId,
-        "products": List<dynamic>.from(products.map((x) => x.toJson())),
+        "products": Map.from(products).map((k, v) => MapEntry<String, dynamic>(k, v.toJson())),
+        "productIds": List<dynamic>.from(productIds.map((x) => x)),
     };
 }

@@ -2,8 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demo/models/product.dart';
 import 'package:demo/models/order.dart';
 import 'package:demo/screens/barcode_scanner/barcode_scanner.dart';
-import 'package:demo/screens/product_detail/product_detail.dart';
-import 'package:demo/screens/product_detail/product_detail_arguments.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart' as widgets;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -22,8 +20,6 @@ class OrderDetail extends StatefulWidget {
 class _MyHomePageState extends State<OrderDetail> {
   bool _isCapturing = false;
 
-  final _scannedProductCounter = <String, int>{};
-
   void _barcodeScanner() {
     setState(() {
       _isCapturing = !_isCapturing;
@@ -38,55 +34,59 @@ class _MyHomePageState extends State<OrderDetail> {
 
     return FutureBuilder<DocumentSnapshot>(
         future: orders.doc(widget.id).get(),
-        builder: (BuildContext context,
-            AsyncSnapshot<DocumentSnapshot> snapshot) {
-              if( snapshot.hasError) {
-                return const Scaffold(body: Center(child: Text('Something went wrong')));
-              }
+        builder:
+            (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+          if (snapshot.hasError) {
+            return const Scaffold(
+                body: Center(child: Text('Something went wrong')));
+          }
 
-              if (snapshot.hasData && !snapshot.data!.exists) {
-                return const Scaffold(body: Center(child: Text('Order not found!')));
-              }
+          if (snapshot.hasData && !snapshot.data!.exists) {
+            return const Scaffold(
+                body: Center(child: Text('Order not found!')));
+          }
 
-              if (snapshot.connectionState == ConnectionState.done) {
-                Order order = Order.fromJson(snapshot.data!.data() as Map<String, dynamic>);
-                for (var product in order.products) {
-                  // TODO replace with info stored in firestore
-                  _scannedProductCounter[product.sku] = 0;                  
-                }
-
-                debugPrint('rendering $_scannedProductCounter');
-                return Scaffold(
-                    appBar: AppBar(
-                      title: Text('Bestellung #${order.orderNumber}'),
-                    ),
-                    body: _isCapturing ? _productListWithScanner(order) : _productList(order),
-                    floatingActionButton: _isCapturing
-                        ? null
-                        : FloatingActionButton(
-                            onPressed: _barcodeScanner,
-                            tooltip: 'Barcode Scan',
-                            child: const Icon(Icons
-                                .qr_code_scanner)) // This trailing comma makes auto-formatting nicer for build methods.
-                    );
-              }
-              return const Scaffold(body: Center(child: Text('Loading')));
-            });    
+          if (snapshot.connectionState == ConnectionState.done) {
+            Order order =
+                Order.fromJson(snapshot.data!.data() as Map<String, dynamic>);
+            return Scaffold(
+                appBar: AppBar(
+                  title: Text('Bestellung #${order.orderNumber}'),
+                ),
+                body: _isCapturing
+                    ? _productListWithScanner(order)
+                    : _productList(order),
+                floatingActionButton: _isCapturing
+                    ? null
+                    : FloatingActionButton(
+                        onPressed: _barcodeScanner,
+                        tooltip: 'Barcode Scan',
+                        child: const Icon(Icons
+                            .qr_code_scanner)) // This trailing comma makes auto-formatting nicer for build methods.
+                );
+          }
+          return const Scaffold(body: Center(child: Text('Loading')));
+        });
   }
 
-  void _onTapProduct(BuildContext context, int productId) {
-    Navigator.pushNamed(context, ProductDetail.routeName,
+  void _onTapProduct(BuildContext context, Product product) {
+    product.scannedCount += 1;
+    FirebaseFirestore.instance.collection('orders').doc(widget.id).update(
+        {'products.${product.id}.scannedCount': FieldValue.increment(1)});
+    /* Navigator.pushNamed(context, ProductDetail.routeName,
         arguments: ProductDetailArguments(productId));
+    */
   }
 
   Widget _itemBuilder(BuildContext context, Product product) {
     return GestureDetector(
-        onTap: () => _onTapProduct(context, product.id),
+        onTap: () => _onTapProduct(context, product),
         key: Key('product_${product.id}'),
         child: Card(
           child: ListTile(
             title: Text(product.name),
-            subtitle: Text('Anzahl: ${product.quantity} (${product.price} CHF)'),
+            subtitle: Text(
+                'Anzahl: ${product.quantity} (${product.price} CHF) - ${product.scannedCount}'),
           ),
         ));
   }
@@ -108,9 +108,10 @@ class _MyHomePageState extends State<OrderDetail> {
 
   Widget _productList(Order order) {
     return ListView.builder(
-        itemCount: order.products.length,
+        itemCount: order.productIds.length,
         itemBuilder: (context, index) {
-          return _itemBuilder(context, order.products[index]);
+          return _itemBuilder(
+              context, order.products['${order.productIds[index]}']!);
         });
   }
 }
