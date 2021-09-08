@@ -1,19 +1,18 @@
-import 'package:demo/models/item.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:demo/models/product.dart';
 import 'package:demo/models/order.dart';
 import 'package:demo/screens/barcode_scanner/barcode_scanner.dart';
-import 'package:demo/screens/item_detail/item_detail.dart';
-import 'package:demo/screens/item_detail/item_detail_arguments.dart';
+import 'package:demo/screens/product_detail/product_detail.dart';
+import 'package:demo/screens/product_detail/product_detail_arguments.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart' as widgets;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:scandit_flutter_datacapture_core/scandit_flutter_datacapture_core.dart';
 
 class OrderDetail extends StatefulWidget {
-  const OrderDetail({Key? key, required this.id, required this.title})
-      : super(key: key);
+  const OrderDetail({Key? key, required this.id}) : super(key: key);
 
-  final int id;
-  final String title;
+  final String id;
   static const routeName = '/order_detail';
 
   @override
@@ -22,6 +21,8 @@ class OrderDetail extends StatefulWidget {
 
 class _MyHomePageState extends State<OrderDetail> {
   bool _isCapturing = false;
+
+  final _scannedProductCounter = <String, int>{};
 
   void _barcodeScanner() {
     setState(() {
@@ -32,52 +33,65 @@ class _MyHomePageState extends State<OrderDetail> {
 
   @override
   Widget build(BuildContext context) {
-    final order = Order.fetchById(widget.id);
-    final _scannedItemCounter = <int, int>{};
+    CollectionReference orders =
+        FirebaseFirestore.instance.collection('orders');
 
-    if (order != null) {
-      for (var item in order.items) {
-        setState(() {
-          _scannedItemCounter[item.id] = 0;
-        });
-      }
+    return FutureBuilder<DocumentSnapshot>(
+        future: orders.doc(widget.id).get(),
+        builder: (BuildContext context,
+            AsyncSnapshot<DocumentSnapshot> snapshot) {
+              if( snapshot.hasError) {
+                return const Scaffold(body: Center(child: Text('Something went wrong')));
+              }
 
-      debugPrint('rendering $_scannedItemCounter');
-      return Scaffold(
-          appBar: AppBar(
-            title: Text('${widget.title} #${widget.id}'),
-          ),
-          body: _isCapturing ? _itemListWithScanner(order) : _itemList(order),
-          floatingActionButton: _isCapturing
-              ? null
-              : FloatingActionButton(
-                  onPressed: _barcodeScanner,
-                  tooltip: 'Barcode Scan',
-                  child: const Icon(Icons
-                      .qr_code_scanner)) // This trailing comma makes auto-formatting nicer for build methods.
-          );
-    }
-    return const Scaffold(body: Center(child: Text('Order not found!')));
+              if (snapshot.hasData && !snapshot.data!.exists) {
+                return const Scaffold(body: Center(child: Text('Order not found!')));
+              }
+
+              if (snapshot.connectionState == ConnectionState.done) {
+                Order order = Order.fromJson(snapshot.data!.data() as Map<String, dynamic>);
+                for (var product in order.products) {
+                  // TODO replace with info stored in firestore
+                  _scannedProductCounter[product.sku] = 0;                  
+                }
+
+                debugPrint('rendering $_scannedProductCounter');
+                return Scaffold(
+                    appBar: AppBar(
+                      title: Text('Bestellung #${order.orderNumber}'),
+                    ),
+                    body: _isCapturing ? _productListWithScanner(order) : _productList(order),
+                    floatingActionButton: _isCapturing
+                        ? null
+                        : FloatingActionButton(
+                            onPressed: _barcodeScanner,
+                            tooltip: 'Barcode Scan',
+                            child: const Icon(Icons
+                                .qr_code_scanner)) // This trailing comma makes auto-formatting nicer for build methods.
+                    );
+              }
+              return const Scaffold(body: Center(child: Text('Loading')));
+            });    
   }
 
-  void _onTapItem(BuildContext context, int itemId) {
-    Navigator.pushNamed(context, ItemDetail.routeName,
-        arguments: ItemDetailArguments(itemId));
+  void _onTapProduct(BuildContext context, int productId) {
+    Navigator.pushNamed(context, ProductDetail.routeName,
+        arguments: ProductDetailArguments(productId));
   }
 
-  Widget _itemBuilder(BuildContext context, Item item) {
+  Widget _itemBuilder(BuildContext context, Product product) {
     return GestureDetector(
-        onTap: () => _onTapItem(context, item.id),
-        key: Key('item_${item.id}'),
+        onTap: () => _onTapProduct(context, product.id),
+        key: Key('product_${product.id}'),
         child: Card(
           child: ListTile(
-            title: Text(item.name),
-            subtitle: Text('Anzahl: ${item.quantity} (${item.price} CHF)'),
+            title: Text(product.name),
+            subtitle: Text('Anzahl: ${product.quantity} (${product.price} CHF)'),
           ),
         ));
   }
 
-  Widget _itemListWithScanner(Order order) {
+  Widget _productListWithScanner(Order order) {
     return Column(children: <Widget>[
       SizedBox.fromSize(
         child: Stack(children: <Widget>[
@@ -88,15 +102,15 @@ class _MyHomePageState extends State<OrderDetail> {
         size: widgets.Size(MediaQuery.of(context).size.width,
             MediaQuery.of(context).size.height * 0.5),
       ),
-      Expanded(child: _itemList(order))
+      Expanded(child: _productList(order))
     ]);
   }
 
-  Widget _itemList(Order order) {
+  Widget _productList(Order order) {
     return ListView.builder(
-        itemCount: order.items.length,
+        itemCount: order.products.length,
         itemBuilder: (context, index) {
-          return _itemBuilder(context, order.items[index]);
+          return _itemBuilder(context, order.products[index]);
         });
   }
 }

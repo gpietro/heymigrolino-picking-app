@@ -1,5 +1,5 @@
 class OrderDetailArguments {
-  final int id;
+  final String id;
 
   OrderDetailArguments(this.id);
 }

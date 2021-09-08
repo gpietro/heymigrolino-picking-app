@@ -1,6 +1,6 @@
 import 'package:demo/screens/barcode_scanner/barcode_scanner.dart';
-import 'package:demo/screens/item_detail/item_detail.dart';
-import 'package:demo/screens/item_detail/item_detail_arguments.dart';
+import 'package:demo/screens/product_detail/product_detail.dart';
+import 'package:demo/screens/product_detail/product_detail_arguments.dart';
 import 'package:demo/screens/order_detail/order_detail_arguments.dart';
 import 'package:flutter/material.dart';
 import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode.dart';
@@ -88,11 +88,11 @@ class MyAwesomeApp extends StatelessWidget {
         case OrderDetail.routeName:
           final args = settings.arguments as OrderDetailArguments;
           builder = (BuildContext context) =>
-              OrderDetail(id: args.id, title: 'Bestellung');
+              OrderDetail(id: args.id);
           break;
-        case ItemDetail.routeName:
-          final args = settings.arguments as ItemDetailArguments;
-          builder = (BuildContext context) => ItemDetail(
+        case ProductDetail.routeName:
+          final args = settings.arguments as ProductDetailArguments;
+          builder = (BuildContext context) => ProductDetail(
                 id: args.id,
                 name: 'Coca Cola',
                 price: 1.50,

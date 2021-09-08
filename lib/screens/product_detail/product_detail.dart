@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class ItemDetail extends StatefulWidget {
-  const ItemDetail(
+class ProductDetail extends StatefulWidget {
+  const ProductDetail(
       {Key? key,
       required this.id,
       required this.name,
@@ -17,10 +17,10 @@ class ItemDetail extends StatefulWidget {
   static const routeName = '/item_detail';
 
   @override
-  State<ItemDetail> createState() => _ItemDetailState();
+  State<ProductDetail> createState() => _ProductDetailState();
 }
 
-class _ItemDetailState extends State<ItemDetail> {
+class _ProductDetailState extends State<ProductDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
