@@ -28,9 +28,23 @@ class ApplicationState extends ChangeNotifier {
     });
   }
 
-  Future<void> incrementScannedCounter(String docId, Product product) {
-    return FirebaseFirestore.instance.collection('orders').doc(docId).update(
-        {'products.${product.id}.scannedCount': FieldValue.increment(1)});
+  Future<void> scanProduct(String docId, String sku) async {
+    Product? scannedProduct;
+    _orders[docId]!.products.forEach((_, product) {
+      if (product.sku == sku) {
+        scannedProduct = product;
+      }
+    });
+    if (scannedProduct != null) {
+      incrementScannedCounter(docId, scannedProduct!);
+    }
+  }
+
+  Future<void> incrementScannedCounter(String docId, Product product) async {
+    if (product.scannedCount < product.quantity) {
+      return FirebaseFirestore.instance.collection('orders').doc(docId).update(
+          {'products.${product.id}.scannedCount': FieldValue.increment(1)});
+    }
   }
 
   Map<String, Order> get orders => _orders;

@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demo/models/product.dart';
 import 'package:demo/models/order.dart';
 import 'package:demo/screens/barcode_scanner/barcode_scanner.dart';
@@ -38,7 +37,7 @@ class _MyHomePageState extends State<OrderDetail> {
             title: Text('Bestellung #${order.orderNumber}'),
           ),
           body: _isCapturing
-              ? _productListWithScanner(order)
+              ? _productListWithScanner(order, appState.scanProduct)
               : _productList(order),
           floatingActionButton: _isCapturing
               ? null
@@ -65,13 +64,12 @@ class _MyHomePageState extends State<OrderDetail> {
         )));
   }
 
-  Widget _productListWithScanner(Order order) {
+  Widget _productListWithScanner(Order order, scanProduct) {
+    var dataCaptureContext = DataCaptureContext.forLicenseKey(dotenv.env['SCANDIT_LICENSE_KEY'] ?? '');
     return Column(children: <Widget>[
       SizedBox.fromSize(
         child: Stack(children: <Widget>[
-          Positioned(
-              child: BarcodeScanner(DataCaptureContext.forLicenseKey(
-                  dotenv.env['SCANDIT_LICENSE_KEY'] ?? '')))
+          Positioned(child: BarcodeScanner(dataCaptureContext, widget.id, scanProduct))
         ]),
         size: widgets.Size(MediaQuery.of(context).size.width,
             MediaQuery.of(context).size.height * 0.5),

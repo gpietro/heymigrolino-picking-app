@@ -85,11 +85,11 @@ class Router extends StatelessWidget {
         case OrderList.routeName:
           builder = (BuildContext context) => const OrderList();
           break;
-        case BarcodeScanner.routeName:
-          builder = (BuildContext context) => BarcodeScanner(
-              DataCaptureContext.forLicenseKey(
-                  dotenv.env['SCANDIT_LICENSE_KEY'] ?? ''));
-          break;
+        //case BarcodeScanner.routeName:
+        //  builder = (BuildContext context) => BarcodeScanner(
+        //      DataCaptureContext.forLicenseKey(
+        //          dotenv.env['SCANDIT_LICENSE_KEY'] ?? ''));
+        //  break;
         case OrderDetail.routeName:
           final args = settings.arguments as OrderDetailArguments;
           builder = (BuildContext context) => OrderDetail(id: args.id);

@@ -7,14 +7,20 @@ import 'package:scandit_flutter_datacapture_core/scandit_flutter_datacapture_cor
 
 class BarcodeScanner extends StatefulWidget {
   final DataCaptureContext dataCaptureContext;
+  final String docId;
+  final scanProduct;
 
-  const BarcodeScanner(this.dataCaptureContext, {Key? key}) : super(key: key);
+  const BarcodeScanner(this.dataCaptureContext, this.docId, this.scanProduct,
+      {Key? key})
+      : super(key: key);
 
   static const routeName = '/barcode_scanner';
 
   // Create data capture context using your license key.
   @override
-  State<StatefulWidget> createState() => _BarcodeScannerState(dataCaptureContext);
+  // ignore: no_logic_in_create_state
+  State<StatefulWidget> createState() =>
+      _BarcodeScannerState(dataCaptureContext);
 }
 
 class _BarcodeScannerState extends State<BarcodeScanner>
@@ -143,6 +149,7 @@ class _BarcodeScannerState extends State<BarcodeScanner>
         : code.data;
     var humanReadableSymbology =
         SymbologyDescription.forSymbology(code.symbology);
+    widget.scanProduct(widget.docId, data);
     await showPlatformDialog(
         context: context,
         builder: (_) => PlatformAlertDialog(
