@@ -1,7 +1,9 @@
+import 'package:provider/provider.dart';
 import 'package:demo/screens/barcode_scanner/barcode_scanner.dart';
 import 'package:demo/screens/product_detail/product_detail.dart';
 import 'package:demo/screens/product_detail/product_detail_arguments.dart';
 import 'package:demo/screens/order_detail/order_detail_arguments.dart';
+import 'package:demo/state/application_state.dart';
 import 'package:flutter/material.dart';
 import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode.dart';
 import 'package:scandit_flutter_datacapture_core/scandit_flutter_datacapture_core.dart';
@@ -14,8 +16,12 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: '.env');
   await ScanditFlutterDataCaptureBarcode.initialize();
-  runApp(const PickingApp());
+  runApp(ChangeNotifierProvider(
+      create: (context) => ApplicationState(), 
+      child: const Router(),   
+  ));  
 }
+
 
 /// We are using a StatefulWidget such that we only create the [Future] once,
 /// no matter how many times our widget rebuild.
@@ -41,26 +47,25 @@ class _PickingAppState extends State<PickingApp> {
         // Check for errors
         if (snapshot.hasError) {
           return const Center(
-            child: Text("Something went wrong", textDirection: TextDirection.ltr)            
-          );
+              child: Text("Something went wrong",
+                  textDirection: TextDirection.ltr));
         }
 
         // Once complete, show your application
         if (snapshot.connectionState == ConnectionState.done) {
-          return const MyAwesomeApp();
+          return const Router();
         }
 
         // Otherwise, show something whilst waiting for initialization to complete
         return const Center(
-            child: Text("Loading", textDirection: TextDirection.ltr)            
-          );
+            child: Text("Loading", textDirection: TextDirection.ltr));
       },
     );
   }
 }
 
-class MyAwesomeApp extends StatelessWidget {
-  const MyAwesomeApp({Key? key}) : super(key: key);
+class Router extends StatelessWidget {
+  const Router({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
   @override
@@ -87,8 +92,7 @@ class MyAwesomeApp extends StatelessWidget {
           break;
         case OrderDetail.routeName:
           final args = settings.arguments as OrderDetailArguments;
-          builder = (BuildContext context) =>
-              OrderDetail(id: args.id);
+          builder = (BuildContext context) => OrderDetail(id: args.id);
           break;
         case ProductDetail.routeName:
           final args = settings.arguments as ProductDetailArguments;

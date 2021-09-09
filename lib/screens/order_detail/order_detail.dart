@@ -2,9 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demo/models/product.dart';
 import 'package:demo/models/order.dart';
 import 'package:demo/screens/barcode_scanner/barcode_scanner.dart';
+import 'package:demo/state/application_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart' as widgets;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:provider/provider.dart';
 import 'package:scandit_flutter_datacapture_core/scandit_flutter_datacapture_core.dart';
 
 class OrderDetail extends StatefulWidget {
@@ -29,58 +31,30 @@ class _MyHomePageState extends State<OrderDetail> {
 
   @override
   Widget build(BuildContext context) {
-    CollectionReference orders =
-        FirebaseFirestore.instance.collection('orders');
-
-    return FutureBuilder<DocumentSnapshot>(
-        future: orders.doc(widget.id).get(),
-        builder:
-            (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-          if (snapshot.hasError) {
-            return const Scaffold(
-                body: Center(child: Text('Something went wrong')));
-          }
-
-          if (snapshot.hasData && !snapshot.data!.exists) {
-            return const Scaffold(
-                body: Center(child: Text('Order not found!')));
-          }
-
-          if (snapshot.connectionState == ConnectionState.done) {
-            Order order =
-                Order.fromJson(snapshot.data!.data() as Map<String, dynamic>);
-            return Scaffold(
-                appBar: AppBar(
-                  title: Text('Bestellung #${order.orderNumber}'),
-                ),
-                body: _isCapturing
-                    ? _productListWithScanner(order)
-                    : _productList(order),
-                floatingActionButton: _isCapturing
-                    ? null
-                    : FloatingActionButton(
-                        onPressed: _barcodeScanner,
-                        tooltip: 'Barcode Scan',
-                        child: const Icon(Icons
-                            .qr_code_scanner)) // This trailing comma makes auto-formatting nicer for build methods.
-                );
-          }
-          return const Scaffold(body: Center(child: Text('Loading')));
-        });
-  }
-
-  void _onTapProduct(BuildContext context, Product product) {
-    product.scannedCount += 1;
-    FirebaseFirestore.instance.collection('orders').doc(widget.id).update(
-        {'products.${product.id}.scannedCount': FieldValue.increment(1)});
-    /* Navigator.pushNamed(context, ProductDetail.routeName,
-        arguments: ProductDetailArguments(productId));
-    */
+    return Consumer<ApplicationState>(builder: (context, appState, _) {
+      var order = appState.orders[widget.id]!;
+      return Scaffold(
+          appBar: AppBar(
+            title: Text('Bestellung #${order.orderNumber}'),
+          ),
+          body: _isCapturing
+              ? _productListWithScanner(order)
+              : _productList(order),
+          floatingActionButton: _isCapturing
+              ? null
+              : FloatingActionButton(
+                  onPressed: _barcodeScanner,
+                  tooltip: 'Barcode Scan',
+                  child: const Icon(Icons
+                      .qr_code_scanner)) // This trailing comma makes auto-formatting nicer for build methods.
+          );
+    });
   }
 
   Widget _itemBuilder(BuildContext context, Product product) {
-    return GestureDetector(
-        onTap: () => _onTapProduct(context, product),
+    return Consumer<ApplicationState>(builder: (context, appState, _) => 
+      GestureDetector(
+        onTap: () => appState.incrementScannedCounter(widget.id, product),
         key: Key('product_${product.id}'),
         child: Card(
           child: ListTile(
@@ -88,7 +62,7 @@ class _MyHomePageState extends State<OrderDetail> {
             subtitle: Text(
                 'Anzahl: ${product.quantity} (${product.price} CHF) - ${product.scannedCount}'),
           ),
-        ));
+        )));
   }
 
   Widget _productListWithScanner(Order order) {
