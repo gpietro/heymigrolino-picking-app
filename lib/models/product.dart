@@ -1,3 +1,5 @@
+enum ProductStatus { available, unavailable }
+
 class Product {
   Product(
       {required this.id,
@@ -6,7 +8,8 @@ class Product {
       required this.price,
       required this.quantity,
       required this.sku,
-      required this.scannedCount});
+      required this.scannedCount,
+      required this.status});
 
   int id;
   int productId;
@@ -15,16 +18,17 @@ class Product {
   int quantity;
   String sku;
   int scannedCount;
+  ProductStatus status;
 
   factory Product.fromJson(Map<String, dynamic> json) => Product(
-        id: json["id"],
-        productId: json["productId"],
-        name: json["name"],
-        price: json["price"],
-        quantity: json["quantity"],
-        sku: json["sku"],
-        scannedCount: json["scannedCount"]
-      );
+      id: json["id"],
+      productId: json["productId"],
+      name: json["name"],
+      price: json["price"],
+      quantity: json["quantity"],
+      sku: json["sku"],
+      scannedCount: json["scannedCount"],
+      status: getStatusFromString(json["status"]));
 
   Map<String, dynamic> toJson() => {
         "id": id,
@@ -33,6 +37,16 @@ class Product {
         "price": price,
         "quantity": quantity,
         "sku": sku,
-        "scannedCount": scannedCount
+        "scannedCount": scannedCount,
+        "status": status.toString()
       };
+}
+
+ProductStatus getStatusFromString(String? statusAsString) {
+  for (ProductStatus status in ProductStatus.values) {
+    if (status.toString() == statusAsString) {
+      return status;
+    }
+  }
+  return ProductStatus.available;
 }

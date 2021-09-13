@@ -1,5 +1,6 @@
 class ProductDetailArguments {
-  final int id;
+  final String id;
+  final String orderId;
 
-  ProductDetailArguments(this.id);
+  ProductDetailArguments(this.id, this.orderId);
 }

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demo/models/order.dart';
+import 'package:demo/screens/admin/completed_order_list.dart';
 import 'package:demo/screens/order_detail/order_detail.dart';
 import 'package:demo/screens/order_detail/order_detail_arguments.dart';
 import 'package:demo/state/application_state.dart';
@@ -8,6 +9,7 @@ import 'package:provider/provider.dart';
 
 class OrderList extends StatefulWidget {
   static const routeName = '/';
+  static const menuAdmin = 'Einstellungen';
 
   const OrderList({Key? key}) : super(key: key);
 
@@ -25,7 +27,18 @@ class OrderListState extends State<OrderList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: const Text('Bestellung auswählen')),
+        appBar: AppBar(
+          title: const Text('Bestellung auswählen'),
+          actions: [
+            PopupMenuButton(
+                onSelected: (String item) => onSelected(context, item),
+                itemBuilder: (context) => [
+                      const PopupMenuItem<String>(
+                          value: OrderList.menuAdmin,
+                          child: Text('Einstellungen'))
+                    ])
+          ],
+        ),
         body: Consumer<ApplicationState>(builder: (context, appState, _) {
           return ListView.builder(
               itemCount: appState.orders.length,
@@ -50,5 +63,16 @@ class OrderListState extends State<OrderList> {
                 title: Text('Bestellnummer ${order.orderNumber}'),
                 subtitle: Text(
                     '10:00 Uhr - ${order.products.length} Produkte (${order.totalPrice} ${order.currency})'))));
+  }
+
+  onSelected(BuildContext context, String item) {
+    switch (item) {
+      case OrderList.menuAdmin:
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => const CompletedOrderList()));
+        break;
+      default:
+        break;
+    }
   }
 }

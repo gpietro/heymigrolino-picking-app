@@ -8,6 +8,7 @@ import 'package:scandit_flutter_datacapture_core/scandit_flutter_datacapture_cor
 class BarcodeScanner extends StatefulWidget {
   final DataCaptureContext dataCaptureContext;
   final String docId;
+  // ignore: prefer_typing_uninitialized_variables
   final scanProduct;
 
   const BarcodeScanner(this.dataCaptureContext, this.docId, this.scanProduct,
@@ -19,8 +20,7 @@ class BarcodeScanner extends StatefulWidget {
   // Create data capture context using your license key.
   @override
   // ignore: no_logic_in_create_state
-  State<StatefulWidget> createState() =>
-      _BarcodeScannerState(dataCaptureContext);
+  State<StatefulWidget> createState() => _BarcodeScannerState(dataCaptureContext);
 }
 
 class _BarcodeScannerState extends State<BarcodeScanner>

@@ -1,16 +1,13 @@
 import 'package:provider/provider.dart';
-import 'package:demo/screens/barcode_scanner/barcode_scanner.dart';
 import 'package:demo/screens/product_detail/product_detail.dart';
 import 'package:demo/screens/product_detail/product_detail_arguments.dart';
 import 'package:demo/screens/order_detail/order_detail_arguments.dart';
 import 'package:demo/state/application_state.dart';
 import 'package:flutter/material.dart';
 import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode.dart';
-import 'package:scandit_flutter_datacapture_core/scandit_flutter_datacapture_core.dart';
 import 'screens/order_list/order_list.dart';
 import 'screens/order_detail/order_detail.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:firebase_core/firebase_core.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,54 +15,12 @@ void main() async {
   await ScanditFlutterDataCaptureBarcode.initialize();
   runApp(ChangeNotifierProvider(
       create: (context) => ApplicationState(), 
-      child: const Router(),   
+      child: const AppRouter(),   
   ));  
 }
 
-
-/// We are using a StatefulWidget such that we only create the [Future] once,
-/// no matter how many times our widget rebuild.
-class PickingApp extends StatefulWidget {
-  const PickingApp({Key? key}) : super(key: key);
-
-  // Create the initialization Future outside of `build`:
-  @override
-  _PickingAppState createState() => _PickingAppState();
-}
-
-class _PickingAppState extends State<PickingApp> {
-  /// The future is part of the state of our widget. We should not call `initializeApp`
-  /// directly inside [build].
-  final Future<FirebaseApp> _initialization = Firebase.initializeApp();
-
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder(
-      // Initialize FlutterFire:
-      future: _initialization,
-      builder: (context, snapshot) {
-        // Check for errors
-        if (snapshot.hasError) {
-          return const Center(
-              child: Text("Something went wrong",
-                  textDirection: TextDirection.ltr));
-        }
-
-        // Once complete, show your application
-        if (snapshot.connectionState == ConnectionState.done) {
-          return const Router();
-        }
-
-        // Otherwise, show something whilst waiting for initialization to complete
-        return const Center(
-            child: Text("Loading", textDirection: TextDirection.ltr));
-      },
-    );
-  }
-}
-
-class Router extends StatelessWidget {
-  const Router({Key? key}) : super(key: key);
+class AppRouter extends StatelessWidget {
+  const AppRouter({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
   @override
@@ -98,10 +53,8 @@ class Router extends StatelessWidget {
           final args = settings.arguments as ProductDetailArguments;
           builder = (BuildContext context) => ProductDetail(
                 id: args.id,
-                name: 'Coca Cola',
-                price: 1.50,
-                quantity: 3,
-              ); // Faking data
+                orderId: args.orderId,
+              );
           break;
         default:
           throw Exception('Invalid route: ${settings.name}');
