@@ -166,6 +166,7 @@ class _BarcodeScannerState extends State<BarcodeScanner>
                     })
               ],
             ));
+    // TODO: SET TIMEOUT?
     _barcodeCapture.isEnabled = true;
   }
 

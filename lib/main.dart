@@ -29,7 +29,6 @@ class AppRouter extends StatelessWidget {
         title: 'Bestellung auswählen',
         onGenerateRoute: _routes(),
         theme: ThemeData(primarySwatch: Colors.orange),
-        // home: const MyHomePage(title: 'Pending orders'),
         home: const OrderList());
   }
 

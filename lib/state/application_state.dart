@@ -61,7 +61,7 @@ class ApplicationState extends ChangeNotifier {
   Future<void> scanProduct(String docId, String sku) async {
     Product? scannedProduct;
     _activeOrders[docId]!.products.forEach((_, product) {
-      if (product.sku == sku) {
+      if (product.sku == sku && product.status == ProductStatus.available) {
         scannedProduct = product;
       }
     });

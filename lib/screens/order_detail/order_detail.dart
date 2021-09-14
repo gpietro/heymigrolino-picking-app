@@ -12,6 +12,11 @@ import 'package:scandit_flutter_datacapture_core/scandit_flutter_datacapture_cor
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:badges/badges.dart';
 
+/**
+ * TODO
+ * - create new screen for barcorde
+ * - hide scan button on unavailable item list
+ */
 class OrderDetail extends StatefulWidget {
   const OrderDetail({Key? key, required this.id}) : super(key: key);
 
@@ -37,6 +42,10 @@ class _OrderDetailState extends State<OrderDetail> {
   Widget build(BuildContext context) {
     return Consumer<ApplicationState>(builder: (context, appState, _) {
       var order = appState.orders[widget.id]!;
+      List<int> availableProductIds =
+          _filterProducts(order, ProductStatus.available);
+      List<int> unavailableProductIds =
+          _filterProducts(order, ProductStatus.unavailable);
       return DefaultTabController(
           length: 2,
           child: Scaffold(
@@ -44,16 +53,23 @@ class _OrderDetailState extends State<OrderDetail> {
                 title: Text('Bestellung #${order.orderNumber}'),
                 bottom: TabBar(
                   tabs: [
-                    Tab(icon: Badge(badgeContent: const Text('3'),child: const Icon(Icons.list))),
-                    Tab(icon: Badge(badgeContent: const Text('0'),child: const Icon(Icons.block))),
+                    const Tab(icon: Icon(Icons.list)),
+                    Tab(
+                        icon: Badge(
+                            badgeContent:
+                                Text('${unavailableProductIds.length}'),
+                            badgeColor: unavailableProductIds.isEmpty
+                                ? Colors.grey
+                                : Colors.red,
+                            child: const Icon(Icons.block))),
                   ],
                 ),
               ),
               body: TabBarView(children: [
                 _isCapturing
                     ? _productListWithScanner(order, appState.scanProduct)
-                    : _productList(order),
-                _productList(order)
+                    : _productList(order, ProductStatus.available),
+                _productList(order, ProductStatus.unavailable),
               ]),
               floatingActionButton: _isCapturing
                   ? null
@@ -71,40 +87,40 @@ class _OrderDetailState extends State<OrderDetail> {
       var productImage = appState.productImages['${product.productId}'];
       return GestureDetector(
           onTap: () => {
-            Navigator.pushNamed(context, ProductDetail.routeName,
-              arguments: ProductDetailArguments('${product.id}', widget.id))
-          }, // appState.incrementScannedCounter(widget.id, product),
+                Navigator.pushNamed(context, ProductDetail.routeName,
+                    arguments:
+                        ProductDetailArguments('${product.id}', widget.id))
+              }, // appState.incrementScannedCounter(widget.id, product),
           onPanUpdate: (details) {
             // Swiping right
             if (details.delta.dx > 0) {
-              
+              //appState.updateProductStatus(
+              //    widget.id, product, ProductStatus.unavailable);
             }
             // Swiping left
             if (details.delta.dx < 0) {
-              appState.updateProductStatus(
-                  widget.id, product, ProductStatus.available);
+              //appState.updateProductStatus(
+              //    widget.id, product, ProductStatus.available);
             }
           },
           key: Key('product_${product.id}'),
           child: Card(
-              child: Row(
-            children: [
-              if (productImage != null)
-                CachedNetworkImage(
-                  width: 50,
-                  height: 50,
-                  placeholder: (context, url) =>
-                      const CircularProgressIndicator(),
-                  imageUrl: productImage.src,
-                ),
-              Expanded(
-                child: ListTile(
-                  title: Text(product.name),
-                  subtitle: Text(
-                      'Anzahl: ${product.quantity} (${product.price} CHF) - ${product.scannedCount}'),
-                ),
-              )
-            ],
+              child: ListTile(
+            title: Text(
+              product.name,
+              style: const TextStyle(fontWeight: FontWeight.w500),
+            ),
+            subtitle: Text('${product.price} CHF'),
+            trailing: Text('(${product.scannedCount})${product.quantity}', style: const TextStyle(fontWeight: FontWeight.w500),),
+            leading: productImage != null
+                ? CachedNetworkImage(
+                    width: 50,
+                    height: 50,
+                    placeholder: (context, url) =>
+                        const CircularProgressIndicator(),
+                    imageUrl: productImage.src.replaceAll(".jpg", "_100x100.jpg"),
+                  )
+                : null,
           )));
     });
   }
@@ -112,30 +128,52 @@ class _OrderDetailState extends State<OrderDetail> {
   Widget _productListWithScanner(Order order, scanProduct) {
     var dataCaptureContext = DataCaptureContext.forLicenseKey(
         dotenv.env['SCANDIT_LICENSE_KEY'] ?? '');
+    var barcodeScanner =
+        BarcodeScanner(dataCaptureContext, widget.id, scanProduct);
     return Column(children: <Widget>[
       SizedBox.fromSize(
-        child: Stack(children: <Widget>[
-          Positioned(
-              child: BarcodeScanner(dataCaptureContext, widget.id, scanProduct))
-        ]),
+        child: Stack(children: <Widget>[Positioned(child: barcodeScanner)]),
         size: widgets.Size(MediaQuery.of(context).size.width,
             MediaQuery.of(context).size.height * 0.5),
       ),
-      Expanded(child: _productList(order))
+      Expanded(child: _productList(order, ProductStatus.available)),
     ]);
   }
 
-  Widget _productList(Order order) {
-    List<int> availableProductIds = order.productIds
-        .where((productId) =>
-            order.products['$productId']!.status == ProductStatus.available)
+  Widget _productList(Order order, ProductStatus status) {
+    List<int> productIds = order.productIds
+        .where((productId) => order.products['$productId']!.status == status)
         .toList();
     // List<int> unavailableProductIds = order.productIds.where((productId) => order.products['$productId']!.status == ProductStatus.unavailable).toList();
     return ListView.builder(
-        itemCount: availableProductIds.length,
+        itemCount: productIds.length,
         itemBuilder: (context, index) {
-          return _itemBuilder(
-              context, order.products['${availableProductIds[index]}']!);
+          return _itemBuilder(context, order.products['${productIds[index]}']!);
         });
+  }
+
+  // TODO: I create and expansion panel with unavailable products
+  Widget _unavailableProducts(Order order) {
+    List<int> productIds = order.productIds
+        .where((productId) =>
+            order.products['$productId']!.status == ProductStatus.unavailable)
+        .toList();
+
+    return ExpansionPanelList(
+      children: [
+        ExpansionPanel(
+          headerBuilder: (context, isOpen) {
+            return const Text('Hello world');
+          },
+          body: const Text("Now open"),
+        ),
+      ],
+    );
+  }
+
+  List<int> _filterProducts(Order order, ProductStatus status) {
+    return order.productIds
+        .where((productId) => order.products['$productId']!.status == status)
+        .toList();
   }
 }
