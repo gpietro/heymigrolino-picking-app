@@ -1,3 +1,5 @@
+import 'package:demo/screens/admin/completed_order_detail.dart';
+import 'package:demo/screens/admin/completed_order_detail_arguments.dart';
 import 'package:provider/provider.dart';
 import 'package:demo/screens/product_detail/product_detail.dart';
 import 'package:demo/screens/product_detail/product_detail_arguments.dart';
@@ -26,7 +28,7 @@ class AppRouter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Bestellung auswählen',
+        title: 'Picking App',
         onGenerateRoute: _routes(),
         theme: ThemeData(
           primarySwatch: Colors.orange, 
@@ -41,14 +43,13 @@ class AppRouter extends StatelessWidget {
         case OrderList.routeName:
           builder = (BuildContext context) => const OrderList();
           break;
-        //case BarcodeScanner.routeName:
-        //  builder = (BuildContext context) => BarcodeScanner(
-        //      DataCaptureContext.forLicenseKey(
-        //          dotenv.env['SCANDIT_LICENSE_KEY'] ?? ''));
-        //  break;
         case OrderDetail.routeName:
           final args = settings.arguments as OrderDetailArguments;
           builder = (BuildContext context) => OrderDetail(id: args.id);
+          break;
+        case CompletedOrderDetail.routeName:
+          final args = settings.arguments as CompletedOrderDetailArguments;
+          builder = (BuildContext context) => CompletedOrderDetail(id: args.id);
           break;
         case ProductDetail.routeName:
           final args = settings.arguments as ProductDetailArguments;

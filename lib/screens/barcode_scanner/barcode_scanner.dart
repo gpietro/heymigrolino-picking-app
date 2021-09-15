@@ -19,8 +19,9 @@ class BarcodeScanner extends StatefulWidget {
 
   // Create data capture context using your license key.
   @override
-  // ignore: no_logic_in_create_state
-  State<StatefulWidget> createState() => _BarcodeScannerState(dataCaptureContext);
+  State<StatefulWidget> createState() => 
+    // ignore: no_logic_in_create_state
+    _BarcodeScannerState(dataCaptureContext);
 }
 
 class _BarcodeScannerState extends State<BarcodeScanner>
@@ -56,7 +57,7 @@ class _BarcodeScannerState extends State<BarcodeScanner>
 
     // Switch camera on to start streaming frames and enable the barcode tracking mode.
     // The camera is started asynchronously and will take some time to completely turn on.
-    _checkPermission();
+    // _checkPermission();
 
     // The barcode capture process is configured through barcode capture settings
     // which are then applied to the barcode capture instance that manages barcode capture.
@@ -66,14 +67,14 @@ class _BarcodeScannerState extends State<BarcodeScanner>
     // sample we enable a very generous set of symbologies. In your own app ensure that you only enable the
     // symbologies that your app requires as every additional enabled symbology has an impact on processing times.
     captureSettings.enableSymbologies({
-      Symbology.ean8,
-      Symbology.ean13Upca,
-      Symbology.upce,
-      Symbology.qr,
-      Symbology.dataMatrix,
-      Symbology.code39,
+      //Symbology.ean8,
+      //Symbology.ean13Upca,
+      //Symbology.upce,
+      //Symbology.qr,
+      //Symbology.dataMatrix,
+      //Symbology.code39,
       Symbology.code128,
-      Symbology.interleavedTwoOfFive
+      //Symbology.interleavedTwoOfFive
     });
 
     // Some linear/1d barcode symbologies allow you to encode variable-length data. By default, the Scandit
@@ -81,8 +82,9 @@ class _BarcodeScannerState extends State<BarcodeScanner>
     // of these symbologies, and the length is falling outside the default range, you may need to adjust the "active
     // symbol counts" for this symbology. This is shown in the following few lines of code for one of the
     // variable-length symbologies.
-    captureSettings.settingsForSymbology(Symbology.code39).activeSymbolCounts =
-        {for (var i = 7; i <= 20; i++) i};
+    
+    //captureSettings.settingsForSymbology(Symbology.code39).activeSymbolCounts =
+    //    {for (var i = 7; i <= 20; i++) i};
 
     // Create new barcode capture mode with the settings from above.
     _barcodeCapture = BarcodeCapture.forContext(_context, captureSettings)
@@ -113,7 +115,8 @@ class _BarcodeScannerState extends State<BarcodeScanner>
     if (_camera != null) {
       _context.setFrameSource(_camera!);
     }
-    _camera?.switchToDesiredState(FrameSourceState.on);
+    // TODO: Enable camera on tap
+    _camera?.switchToDesiredState(FrameSourceState.off);
     _barcodeCapture.isEnabled = true;
   }
 
@@ -151,8 +154,7 @@ class _BarcodeScannerState extends State<BarcodeScanner>
         SymbologyDescription.forSymbology(code.symbology);
     await widget.scanProduct(widget.docId, data);
     // TODO check appState
-    
-    
+
     await showPlatformDialog(
         context: context,
         builder: (_) => PlatformAlertDialog(

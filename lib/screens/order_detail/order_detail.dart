@@ -10,13 +10,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 import 'package:scandit_flutter_datacapture_core/scandit_flutter_datacapture_core.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:badges/badges.dart';
 
-/**
- * TODO
- * - create new screen for barcorde
- * - hide scan button on unavailable item list
- */
 class OrderDetail extends StatefulWidget {
   const OrderDetail({Key? key, required this.id}) : super(key: key);
 
@@ -29,15 +23,6 @@ class OrderDetail extends StatefulWidget {
 }
 
 class _OrderDetailState extends State<OrderDetail> {
-  bool _isCapturing = false;
-
-  void _barcodeScanner() {
-    setState(() {
-      _isCapturing = !_isCapturing;
-    });
-    // Navigator.pushNamed(context, BarcodeScanner.routeName);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Consumer<ApplicationState>(builder: (context, appState, _) {
@@ -50,7 +35,8 @@ class _OrderDetailState extends State<OrderDetail> {
           length: 2,
           child: Scaffold(
               appBar: AppBar(
-                title: Text('Bestellung #${order.orderNumber}'),
+                title: Text('Bestellung #${order.orderNumber}'),                
+                /*
                 bottom: TabBar(
                   tabs: [
                     const Tab(icon: Icon(Icons.list)),
@@ -63,14 +49,16 @@ class _OrderDetailState extends State<OrderDetail> {
                                 : Colors.red,
                             child: const Icon(Icons.block))),
                   ],
-                ),
+                ),*/
               ),
-              body: TabBarView(children: [
+              body: _productListWithScanner(order, appState.scanProduct),
+              /*TabBarView(children: [
                 _isCapturing
                     ? _productListWithScanner(order, appState.scanProduct)
                     : _productList(order, ProductStatus.available),
                 _productList(order, ProductStatus.unavailable),
-              ]),
+              ]),*/
+              /*
               floatingActionButton: _isCapturing
                   ? null
                   : FloatingActionButton(
@@ -78,6 +66,7 @@ class _OrderDetailState extends State<OrderDetail> {
                       tooltip: 'Barcode Scan',
                       child: const Icon(Icons
                           .qr_code_scanner)) // This trailing comma makes auto-formatting nicer for build methods.
+              */
               ));
     });
   }
@@ -134,7 +123,7 @@ class _OrderDetailState extends State<OrderDetail> {
       SizedBox.fromSize(
         child: Stack(children: <Widget>[Positioned(child: barcodeScanner)]),
         size: widgets.Size(MediaQuery.of(context).size.width,
-            MediaQuery.of(context).size.height * 0.5),
+            MediaQuery.of(context).size.height * 0.25),
       ),
       Expanded(child: _productList(order, ProductStatus.available)),
     ]);
@@ -152,7 +141,6 @@ class _OrderDetailState extends State<OrderDetail> {
         });
   }
 
-  // TODO: I create and expansion panel with unavailable products
   Widget _unavailableProducts(Order order) {
     List<int> productIds = order.productIds
         .where((productId) =>

@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:demo/models/order.dart';
 import 'package:demo/screens/admin/completed_order_list.dart';
 import 'package:demo/screens/order_detail/order_detail.dart';
@@ -17,18 +16,12 @@ class OrderList extends StatefulWidget {
   OrderListState createState() => OrderListState();
 }
 
-final ordersRef =
-    FirebaseFirestore.instance.collection('orders').withConverter<Order>(
-          fromFirestore: (snapshots, _) => Order.fromJson(snapshots.data()!),
-          toFirestore: (order, _) => order.toJson(),
-        );
-
 class OrderListState extends State<OrderList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Bestellung auswählen'),          
+          title: const Text('Bestellliste'),
           actions: [
             PopupMenuButton(
                 onSelected: (String item) => onSelected(context, item),
