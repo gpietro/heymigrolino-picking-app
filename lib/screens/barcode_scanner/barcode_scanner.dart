@@ -149,7 +149,10 @@ class _BarcodeScannerState extends State<BarcodeScanner>
         : code.data;
     var humanReadableSymbology =
         SymbologyDescription.forSymbology(code.symbology);
-    widget.scanProduct(widget.docId, data);
+    await widget.scanProduct(widget.docId, data);
+    // TODO check appState
+    
+    
     await showPlatformDialog(
         context: context,
         builder: (_) => PlatformAlertDialog(

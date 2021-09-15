@@ -28,7 +28,9 @@ class AppRouter extends StatelessWidget {
     return MaterialApp(
         title: 'Bestellung auswählen',
         onGenerateRoute: _routes(),
-        theme: ThemeData(primarySwatch: Colors.orange),
+        theme: ThemeData(
+          primarySwatch: Colors.orange, 
+        ),
         home: const OrderList());
   }
 

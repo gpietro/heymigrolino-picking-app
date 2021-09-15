@@ -28,7 +28,7 @@ class OrderListState extends State<OrderList> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Bestellung auswählen'),
+          title: const Text('Bestellung auswählen'),          
           actions: [
             PopupMenuButton(
                 onSelected: (String item) => onSelected(context, item),
@@ -62,7 +62,7 @@ class OrderListState extends State<OrderList> {
             child: ListTile(
                 title: Text('Bestellnummer ${order.orderNumber}'),
                 subtitle: Text(
-                    '10:00 Uhr - ${order.products.length} Produkte (${order.totalPrice} ${order.currency})'))));
+                    '${order.createdTime()} - ${order.products.length} Produkte (${order.totalPrice} ${order.currency})'))));
   }
 
   onSelected(BuildContext context, String item) {

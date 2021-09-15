@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:intl/intl.dart';
 import 'package:demo/models/product.dart';
 
 Order orderFromJson(String str) => Order.fromJson(json.decode(str));
@@ -64,6 +64,12 @@ class Order {
         "productIds": List<dynamic>.from(productIds.map((x) => x)),
         "status": status.toString()
       };
+
+  String createdTime() {
+    DateTime date = DateTime.fromMillisecondsSinceEpoch(createdAt);
+    var format = DateFormat("HH:mm");
+    return format.format(date);
+  }
 }
 
 OrderStatus getStatusFromString(String? statusAsString) {
