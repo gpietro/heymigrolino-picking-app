@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:demo/models/order.dart';
 import 'package:demo/models/product.dart';
 import 'package:demo/models/product_image.dart';
+import 'package:demo/screens/order_list/order_list.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -65,8 +66,12 @@ class ApplicationState extends ChangeNotifier {
         scannedProduct = product;
       }
     });
-    if (scannedProduct != null) {
-      incrementScannedCounter(docId, scannedProduct!);
+    if (scannedProduct != null &&
+        scannedProduct!.scannedCount < scannedProduct!.quantity) {
+      await incrementScannedCounter(docId, scannedProduct!);
+      if (scannedProduct!.quantity - scannedProduct!.scannedCount == 1) {
+        updateProductStatus(docId, scannedProduct!, ProductStatus.complete);
+      }
     }
   }
 
@@ -78,11 +83,16 @@ class ApplicationState extends ChangeNotifier {
         .update({'products.${product.id}.status': status.toString()});
   }
 
+  Future<void> updateOrderStatus(String docId, OrderStatus status) {    
+    return FirebaseFirestore.instance
+        .collection('orders')
+        .doc(docId)
+        .update({'status': status.toString()});
+  }
+
   Future<void> incrementScannedCounter(String docId, Product product) async {
-    if (product.scannedCount < product.quantity) {
-      return FirebaseFirestore.instance.collection('orders').doc(docId).update(
-          {'products.${product.id}.scannedCount': FieldValue.increment(1)});
-    }
+    return FirebaseFirestore.instance.collection('orders').doc(docId).update(
+        {'products.${product.id}.scannedCount': FieldValue.increment(1)});
   }
 
   // by default: active orders

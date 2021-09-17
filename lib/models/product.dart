@@ -1,4 +1,4 @@
-enum ProductStatus { available, unavailable }
+enum ProductStatus { available, unavailable, complete }
 
 class Product {
   Product(

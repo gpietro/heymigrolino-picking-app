@@ -57,7 +57,7 @@ class _BarcodeScannerState extends State<BarcodeScanner>
 
     // Switch camera on to start streaming frames and enable the barcode tracking mode.
     // The camera is started asynchronously and will take some time to completely turn on.
-    // _checkPermission();
+    _checkPermission();
 
     // The barcode capture process is configured through barcode capture settings
     // which are then applied to the barcode capture instance that manages barcode capture.
@@ -116,7 +116,7 @@ class _BarcodeScannerState extends State<BarcodeScanner>
       _context.setFrameSource(_camera!);
     }
     // TODO: Enable camera on tap
-    _camera?.switchToDesiredState(FrameSourceState.off);
+    _camera?.switchToDesiredState(FrameSourceState.on);
     _barcodeCapture.isEnabled = true;
   }
 
