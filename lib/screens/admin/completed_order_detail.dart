@@ -28,7 +28,7 @@ class _CompletedOrderDetailState extends State<CompletedOrderDetail> {
               appBar: AppBar(
                 title: Text('#${order.orderNumber} Bestellung'),                                
                 foregroundColor: Colors.white,
-                backgroundColor: Colors.blueGrey,
+                backgroundColor: Colors.green,
               ),
               body: _productList(order)              
               ));
