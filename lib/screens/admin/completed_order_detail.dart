@@ -3,7 +3,6 @@ import 'package:demo/models/order.dart';
 import 'package:demo/state/application_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:barcode_widget/barcode_widget.dart';
 
 class CompletedOrderDetail extends StatefulWidget {

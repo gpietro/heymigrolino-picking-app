@@ -2,10 +2,11 @@ import 'dart:async';
 import 'package:demo/models/order.dart';
 import 'package:demo/models/product.dart';
 import 'package:demo/models/product_image.dart';
-import 'package:demo/screens/order_list/order_list.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+
+enum ScanResult { ok, error }
 
 class ApplicationState extends ChangeNotifier {
   ApplicationState() {
@@ -23,6 +24,7 @@ class ApplicationState extends ChangeNotifier {
     FirebaseFirestore.instance
         .collection('orders')
         .where("status", isEqualTo: OrderStatus.active.toString())
+        .orderBy("orderNumber", descending: true)
         .snapshots()
         .listen((snapshot) {
       _activeOrders = {};
@@ -36,6 +38,7 @@ class ApplicationState extends ChangeNotifier {
     FirebaseFirestore.instance
         .collection('orders')
         .where("status", isEqualTo: OrderStatus.complete.toString())
+        .orderBy("orderNumber", descending: true)
         .snapshots()
         .listen((snapshot) {
       _completeOrders = {};
@@ -59,7 +62,7 @@ class ApplicationState extends ChangeNotifier {
     });
   }
 
-  Future<void> scanProduct(String docId, String sku) async {
+  Future<ScanResult> scanProduct(String docId, String sku) async {
     Product? scannedProduct;
     _activeOrders[docId]!.products.forEach((_, product) {
       if (product.sku == sku && product.status == ProductStatus.available) {
@@ -72,7 +75,9 @@ class ApplicationState extends ChangeNotifier {
       if (scannedProduct!.quantity - scannedProduct!.scannedCount == 1) {
         updateProductStatus(docId, scannedProduct!, ProductStatus.complete);
       }
+      return ScanResult.ok;
     }
+    return ScanResult.error;
   }
 
   Future<void> updateProductStatus(
@@ -83,7 +88,7 @@ class ApplicationState extends ChangeNotifier {
         .update({'products.${product.id}.status': status.toString()});
   }
 
-  Future<void> updateOrderStatus(String docId, OrderStatus status) {    
+  Future<void> updateOrderStatus(String docId, OrderStatus status) {
     return FirebaseFirestore.instance
         .collection('orders')
         .doc(docId)

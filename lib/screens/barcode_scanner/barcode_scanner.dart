@@ -1,3 +1,4 @@
+import 'package:demo/state/application_state.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
@@ -19,15 +20,16 @@ class BarcodeScanner extends StatefulWidget {
 
   // Create data capture context using your license key.
   @override
-  State<StatefulWidget> createState() => 
-    // ignore: no_logic_in_create_state
-    _BarcodeScannerState(dataCaptureContext);
+  State<StatefulWidget> createState() =>
+      // ignore: no_logic_in_create_state
+      _BarcodeScannerState(dataCaptureContext);
 }
 
 class _BarcodeScannerState extends State<BarcodeScanner>
     with WidgetsBindingObserver
     implements BarcodeCaptureListener {
   final DataCaptureContext _context;
+  ScanResult? showScanMessage;
 
   // Use the world-facing (back) camera.
   final Camera? _camera = Camera.defaultCamera;
@@ -82,7 +84,7 @@ class _BarcodeScannerState extends State<BarcodeScanner>
     // of these symbologies, and the length is falling outside the default range, you may need to adjust the "active
     // symbol counts" for this symbology. This is shown in the following few lines of code for one of the
     // variable-length symbologies.
-    
+
     //captureSettings.settingsForSymbology(Symbology.code39).activeSymbolCounts =
     //    {for (var i = 7; i <= 20; i++) i};
 
@@ -122,15 +124,42 @@ class _BarcodeScannerState extends State<BarcodeScanner>
 
   @override
   Widget build(BuildContext context) {
-    Widget child;
+    List<Widget> children;
     if (_isPermissionMessageVisible) {
-      child = PlatformText('No permission to access the camera!',
-          style: const TextStyle(
-              fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black));
+      children = [
+        PlatformText('No permission to access the camera!',
+            style: const TextStyle(
+                fontSize: 14, fontWeight: FontWeight.bold, color: Colors.black))
+      ];
     } else {
-      child = _captureView;
+      children = [_captureView];
     }
-    return Center(child: child);
+    if (showScanMessage != null) {
+      String textMessage = showScanMessage == ScanResult.ok
+          ? '\u{1F973} product scanned!'
+          : '\u{1F4A9} wrong product!';
+      children = [
+        ...children,
+        Container(
+            decoration: const BoxDecoration(
+              color: Colors.black54,
+              borderRadius: BorderRadius.all(Radius.circular(20)),
+            ),
+            padding: const EdgeInsets.all(4.0),
+            child: Text(
+              textMessage,
+              style: const TextStyle(
+                fontSize: 18,
+                color: Colors.white,
+              ),
+            ))
+      ];
+    }
+    // check: 2705
+    // cross: 274C
+    // poo:   1F4A9
+
+    return Stack(alignment: const Alignment(0, 0), children: children);
   }
 
   @override
@@ -150,29 +179,22 @@ class _BarcodeScannerState extends State<BarcodeScanner>
     var data = (code.data == null || code.data?.isEmpty == true)
         ? code.rawData
         : code.data;
-    var humanReadableSymbology =
-        SymbologyDescription.forSymbology(code.symbology);
-    await widget.scanProduct(widget.docId, data);
-    // TODO check appState
+    ScanResult scanResult = await widget.scanProduct(widget.docId, data);
+    setState(() {
+      showScanMessage = scanResult;
+    });
 
-    await showPlatformDialog(
-        context: context,
-        builder: (_) => PlatformAlertDialog(
-              content: PlatformText(
-                'Scanned: $data\n (${humanReadableSymbology.readableName})',
-                style:
-                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-              ),
-              actions: [
-                PlatformDialogAction(
-                    child: PlatformText('OK'),
-                    onPressed: () {
-                      Navigator.of(context, rootNavigator: true).pop();
-                    })
-              ],
-            ));
-    // TODO: SET TIMEOUT?
-    _barcodeCapture.isEnabled = true;
+    //var humanReadableSymbology =
+    //    SymbologyDescription.forSymbology(code.symbology);
+
+    Future.delayed(
+        const Duration(seconds: 1),
+        () => {
+              _barcodeCapture.isEnabled = true,
+              setState(() {
+                showScanMessage = null;
+              })
+            });
   }
 
   @override

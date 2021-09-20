@@ -22,7 +22,7 @@ class CompletedOrderListState extends State<CompletedOrderList> {
         appBar: AppBar(
           title: const Text('Bestellliste'),
           foregroundColor: Colors.white,
-          backgroundColor: Colors.blueGrey,
+          backgroundColor: Colors.green,
         ),
         body: Consumer<ApplicationState>(builder: (context, appState, _) {
           return ListView.builder(
