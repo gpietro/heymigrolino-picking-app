@@ -29,7 +29,8 @@ class CompletedOrderListState extends State<CompletedOrderList> {
               itemCount: appState.completeOrders.length,
               itemBuilder: (context, index) {
                 String key = appState.completeOrders.keys.elementAt(index);
-                return _itemBuilder(context, appState.completeOrders[key]!, key);
+                return _itemBuilder(
+                    context, appState.completeOrders[key]!, key);
               });
         }));
   }

@@ -27,7 +27,7 @@ class _OrderDetailState extends State<OrderDetail> {
   @override
   Widget build(BuildContext context) {
     return Consumer<ApplicationState>(builder: (context, appState, _) {
-      var order = appState.orders[widget.id] ?? appState.completeOrders[widget.id];
+      var order = appState.orders[widget.id] ?? appState.completeOrders[widget.id]; // Avoid null exception
       return Scaffold(
           appBar: AppBar(
             title: Text('Bestellung #${order!.orderNumber}'),
@@ -146,7 +146,7 @@ class _OrderDetailState extends State<OrderDetail> {
                       Navigator.of(context).pushNamedAndRemoveUntil(
                         OrderList.routeName, (Route<dynamic> route) => false);
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text('Order #${order.id} completed!'),
+                        content: Text('Order #${order.orderNumber} completed!'),
                         duration: const Duration(seconds: 2),
                       ));
                       appState.updateOrderStatus(

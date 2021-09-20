@@ -24,7 +24,7 @@ class ApplicationState extends ChangeNotifier {
     FirebaseFirestore.instance
         .collection('orders')
         .where("status", isEqualTo: OrderStatus.active.toString())
-        .orderBy("orderNumber", descending: true)
+        //.orderBy("orderNumber", descending: true)
         .snapshots()
         .listen((snapshot) {
       _activeOrders = {};
@@ -38,7 +38,7 @@ class ApplicationState extends ChangeNotifier {
     FirebaseFirestore.instance
         .collection('orders')
         .where("status", isEqualTo: OrderStatus.complete.toString())
-        .orderBy("orderNumber", descending: true)
+        //.orderBy("orderNumber", descending: true)
         .snapshots()
         .listen((snapshot) {
       _completeOrders = {};
