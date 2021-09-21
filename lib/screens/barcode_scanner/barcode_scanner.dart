@@ -69,7 +69,7 @@ class _BarcodeScannerState extends State<BarcodeScanner>
     // sample we enable a very generous set of symbologies. In your own app ensure that you only enable the
     // symbologies that your app requires as every additional enabled symbology has an impact on processing times.
     captureSettings.enableSymbologies({
-      //Symbology.ean8,
+      Symbology.ean8,
       //Symbology.ean13Upca,
       //Symbology.upce,
       //Symbology.qr,

@@ -1,5 +1,7 @@
 import 'package:demo/screens/admin/completed_order_detail.dart';
 import 'package:demo/screens/admin/completed_order_detail_arguments.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 import 'package:provider/provider.dart';
 import 'package:demo/screens/product_detail/product_detail.dart';
 import 'package:demo/screens/product_detail/product_detail_arguments.dart';
@@ -24,6 +26,9 @@ void main() async {
 class AppRouter extends StatelessWidget {
   const AppRouter({Key? key}) : super(key: key);
 
+  static FirebaseAnalytics analytics = FirebaseAnalytics();
+  static FirebaseAnalyticsObserver observer = FirebaseAnalyticsObserver(analytics: analytics);
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -33,6 +38,7 @@ class AppRouter extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.orange, 
         ),
+        navigatorObservers: <NavigatorObserver>[observer],
         home: const OrderList());
   }
 
