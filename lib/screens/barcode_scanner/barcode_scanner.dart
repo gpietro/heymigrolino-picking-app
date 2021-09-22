@@ -75,7 +75,7 @@ class _BarcodeScannerState extends State<BarcodeScanner>
       //Symbology.qr,
       //Symbology.dataMatrix,
       //Symbology.code39,
-      Symbology.code128,
+      //Symbology.code128,
       //Symbology.interleavedTwoOfFive
     });
 
