@@ -62,15 +62,15 @@ class ApplicationState extends ChangeNotifier {
     });
   }
 
-  Future<ScanResult> scanProduct(String docId, String sku) async {
+  Future<ScanResult> scanProduct(String docId, String barcode) async {
     Product? scannedProduct;
     _activeOrders[docId]!.products.forEach((_, product) {
-      if (product.sku == sku && product.status == ProductStatus.available) {
+      var productImage = _productImages['${product.productId}'];
+      if (productImage != null && productImage.barcode == barcode && product.status == ProductStatus.available) {
         scannedProduct = product;
       }
     });
-    if (scannedProduct != null &&
-        scannedProduct!.scannedCount < scannedProduct!.quantity) {
+    if (scannedProduct != null && scannedProduct!.scannedCount < scannedProduct!.quantity) {
       await incrementScannedCounter(docId, scannedProduct!);
       if (scannedProduct!.quantity - scannedProduct!.scannedCount == 1) {
         updateProductStatus(docId, scannedProduct!, ProductStatus.complete);

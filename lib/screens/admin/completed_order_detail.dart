@@ -71,8 +71,8 @@ class _CompletedOrderDetailState extends State<CompletedOrderDetail> {
               ...List.generate(product.quantity, (index) => Padding(
                 padding: const EdgeInsets.all(5.0),
                 child: BarcodeWidget(
-                  barcode: Barcode.code128(),
-                  data: product.sku,
+                  barcode: Barcode.ean13(),
+                  data: productImage!.barcode,
                   width: 160,
                   style: const TextStyle(fontSize: 10))))
             ])

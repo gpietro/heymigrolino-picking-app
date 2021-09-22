@@ -7,7 +7,6 @@ class Product {
       required this.name,
       required this.price,
       required this.quantity,
-      required this.sku,
       required this.scannedCount,
       required this.status});
 
@@ -16,7 +15,6 @@ class Product {
   String name;
   String price;
   int quantity;
-  String sku;
   int scannedCount;
   ProductStatus status;
 
@@ -26,7 +24,6 @@ class Product {
       name: json["name"],
       price: json["price"],
       quantity: json["quantity"],
-      sku: json["sku"],
       scannedCount: json["scannedCount"],
       status: getStatusFromString(json["status"]));
 
@@ -36,7 +33,6 @@ class Product {
         "name": name,
         "price": price,
         "quantity": quantity,
-        "sku": sku,
         "scannedCount": scannedCount,
         "status": status.toString()
       };
