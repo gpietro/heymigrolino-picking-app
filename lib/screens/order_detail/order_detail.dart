@@ -1,6 +1,7 @@
 import 'package:demo/models/product.dart';
 import 'package:demo/models/order.dart';
 import 'package:demo/screens/barcode_scanner/barcode_scanner.dart';
+import 'package:demo/screens/order_detail/barcode_form.dart';
 import 'package:demo/screens/order_list/order_list.dart';
 import 'package:demo/state/application_state.dart';
 import 'package:flutter/material.dart';
@@ -23,17 +24,34 @@ class OrderDetail extends StatefulWidget {
 }
 
 class _OrderDetailState extends State<OrderDetail> {
-
   @override
   Widget build(BuildContext context) {
     return Consumer<ApplicationState>(builder: (context, appState, _) {
-      var order = appState.orders[widget.id] ?? appState.completeOrders[widget.id]; // Avoid null exception
+      var order = appState.orders[widget.id] ??
+          appState.completeOrders[widget.id]; // Avoid null exception
       return Scaffold(
-          appBar: AppBar(
-            title: Text('Bestellung #${order!.orderNumber}'),
-          ),
-          body: _productListWithScanner(order, appState.scanProduct),
-        );
+        appBar: AppBar(
+          title: Text('Bestellung #${order!.orderNumber}'),
+          actions: <Widget>[
+            IconButton(
+              icon: const Icon(
+                Icons.edit,
+              ),
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) => SimpleDialog(
+                    title: const Text('Insert product barcode'),
+                    children: [
+                      BarcodeForm(onSubmit:
+                        <ScanResult>(String barcode) => appState.scanProduct(widget.id, barcode))
+                    ]));
+              },
+            )            
+          ],
+        ),
+        body: _productListWithScanner(order, appState.scanProduct),
+      );
     });
   }
 
@@ -140,11 +158,12 @@ class _OrderDetailState extends State<OrderDetail> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text('Hurray! the order is complete', style: TextStyle(fontWeight: FontWeight.bold)),
+                  const Text('Hurray! the order is complete',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
                   OutlinedButton(
                     onPressed: () async {
                       Navigator.of(context).pushNamedAndRemoveUntil(
-                        OrderList.routeName, (Route<dynamic> route) => false);
+                          OrderList.routeName, (Route<dynamic> route) => false);
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text('Order #${order.orderNumber} completed!'),
                         duration: const Duration(seconds: 2),
