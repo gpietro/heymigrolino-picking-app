@@ -51,31 +51,29 @@ class _CompletedOrderDetailState extends State<CompletedOrderDetail> {
       var productImage = appState.productImages['${product.productId}'];
       return Card(
           child: Column(children: [
-            Row(
-              children: [
-                if (productImage != null)
-                  CachedNetworkImage(
-                    width: 50,
-                    height: 50,
-                    placeholder: (context, url) =>
-                        const CircularProgressIndicator(),
-                    imageUrl: productImage.src.replaceAll(".jpg", "_100x100.jpg"),
-                  ),
-                Text(
-                  '${product.scannedCount} x ${product.name}',
-                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-                )
-              ],
-            ),
-            Column(children: <Widget>[
-              ...List.generate(product.scannedCount, (index) => Padding(
-                padding: const EdgeInsets.all(5.0),
-                child: BarcodeWidget(
-                  barcode: productImage!.barcode.length == 13 ? Barcode.ean13() : Barcode.ean8(),
-                  data: productImage.barcode,
-                  width: 150,
-                  style: const TextStyle(fontSize: 10))))
-            ])
+            if( product.scannedCount > 0)
+              Row(
+                children: [
+                  if (productImage != null)
+                    CachedNetworkImage(
+                      width: 50,
+                      height: 50,
+                      placeholder: (context, url) =>
+                          const CircularProgressIndicator(),
+                      imageUrl: productImage.src.replaceAll(".jpg", "_100x100.jpg"),
+                    ),
+                  Text(
+                    '${product.scannedCount} x ${product.name}',
+                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                  )
+                ],
+              ),
+            if( product.scannedCount > 0)
+              BarcodeWidget(
+                barcode: productImage!.barcode.length == 13 ? Barcode.ean13() : Barcode.ean8(),
+                data: productImage.barcode,
+                width: 150,
+                style: const TextStyle(fontSize: 10))
           ]));
     });
   }
