@@ -2,10 +2,10 @@ import 'dart:async';
 import 'package:demo/models/order.dart';
 import 'package:demo/models/product.dart';
 import 'package:demo/models/product_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_app_check/firebase_app_check.dart';
 
 enum ScanResult { ok, error }
 
@@ -20,7 +20,9 @@ class ApplicationState extends ChangeNotifier {
 
   Future<void> init() async {
     await Firebase.initializeApp();
-    await FirebaseAppCheck.instance.activate(webRecaptchaSiteKey: 'recaptcha-v3-site-key');
+    await FirebaseAuth.instance.signInAnonymously();
+    // Does not support Firestore yet
+    // await FirebaseAppCheck.instance.activate(webRecaptchaSiteKey: 'recaptcha-v3-site-key');
     
     // Active orders
     FirebaseFirestore.instance
