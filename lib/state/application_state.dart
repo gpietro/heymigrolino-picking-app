@@ -5,6 +5,7 @@ import 'package:demo/models/product_image.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_app_check/firebase_app_check.dart';
 
 enum ScanResult { ok, error }
 
@@ -19,6 +20,7 @@ class ApplicationState extends ChangeNotifier {
 
   Future<void> init() async {
     await Firebase.initializeApp();
+    await FirebaseAppCheck.instance.activate(webRecaptchaSiteKey: 'recaptcha-v3-site-key');
     
     // Active orders
     FirebaseFirestore.instance
@@ -66,11 +68,14 @@ class ApplicationState extends ChangeNotifier {
     Product? scannedProduct;
     _activeOrders[docId]!.products.forEach((_, product) {
       var productImage = _productImages['${product.productId}'];
-      if (productImage != null && productImage.barcode == barcode && product.status == ProductStatus.available) {
+      if (productImage != null &&
+          productImage.barcode == barcode &&
+          product.status == ProductStatus.available) {
         scannedProduct = product;
       }
     });
-    if (scannedProduct != null && scannedProduct!.scannedCount < scannedProduct!.quantity) {
+    if (scannedProduct != null &&
+        scannedProduct!.scannedCount < scannedProduct!.quantity) {
       await incrementScannedCounter(docId, scannedProduct!);
       if (scannedProduct!.quantity - scannedProduct!.scannedCount == 1) {
         updateProductStatus(docId, scannedProduct!, ProductStatus.complete);
