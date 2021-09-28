@@ -23,21 +23,14 @@ void _onTapOrder(BuildContext context, String orderId) {
 }
 
 Widget _itemBuilder(BuildContext context, Order order, String docId) {
-  return Container(
+  return GestureDetector(
+      onTap: () => _onTapOrder(context, docId),
       key: Key('order_list_item_${order.id}'),
-      child: Stack(children: <Widget>[
-        Card(
-            child: ListTile(
-                title: Text('Bestellnummer ${order.orderNumber}'),
-                subtitle: Text(
-                    '${order.createdTime()} - ${order.products.length} Produkte (${order.totalPrice} ${order.currency})'))),
-        Positioned.fill(
-            child: Material(
-                color: Colors.transparent,
-                child: InkWell(
-                  onTap: () => _onTapOrder(context, docId),
-                )))
-      ]));
+      child: Card(
+          child: ListTile(
+              title: Text('Bestellnummer ${order.orderNumber}'),
+              subtitle: Text(
+                  '${order.createdTime()} - ${order.products.length} Produkte (${order.totalPrice} ${order.currency})'))));
 }
 
 onSelected(BuildContext context, String item) {
@@ -66,19 +59,20 @@ class OrderListState extends State<OrderList> {
               padding: const EdgeInsets.only(top: 25.0),
               children: [
                 ...appState.orderLocations.map((OrderLocation orderLocation) {
-                  return Material(
-                      color: Colors.white.withOpacity(0.0),
-                      child: InkWell(
-                          onTap: () {
-                            setState(() {
-                              appState.selectedLocation = orderLocation;
-                            });
-                            Navigator.of(context).pop();
-                          },
-                          child: Padding(
-                              padding: const EdgeInsets.all(14),
-                              child: Text(
-                                  '${orderLocation.zip} ${orderLocation.name}'))));
+                  return GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        appState.selectedLocation = orderLocation;
+                      });
+                      Navigator.of(context).pop();
+                    },
+                    key: Key('location_${orderLocation.id}'),
+                    child: Card(
+                      child: ListTile(
+                        title: Text('${orderLocation.zip} ${orderLocation.name}'),
+                      )
+                    )
+                  );                  
                 })
               ],
             ),
