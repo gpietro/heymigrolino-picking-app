@@ -59,7 +59,7 @@ class OrderListState extends State<OrderList> {
               padding: const EdgeInsets.only(top: 25.0),
               children: [
                 const SizedBox(
-                  height: 55.0,
+                  height: 70.0,
                   child: DrawerHeader(
                     child: Text('Locations', style: TextStyle(fontSize: 16.0)),
                       decoration: BoxDecoration(

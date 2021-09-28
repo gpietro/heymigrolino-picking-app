@@ -71,12 +71,8 @@ class _BarcodeScannerState extends State<BarcodeScanner>
     captureSettings.enableSymbologies({
       Symbology.ean8,
       Symbology.ean13Upca,
-      //Symbology.upce,
-      //Symbology.qr,
-      //Symbology.dataMatrix,
-      //Symbology.code39,
-      //Symbology.code128,
-      //Symbology.interleavedTwoOfFive
+      Symbology.upce,
+      Symbology.interleavedTwoOfFive      
     });
 
     // Some linear/1d barcode symbologies allow you to encode variable-length data. By default, the Scandit

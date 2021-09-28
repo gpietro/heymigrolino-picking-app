@@ -1,3 +1,5 @@
+import 'package:barcode_widget/barcode_widget.dart';
+
 class ProductImage {
   ProductImage(
       {required this.alt,
@@ -19,6 +21,35 @@ class ProductImage {
       width: json['width'],
       barcode: json['barcode']);
 
-  Map<String, dynamic> toJson() =>
-      {"alt": alt, "src": src, "height": height, "width": width, "barcode": barcode};
+  Map<String, dynamic> toJson() => {
+        "alt": alt,
+        "src": src,
+        "height": height,
+        "width": width,
+        "barcode": barcode
+      };
+
+  Barcode? getBarcode() {
+    Barcode? result;
+    switch (barcode.length) {
+      case 14:
+        result = Barcode.itf14();
+        break;
+      case 13:
+        result = Barcode.ean13();
+        break;
+      case 12:
+        result = Barcode.upcA();
+        break;
+      case 8:
+        result = Barcode.ean8();
+        break;
+      case 6:
+        result = Barcode.upcE();
+        break;
+      default:
+        break;
+    }
+    return result;
+  }
 }

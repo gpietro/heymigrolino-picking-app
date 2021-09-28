@@ -69,8 +69,8 @@ class _CompletedOrderDetailState extends State<CompletedOrderDetail> {
                 ],
               ),
             if( product.scannedCount > 0)
-              BarcodeWidget(
-                barcode: productImage!.barcode.length == 13 ? Barcode.ean13() : Barcode.ean8(),
+              BarcodeWidget(              
+                barcode: productImage!.getBarcode()!,
                 data: productImage.barcode,
                 width: 150,
                 style: const TextStyle(fontSize: 10))
