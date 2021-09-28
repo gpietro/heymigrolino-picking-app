@@ -58,6 +58,17 @@ class OrderListState extends State<OrderList> {
               // Important: Remove any padding from the ListView.
               padding: const EdgeInsets.only(top: 25.0),
               children: [
+                const SizedBox(
+                  height: 55.0,
+                  child: DrawerHeader(
+                    child: Text('Locations', style: TextStyle(fontSize: 16.0)),
+                      decoration: BoxDecoration(
+                      color: Colors.orange
+                    ),                    
+                    margin: EdgeInsets.all(0),
+                    padding: EdgeInsets.only(left: 20.0)
+                  ),
+                ),
                 ...appState.orderLocations.map((OrderLocation orderLocation) {
                   return GestureDetector(
                     onTap: () {
