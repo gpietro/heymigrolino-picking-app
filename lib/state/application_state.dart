@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:demo/models/order.dart';
+import 'package:demo/models/order_location.dart';
 import 'package:demo/models/product.dart';
 import 'package:demo/models/product_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -17,13 +18,15 @@ class ApplicationState extends ChangeNotifier {
   Map<String, Order> _completeOrders = {};
   Map<String, Order> _activeOrders = {};
   Map<String, ProductImage> _productImages = {};
+  List<OrderLocation> _orderLocations = [];
+  OrderLocation? _selectedLocation;
 
   Future<void> init() async {
     await Firebase.initializeApp();
     await FirebaseAuth.instance.signInAnonymously();
-    // Does not support Firestore yet
+    // !Does not support Firestore yet!
     // await FirebaseAppCheck.instance.activate(webRecaptchaSiteKey: 'recaptcha-v3-site-key');
-    
+
     // Active orders
     FirebaseFirestore.instance
         .collection('orders')
@@ -62,6 +65,18 @@ class ApplicationState extends ChangeNotifier {
         _productImages[document.reference.id] =
             ProductImage.fromJson(document.data());
       }
+      notifyListeners();
+    });
+
+    FirebaseFirestore.instance
+        .collection('locations')
+        .snapshots()
+        .listen((snapshot) {
+      _orderLocations = [];
+      for (final document in snapshot.docs) {
+        _orderLocations.add(OrderLocation.fromJson(document.data()));
+      }
+      _selectedLocation = _orderLocations.first;
       notifyListeners();
     });
   }
@@ -111,4 +126,8 @@ class ApplicationState extends ChangeNotifier {
   Map<String, Order> get orders => _activeOrders;
   Map<String, Order> get completeOrders => _completeOrders;
   Map<String, ProductImage> get productImages => _productImages;
+  List<OrderLocation> get orderLocations => _orderLocations;
+  // ignore: unnecessary_getters_setters
+  OrderLocation? get selectedLocation => _selectedLocation;
+  set selectedLocation(OrderLocation? orderLocation) => _selectedLocation = orderLocation;
 }

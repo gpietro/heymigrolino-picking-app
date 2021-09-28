@@ -136,28 +136,31 @@ class _BarcodeScannerState extends State<BarcodeScanner>
     }
     if (showScanMessage != null) {
       String textMessage = showScanMessage == ScanResult.ok
-          ? '\u{1F973} product scanned!'
-          : '\u{1F4A9} wrong product!';
+          ? 'PRODUCT SCANNED!'
+          : 'WRONG PRODUCT!';
+      Color color = showScanMessage == ScanResult.ok
+          ? const Color(0xAA43a047)
+          : const Color(0xAAe53935);
       children = [
         ...children,
+        // TODO: try to use Positioned.fill instead of Container
         Container(
-            decoration: const BoxDecoration(
-              color: Colors.black54,
-              borderRadius: BorderRadius.all(Radius.circular(20)),
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: color,
             ),
-            padding: const EdgeInsets.all(4.0),
             child: Text(
               textMessage,
               style: const TextStyle(
-                fontSize: 18,
-                color: Colors.white,
+                fontSize: 16,              
+                
+                fontWeight: FontWeight.bold
               ),
             ))
       ];
     }
-    // check: 2705
-    // cross: 274C
-    // poo:   1F4A9
 
     return Stack(alignment: const Alignment(0, 0), children: children);
   }
