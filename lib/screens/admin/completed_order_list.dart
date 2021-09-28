@@ -25,12 +25,14 @@ class CompletedOrderListState extends State<CompletedOrderList> {
           backgroundColor: Colors.green,
         ),
         body: Consumer<ApplicationState>(builder: (context, appState, _) {
+          Map<String, Order> completeOrders = Map.of(appState.completeOrders)
+            ..removeWhere((key, value) => value.locationId != appState.selectedLocation?.id);
           return ListView.builder(
-              itemCount: appState.completeOrders.length,
+              itemCount: completeOrders.length,
               itemBuilder: (context, index) {
-                String key = appState.completeOrders.keys.elementAt(index);
+                String key = completeOrders.keys.elementAt(index);
                 return _itemBuilder(
-                    context, appState.completeOrders[key]!, key);
+                    context, completeOrders[key]!, key);
               });
         }));
   }
