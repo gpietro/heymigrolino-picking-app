@@ -42,8 +42,8 @@ class BarcodeFormState extends State<BarcodeForm> {
                   if (value == null || value.isEmpty) {
                     return 'Enter barcode';
                   }
-                  if (value.length != 8 && value.length != 13) {
-                    return 'The barcode must have 8 or 13 digits';
+                  if (value.length != 8 && value.length != 12 && value.length != 13 && value.length != 14) {
+                    return 'Incorrect number of digits';
                   }
                   if (double.tryParse(value) == null) {
                     return 'The barcode needs to be a number';

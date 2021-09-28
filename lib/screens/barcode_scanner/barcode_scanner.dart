@@ -72,8 +72,11 @@ class _BarcodeScannerState extends State<BarcodeScanner>
       Symbology.ean8,
       Symbology.ean13Upca,
       Symbology.upce,
-      Symbology.interleavedTwoOfFive      
+      Symbology.interleavedTwoOfFive
     });
+
+    captureSettings.settingsForSymbology(Symbology.ean13Upca)
+      .setExtensionEnabled("remove_leading_upca_zero", enabled: true);
 
     // Some linear/1d barcode symbologies allow you to encode variable-length data. By default, the Scandit
     // Data Capture SDK only scans barcodes in a certain length range. If your application requires scanning of one
@@ -149,11 +152,7 @@ class _BarcodeScannerState extends State<BarcodeScanner>
             ),
             child: Text(
               textMessage,
-              style: const TextStyle(
-                fontSize: 16,              
-                
-                fontWeight: FontWeight.bold
-              ),
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ))
       ];
     }
