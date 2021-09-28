@@ -79,7 +79,7 @@ class OrderListState extends State<OrderList> {
                     },
                     key: Key('location_${orderLocation.id}'),
                     child: Card(
-                      color: orderLocation.id == appState.selectedLocation?.id ? Colors.green : Colors.white,
+                      color: orderLocation.id == appState.selectedLocation?.id ? Colors.orange.shade100 : Colors.white,
                       child: ListTile(
                         title: Text('${orderLocation.zip} ${orderLocation.name}'),
                       )
@@ -90,7 +90,7 @@ class OrderListState extends State<OrderList> {
             ),
           ),
           appBar: AppBar(
-            title: Text('Bestellliste ${appState.selectedLocation?.name ?? ""}'),
+            title: Text(appState.selectedLocation?.name ?? "Loading..."),
             actions: [
               PopupMenuButton(
                   onSelected: (String item) => onSelected(context, item),
