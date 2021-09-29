@@ -51,33 +51,43 @@ class _CompletedOrderDetailState extends State<CompletedOrderDetail> {
   Widget _itemBuilder(BuildContext context, Product product) {
     return Consumer<ApplicationState>(builder: (context, appState, _) {
       var productImage = appState.productImages['${product.productId}'];
-      return Card(
-          child: Column(children: [
-        if (product.scannedCount > 0)
-          Row(
-            children: [
-              if (productImage != null)
-                CachedNetworkImage(
-                  width: 50,
-                  height: 50,
-                  placeholder: (context, url) =>
-                      const CircularProgressIndicator(),
-                  imageUrl: productImage.src.replaceAll(".jpg", "_100x100.jpg"),
-                ),
-              Text(
-                '${product.scannedCount} x ${product.name}',
-                style:
-                    const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-              )
-            ],
-          ),
-        if (product.scannedCount > 0)
-          BarcodeWidget(
-              barcode: productImage!.getBarcode()!,
-              data: productImage.barcode,
-              width: 150,
-              style: const TextStyle(fontSize: 10))
-      ]));
+      if (product.scannedCount > 0) {
+        return Card(
+            margin: const EdgeInsets.only(bottom: 20.0),
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(padding: const EdgeInsets.only(bottom: 10.0), child: Text(
+                    '${product.scannedCount} x ${product.name}',
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.w500),
+                  ),),                  
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      if (productImage != null)
+                        CachedNetworkImage(
+                          width: 80,
+                          height: 80,
+                          placeholder: (context, url) =>
+                              const CircularProgressIndicator(),
+                          imageUrl: productImage.src
+                              .replaceAll(".jpg", "_100x100.jpg"),
+                        ),
+                      BarcodeWidget(
+                          barcode: productImage!.getBarcode()!,
+                          data: productImage.barcode,
+                          width: 160,
+                          style: const TextStyle(fontSize: 10))
+                    ],
+                  ),
+                ],
+              ),
+            ));
+      }
+      return const SizedBox.shrink();      
     });
   }
 
@@ -136,7 +146,7 @@ class _CompletedOrderDetailState extends State<CompletedOrderDetail> {
                               Text('Order #${order.orderNumber} verified!'),
                           duration: const Duration(seconds: 2),
                         ));
-                        */                        
+                        */
                       },
                       child: const Text('Order verified'),
                     )));

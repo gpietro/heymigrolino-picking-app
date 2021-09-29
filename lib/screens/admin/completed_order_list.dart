@@ -46,10 +46,10 @@ class CompletedOrderListState extends State<CompletedOrderList> {
     return GestureDetector(
         onTap: () => _onTapOrder(context, docId),
         key: Key('order_list_item_${order.id}'),
-        child: Card(
-            child: ListTile(
-                title: Text('Bestellnummer ${order.orderNumber}'),
-                subtitle: Text(
-                    '${order.createdTime()} - ${order.products.length} Produkte (${order.totalPrice} ${order.currency})'))));
+        child: Card(          
+          child: ListTile(
+              title: Text('Bestellnummer ${order.orderNumber}'),
+              subtitle: Text(
+                  '${order.createdTime()} - ${order.products.length} Produkte (${order.totalPrice} ${order.currency})'))));
   }
 }
