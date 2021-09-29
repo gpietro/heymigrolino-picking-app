@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-enum ScanResult { ok, error }
+enum ScanResult { ok, full, error }
 
 class ApplicationState extends ChangeNotifier {
   ApplicationState() {
@@ -91,13 +91,15 @@ class ApplicationState extends ChangeNotifier {
         scannedProduct = product;
       }
     });
-    if (scannedProduct != null &&
-        scannedProduct!.scannedCount < scannedProduct!.quantity) {
-      await incrementScannedCounter(docId, scannedProduct!);
-      if (scannedProduct!.quantity - scannedProduct!.scannedCount == 1) {
-        updateProductStatus(docId, scannedProduct!, ProductStatus.complete);
+    if (scannedProduct != null) {
+      if (scannedProduct!.scannedCount < scannedProduct!.quantity) {
+        await incrementScannedCounter(docId, scannedProduct!);
+        if (scannedProduct!.quantity - scannedProduct!.scannedCount == 1) {
+          updateProductStatus(docId, scannedProduct!, ProductStatus.complete);
+        }
+        return ScanResult.ok;
       }
-      return ScanResult.ok;
+      return ScanResult.full;
     }
     return ScanResult.error;
   }
@@ -129,5 +131,6 @@ class ApplicationState extends ChangeNotifier {
   List<OrderLocation> get orderLocations => _orderLocations;
   // ignore: unnecessary_getters_setters
   OrderLocation? get selectedLocation => _selectedLocation;
-  set selectedLocation(OrderLocation? orderLocation) => _selectedLocation = orderLocation;
+  set selectedLocation(OrderLocation? orderLocation) =>
+      _selectedLocation = orderLocation;
 }

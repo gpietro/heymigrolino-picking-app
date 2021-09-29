@@ -75,8 +75,9 @@ class _BarcodeScannerState extends State<BarcodeScanner>
       Symbology.interleavedTwoOfFive
     });
 
-    captureSettings.settingsForSymbology(Symbology.ean13Upca)
-      .setExtensionEnabled("remove_leading_upca_zero", enabled: true);
+    captureSettings
+        .settingsForSymbology(Symbology.ean13Upca)
+        .setExtensionEnabled("remove_leading_upca_zero", enabled: true);
 
     // Some linear/1d barcode symbologies allow you to encode variable-length data. By default, the Scandit
     // Data Capture SDK only scans barcodes in a certain length range. If your application requires scanning of one
@@ -134,12 +135,18 @@ class _BarcodeScannerState extends State<BarcodeScanner>
       children = [_captureView];
     }
     if (showScanMessage != null) {
-      String textMessage = showScanMessage == ScanResult.ok
-          ? 'PRODUCT SCANNED!'
-          : 'WRONG PRODUCT!';
-      Color color = showScanMessage == ScanResult.ok
-          ? const Color(0xAA43a047)
-          : const Color(0xAAe53935);
+      String textMessage;
+      Color color;
+      if (showScanMessage == ScanResult.ok) {
+        textMessage = 'PRODUCT SCANNED!';
+        color = const Color(0xAA43a047);
+      } else if (showScanMessage == ScanResult.full) {
+        textMessage = 'PRODUCT ALREADY SCANNED!';
+        color = const Color(0xAAe53935);
+      } else {
+        textMessage = 'WRONG PRODUCT!';
+        color = const Color(0xAAe53935);
+      }
       children = [
         ...children,
         // TODO: try to use Positioned.fill instead of Container
