@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:demo/models/product.dart';
 import 'package:demo/models/order.dart';
 import 'package:demo/screens/barcode_scanner/barcode_scanner.dart';
@@ -5,6 +7,7 @@ import 'package:demo/screens/order_detail/barcode_form.dart';
 import 'package:demo/screens/order_list/order_list.dart';
 import 'package:demo/state/application_state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart' as widgets;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
@@ -162,12 +165,46 @@ class _OrderDetailState extends State<OrderDetail> {
                       style: TextStyle(fontWeight: FontWeight.bold)),
                   OutlinedButton(
                     onPressed: () async {
-                      Navigator.of(context).pushNamedAndRemoveUntil(
+                      Timer timer = Timer(const Duration(milliseconds: 3000), () {
+                        Navigator.of(context, rootNavigator: true).pop();
+                        Navigator.of(context).pushNamedAndRemoveUntil(
                           OrderList.routeName, (Route<dynamic> route) => false);
+                      });
+                      showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (BuildContext context) => AlertDialog(
+                          content: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: const [
+                            Text('Order complete', style: TextStyle(fontSize: 20)),
+                            Icon(
+                              Icons.check_outlined,
+                              color: Colors.green,
+                              size: 48.0,
+                            ),
+                            Text('Well done!')
+                          ]),
+                          actions: <Widget>[
+                            TextButton(
+                              child: const Text('Close'),
+                              onPressed: () {                                
+                                Navigator.pop(context);
+                                Navigator.of(context).pushNamedAndRemoveUntil(
+                                  OrderList.routeName, (Route<dynamic> route) => false);
+                              },
+                            ),
+                          ],
+                        ),
+                      ).then((value) {                        
+                        timer.cancel();                      
+                      });
+                      /* 
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text('Order #${order.orderNumber} completed!'),
                         duration: const Duration(seconds: 2),
                       ));
+                      */
                       appState.updateOrderStatus(
                           widget.id, OrderStatus.complete);
                     },

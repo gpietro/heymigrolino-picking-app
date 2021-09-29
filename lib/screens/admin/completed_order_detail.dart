@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:demo/models/product.dart';
 import 'package:demo/models/order.dart';
@@ -51,30 +53,31 @@ class _CompletedOrderDetailState extends State<CompletedOrderDetail> {
       var productImage = appState.productImages['${product.productId}'];
       return Card(
           child: Column(children: [
-            if( product.scannedCount > 0)
-              Row(
-                children: [
-                  if (productImage != null)
-                    CachedNetworkImage(
-                      width: 50,
-                      height: 50,
-                      placeholder: (context, url) =>
-                          const CircularProgressIndicator(),
-                      imageUrl: productImage.src.replaceAll(".jpg", "_100x100.jpg"),
-                    ),
-                  Text(
-                    '${product.scannedCount} x ${product.name}',
-                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-                  )
-                ],
-              ),
-            if( product.scannedCount > 0)
-              BarcodeWidget(              
-                barcode: productImage!.getBarcode()!,
-                data: productImage.barcode,
-                width: 150,
-                style: const TextStyle(fontSize: 10))
-          ]));
+        if (product.scannedCount > 0)
+          Row(
+            children: [
+              if (productImage != null)
+                CachedNetworkImage(
+                  width: 50,
+                  height: 50,
+                  placeholder: (context, url) =>
+                      const CircularProgressIndicator(),
+                  imageUrl: productImage.src.replaceAll(".jpg", "_100x100.jpg"),
+                ),
+              Text(
+                '${product.scannedCount} x ${product.name}',
+                style:
+                    const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+              )
+            ],
+          ),
+        if (product.scannedCount > 0)
+          BarcodeWidget(
+              barcode: productImage!.getBarcode()!,
+              data: productImage.barcode,
+              width: 150,
+              style: const TextStyle(fontSize: 10))
+      ]));
     });
   }
 
@@ -91,13 +94,49 @@ class _CompletedOrderDetailState extends State<CompletedOrderDetail> {
                     padding: const EdgeInsets.all(16.0),
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.of(context).pop();
+                        Timer timer =
+                            Timer(const Duration(milliseconds: 3000), () {
+                          Navigator.of(context, rootNavigator: true).pop();
+                          Navigator.of(context).pop();
+                          deleteOrder();
+                        });
+                        showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (BuildContext context) => AlertDialog(
+                            content: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: const [
+                                  Text('Order verified',
+                                      style: TextStyle(fontSize: 20)),
+                                  Icon(
+                                    Icons.check_outlined,
+                                    color: Colors.green,
+                                    size: 48.0,
+                                  ),
+                                  Text('Well done!')
+                                ]),
+                            actions: <Widget>[
+                              TextButton(
+                                child: const Text('Close'),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                  Navigator.of(context).pop();
+                                  deleteOrder();
+                                },
+                              ),
+                            ],
+                          ),
+                        ).then((value) {
+                          timer.cancel();
+                        });
+                        /*
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                           content:
                               Text('Order #${order.orderNumber} verified!'),
                           duration: const Duration(seconds: 2),
                         ));
-                        deleteOrder();
+                        */                        
                       },
                       child: const Text('Order verified'),
                     )));
