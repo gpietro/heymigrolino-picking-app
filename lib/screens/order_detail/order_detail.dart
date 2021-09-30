@@ -6,6 +6,7 @@ import 'package:demo/screens/barcode_scanner/barcode_scanner.dart';
 import 'package:demo/screens/order_detail/barcode_form.dart';
 import 'package:demo/screens/order_list/order_list.dart';
 import 'package:demo/state/application_state.dart';
+import 'package:demo/widgets/image_full_screen_wrapper_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart' as widgets;
@@ -91,15 +92,17 @@ class _OrderDetailState extends State<OrderDetail> {
                           fontSize: 16,
                           color: counterColor[product.status])),
                   leading: productImage != null
-                      ? CachedNetworkImage(
+                      ? ImageFullScreenWrapperWidget(
+                        child: CachedNetworkImage(
                           width: 50,
                           height: 50,
                           placeholder: (context, url) =>
                               const CircularProgressIndicator(),
                           imageUrl: productImage.src
-                              .replaceAll(".jpg", "_100x100.jpg"),
-                        )
-                      : null,
+                              .replaceAll(".jpg", "_300x300.jpg"),
+                        ),
+                        dark: false
+                      ): null,
                 ))),
         secondaryActions: <Widget>[
           if (product.status != ProductStatus.complete)
