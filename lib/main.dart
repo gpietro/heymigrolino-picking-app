@@ -9,6 +9,7 @@ import 'package:demo/screens/order_detail/order_detail_arguments.dart';
 import 'package:demo/state/application_state.dart';
 import 'package:flutter/material.dart';
 import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode.dart';
+import 'screens/location_list/location_list.dart';
 import 'screens/order_list/order_list.dart';
 import 'screens/order_detail/order_detail.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -18,16 +19,17 @@ void main() async {
   await dotenv.load(fileName: '.env');
   await ScanditFlutterDataCaptureBarcode.initialize();
   runApp(ChangeNotifierProvider(
-      create: (context) => ApplicationState(), 
-      child: const AppRouter(),   
-  ));  
+    create: (context) => ApplicationState(),
+    child: const AppRouter(),
+  ));
 }
 
 class AppRouter extends StatelessWidget {
   const AppRouter({Key? key}) : super(key: key);
 
   static FirebaseAnalytics analytics = FirebaseAnalytics();
-  static FirebaseAnalyticsObserver observer = FirebaseAnalyticsObserver(analytics: analytics);
+  static FirebaseAnalyticsObserver observer =
+      FirebaseAnalyticsObserver(analytics: analytics);
 
   // This widget is the root of your application.
   @override
@@ -36,10 +38,10 @@ class AppRouter extends StatelessWidget {
         title: 'Picking App',
         onGenerateRoute: _routes(),
         theme: ThemeData(
-          primarySwatch: Colors.orange, 
+          primarySwatch: Colors.orange,
         ),
         navigatorObservers: <NavigatorObserver>[observer],
-        home: const OrderList());
+        home: const LocationList());
   }
 
   RouteFactory _routes() {
@@ -48,6 +50,9 @@ class AppRouter extends StatelessWidget {
       switch (settings.name) {
         case OrderList.routeName:
           builder = (BuildContext context) => const OrderList();
+          break;
+        case LocationList.routeName:
+          builder = (BuildContext context) => const LocationList();
           break;
         case OrderDetail.routeName:
           final args = settings.arguments as OrderDetailArguments;

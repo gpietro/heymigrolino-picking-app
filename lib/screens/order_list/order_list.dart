@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class OrderList extends StatefulWidget {
-  static const routeName = '/';
+  static const routeName = '/order_list';
   static const menuAdmin = 'Einstellungen';
 
   const OrderList({Key? key}) : super(key: key);
@@ -53,7 +53,7 @@ class OrderListState extends State<OrderList> {
             (key, value) => value.locationId != appState.selectedLocation?.id);
 
       return Scaffold(
-          drawer: Drawer(
+          /*drawer: Drawer(
             child: ListView(
               // Important: Remove any padding from the ListView.
               padding: const EdgeInsets.only(top: 25.0),
@@ -88,7 +88,7 @@ class OrderListState extends State<OrderList> {
                 })
               ],
             ),
-          ),
+          ),*/
           appBar: AppBar(
             title: Text(appState.selectedLocation?.name ?? "Loading..."),
             actions: [
