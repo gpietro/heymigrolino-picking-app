@@ -7,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:wakelock/wakelock.dart';
 
 enum ScanResult { ok, full, error }
 
@@ -26,6 +27,7 @@ class ApplicationState extends ChangeNotifier {
     await FirebaseAuth.instance.signInAnonymously();
     // !Does not support Firestore yet!
     // await FirebaseAppCheck.instance.activate(webRecaptchaSiteKey: 'recaptcha-v3-site-key');
+    Wakelock.enable();
 
     // Active orders
     FirebaseFirestore.instance
