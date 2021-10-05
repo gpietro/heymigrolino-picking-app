@@ -40,16 +40,16 @@ class BarcodeFormState extends State<BarcodeForm> {
                 },
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Enter barcode';
+                    return 'Barcode-Einfügung';
                   }
                   if (value.length != 8 && value.length != 12 && value.length != 13 && value.length != 14) {
-                    return 'Incorrect number of digits';
+                    return 'Falsche Anzahl von Ziffern';
                   }
                   if (double.tryParse(value) == null) {
-                    return 'The barcode needs to be a number';
+                    return 'Der Barcode muss eine Zahl sein';
                   }
                   if (scanResult == ScanResult.error) {
-                    return 'Product not found!';
+                    return 'Produkt nicht gefunden!';
                   } 
                   return null;
                 },
@@ -71,7 +71,7 @@ class BarcodeFormState extends State<BarcodeForm> {
                   if (_formKey.currentState!.validate()) {                    
                     Navigator.pop(context);
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                      content: Text('Product scanned!'),
+                      content: Text('Produkt gescannt!'),
                       backgroundColor: Colors.green));
                   }
                 },

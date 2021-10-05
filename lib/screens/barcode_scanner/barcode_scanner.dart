@@ -138,13 +138,13 @@ class _BarcodeScannerState extends State<BarcodeScanner>
       String textMessage;
       Color color;
       if (showScanMessage == ScanResult.ok) {
-        textMessage = 'PRODUCT SCANNED!';
+        textMessage = 'PRODUKT GESCANNT!';
         color = const Color(0xAA43a047);
       } else if (showScanMessage == ScanResult.full) {
-        textMessage = 'PRODUCT ALREADY SCANNED!';
+        textMessage = 'PRODUKT SCHON GESCANNT!';
         color = const Color(0xAAe53935);
       } else {
-        textMessage = 'WRONG PRODUCT!';
+        textMessage = 'FALSCHES PRODUKT!';
         color = const Color(0xAAe53935);
       }
       children = [

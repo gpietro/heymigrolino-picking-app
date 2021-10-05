@@ -3,8 +3,6 @@ import 'package:demo/screens/admin/completed_order_detail_arguments.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:provider/provider.dart';
-import 'package:demo/screens/product_detail/product_detail.dart';
-import 'package:demo/screens/product_detail/product_detail_arguments.dart';
 import 'package:demo/screens/order_detail/order_detail_arguments.dart';
 import 'package:demo/state/application_state.dart';
 import 'package:flutter/material.dart';
@@ -61,13 +59,6 @@ class AppRouter extends StatelessWidget {
         case CompletedOrderDetail.routeName:
           final args = settings.arguments as CompletedOrderDetailArguments;
           builder = (BuildContext context) => CompletedOrderDetail(id: args.id);
-          break;
-        case ProductDetail.routeName:
-          final args = settings.arguments as ProductDetailArguments;
-          builder = (BuildContext context) => ProductDetail(
-                id: args.id,
-                orderId: args.orderId,
-              );
           break;
         default:
           throw Exception('Invalid route: ${settings.name}');

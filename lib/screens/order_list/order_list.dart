@@ -1,5 +1,4 @@
 import 'package:demo/models/order.dart';
-import 'package:demo/models/order_location.dart';
 import 'package:demo/screens/admin/completed_order_list.dart';
 import 'package:demo/screens/order_detail/order_detail.dart';
 import 'package:demo/screens/order_detail/order_detail_arguments.dart';
@@ -53,42 +52,6 @@ class OrderListState extends State<OrderList> {
             (key, value) => value.locationId != appState.selectedLocation?.id);
 
       return Scaffold(
-          /*drawer: Drawer(
-            child: ListView(
-              // Important: Remove any padding from the ListView.
-              padding: const EdgeInsets.only(top: 25.0),
-              children: [
-                const SizedBox(
-                  height: 70.0,
-                  child: DrawerHeader(
-                    child: Text('Locations', style: TextStyle(fontSize: 16.0)),
-                      decoration: BoxDecoration(
-                      color: Colors.orange
-                    ),                    
-                    margin: EdgeInsets.all(0),
-                    padding: EdgeInsets.only(left: 20.0)
-                  ),
-                ),
-                ...appState.orderLocations.map((OrderLocation orderLocation) {
-                  return GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        appState.selectedLocation = orderLocation;
-                      });
-                      Navigator.of(context).pop();
-                    },
-                    key: Key('location_${orderLocation.id}'),
-                    child: Card(
-                      color: orderLocation.id == appState.selectedLocation?.id ? Colors.orange.shade100 : Colors.white,
-                      child: ListTile(
-                        title: Text('${orderLocation.zip} ${orderLocation.name}'),
-                      )
-                    )
-                  );                  
-                })
-              ],
-            ),
-          ),*/
           appBar: AppBar(
             title: Text(appState.selectedLocation?.name ?? "Loading..."),
             actions: [

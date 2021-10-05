@@ -45,7 +45,7 @@ class _OrderDetailState extends State<OrderDetail> {
                 showDialog(
                   context: context,
                   builder: (BuildContext context) => SimpleDialog(
-                    title: const Text('Insert product barcode'),
+                    title: const Text('Nummer des Barcodes eingeben'),
                     children: [
                       BarcodeForm(onSubmit:
                         <ScanResult>(String barcode) => appState.scanProduct(widget.id, barcode))
@@ -108,8 +108,8 @@ class _OrderDetailState extends State<OrderDetail> {
           if (product.status != ProductStatus.complete)
             IconSlideAction(
               caption: product.status == ProductStatus.available
-                  ? 'Unavailable'
-                  : 'Available',
+                  ? 'nicht verfügbar'
+                  : 'verfügbar',
               color: product.status == ProductStatus.available
                   ? Colors.red
                   : Colors.green,
@@ -125,7 +125,7 @@ class _OrderDetailState extends State<OrderDetail> {
                         : ProductStatus.available),
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text(
-                      '${product.status == ProductStatus.unavailable ? 'Available' : 'Unavailable'}: ${product.name}',
+                      '${product.status == ProductStatus.unavailable ? 'verfügbar' : 'nicht verfügbar'}: ${product.name}',
                       overflow: TextOverflow.ellipsis,
                     ),
                     action: SnackBarAction(
@@ -164,7 +164,7 @@ class _OrderDetailState extends State<OrderDetail> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text('Hurray! the order is complete',
+                  const Text('Die Bestellung ist abgeschlossen',
                       style: TextStyle(fontWeight: FontWeight.bold)),
                   OutlinedButton(
                     onPressed: () async {
@@ -180,13 +180,13 @@ class _OrderDetailState extends State<OrderDetail> {
                           content: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: const [
-                            Text('Order complete', style: TextStyle(fontSize: 20)),
+                            Text('Alles ist gepackt', style: TextStyle(fontSize: 20)),
                             Icon(
                               Icons.check_outlined,
                               color: Colors.green,
                               size: 48.0,
                             ),
-                            Text('Well done!')
+                            Text('Gut gemacht!')
                           ]),
                           actions: <Widget>[
                             TextButton(
@@ -202,16 +202,10 @@ class _OrderDetailState extends State<OrderDetail> {
                       ).then((value) {                        
                         timer.cancel();                      
                       });
-                      /* 
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text('Order #${order.orderNumber} completed!'),
-                        duration: const Duration(seconds: 2),
-                      ));
-                      */
                       appState.updateOrderStatus(
                           widget.id, OrderStatus.complete);
                     },
-                    child: const Text('Checkout'),
+                    child: const Text('Zur Kasse'),
                   )
                 ],
               )),
@@ -222,12 +216,10 @@ class _OrderDetailState extends State<OrderDetail> {
 
   Widget _productList(Order order, ProductStatus status) {
     List<int> productIds = order.productIds
-        //.where((productId) => order.products['$productId']!.status == status)
         .toList(growable: false)
       ..sort((prevId, nextId) => order.products['$prevId']!.status
           .toString()
           .compareTo(order.products['$nextId']!.status.toString()));
-    // List<int> unavailableProductIds = order.productIds.where((productId) => order.products['$productId']!.status == ProductStatus.unavailable).toList();
     return ListView.builder(
         itemCount: productIds.length,
         itemBuilder: (context, index) {

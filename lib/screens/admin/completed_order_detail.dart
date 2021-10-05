@@ -93,7 +93,6 @@ class _CompletedOrderDetailState extends State<CompletedOrderDetail> {
 
   Widget _productList(Order order, Function deleteOrder) {
     List<int> productIds = order.productIds.toList();
-    // List<int> unavailableProductIds = order.productIds.where((productId) => order.products['$productId']!.status == ProductStatus.unavailable).toList();
     return ListView.builder(
         itemCount: productIds.length + 1,
         itemBuilder: (context, index) {
@@ -117,14 +116,14 @@ class _CompletedOrderDetailState extends State<CompletedOrderDetail> {
                             content: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: const [
-                                  Text('Order verified',
+                                  Text('Bestellung abgeschlossen',
                                       style: TextStyle(fontSize: 20)),
                                   Icon(
                                     Icons.check_outlined,
                                     color: Colors.green,
                                     size: 48.0,
                                   ),
-                                  Text('Well done!')
+                                  Text('Gut gemacht!')
                                 ]),
                             actions: <Widget>[
                               TextButton(
@@ -148,7 +147,7 @@ class _CompletedOrderDetailState extends State<CompletedOrderDetail> {
                         ));
                         */
                       },
-                      child: const Text('Order verified'),
+                      child: const Text('Bestellung abgeschlossen'),
                     )));
           }
           return _itemBuilder(context, order.products['${productIds[index]}']!);

@@ -18,7 +18,7 @@ class LocationListState extends State<LocationList> {
     return Consumer<ApplicationState>(builder: (context, appState, _) {
       return Scaffold(
         appBar: AppBar(
-          title: const Text("Select the shop"),
+          title: const Text("Wählen Sie den Standort aus"),
         ),
         body: ListView.builder(
           itemCount: appState.orderLocations.length,
