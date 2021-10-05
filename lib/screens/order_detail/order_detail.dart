@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:demo/models/product.dart';
 import 'package:demo/models/order.dart';
+import 'package:demo/models/product_image.dart';
 import 'package:demo/screens/barcode_scanner/barcode_scanner.dart';
 import 'package:demo/screens/order_detail/barcode_form.dart';
 import 'package:demo/screens/order_list/order_list.dart';
@@ -43,15 +44,16 @@ class _OrderDetailState extends State<OrderDetail> {
               ),
               onPressed: () {
                 showDialog(
-                  context: context,
-                  builder: (BuildContext context) => SimpleDialog(
-                    title: const Text('Nummer des Barcodes eingeben'),
-                    children: [
-                      BarcodeForm(onSubmit:
-                        <ScanResult>(String barcode) => appState.scanProduct(widget.id, barcode))
-                    ]));
+                    context: context,
+                    builder: (BuildContext context) => SimpleDialog(
+                            title: const Text('Nummer des Barcodes eingeben'),
+                            children: [
+                              BarcodeForm(
+                                  onSubmit: <ScanResult>(String barcode) =>
+                                      appState.scanProduct(widget.id, barcode))
+                            ]));
               },
-            )            
+            )
           ],
         ),
         body: _productListWithScanner(order, appState.scanProduct),
@@ -93,16 +95,16 @@ class _OrderDetailState extends State<OrderDetail> {
                           color: counterColor[product.status])),
                   leading: productImage != null
                       ? ImageFullScreenWrapperWidget(
-                        child: CachedNetworkImage(
-                          width: 50,
-                          height: 50,
-                          placeholder: (context, url) =>
-                              const CircularProgressIndicator(),
-                          imageUrl: productImage.src
-                              .replaceAll(".jpg", "_300x300.jpg"),
-                        ),
-                        dark: false
-                      ): null,
+                          child: CachedNetworkImage(
+                            width: 50,
+                            height: 50,
+                            placeholder: (context, url) =>
+                                const CircularProgressIndicator(),
+                            imageUrl: productImage.src
+                                .replaceAll(".jpg", "_300x300.jpg"),
+                          ),
+                          dark: false)
+                      : null,
                 ))),
         secondaryActions: <Widget>[
           if (product.status != ProductStatus.complete)
@@ -168,39 +170,43 @@ class _OrderDetailState extends State<OrderDetail> {
                       style: TextStyle(fontWeight: FontWeight.bold)),
                   OutlinedButton(
                     onPressed: () async {
-                      Timer timer = Timer(const Duration(milliseconds: 3000), () {
+                      Timer timer =
+                          Timer(const Duration(milliseconds: 3000), () {
                         Navigator.of(context, rootNavigator: true).pop();
                         Navigator.of(context).pushNamedAndRemoveUntil(
-                          OrderList.routeName, (Route<dynamic> route) => false);
+                            OrderList.routeName,
+                            (Route<dynamic> route) => false);
                       });
                       showDialog(
                         context: context,
                         barrierDismissible: false,
                         builder: (BuildContext context) => AlertDialog(
                           content: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: const [
-                            Text('Alles ist gepackt', style: TextStyle(fontSize: 20)),
-                            Icon(
-                              Icons.check_outlined,
-                              color: Colors.green,
-                              size: 48.0,
-                            ),
-                            Text('Gut gemacht!')
-                          ]),
+                              mainAxisSize: MainAxisSize.min,
+                              children: const [
+                                Text('Alles ist gepackt',
+                                    style: TextStyle(fontSize: 20)),
+                                Icon(
+                                  Icons.check_outlined,
+                                  color: Colors.green,
+                                  size: 48.0,
+                                ),
+                                Text('Gut gemacht!')
+                              ]),
                           actions: <Widget>[
                             TextButton(
                               child: const Text('Close'),
-                              onPressed: () {                                
+                              onPressed: () {
                                 Navigator.pop(context);
                                 Navigator.of(context).pushNamedAndRemoveUntil(
-                                  OrderList.routeName, (Route<dynamic> route) => false);
+                                    OrderList.routeName,
+                                    (Route<dynamic> route) => false);
                               },
                             ),
                           ],
                         ),
-                      ).then((value) {                        
-                        timer.cancel();                      
+                      ).then((value) {
+                        timer.cancel();
                       });
                       appState.updateOrderStatus(
                           widget.id, OrderStatus.complete);
@@ -209,14 +215,27 @@ class _OrderDetailState extends State<OrderDetail> {
                   )
                 ],
               )),
-        Expanded(child: _productList(order, ProductStatus.available)),
+        Expanded(
+            child: _productList(
+                order, ProductStatus.available, appState.productImages)),
       ]);
     });
   }
 
-  Widget _productList(Order order, ProductStatus status) {
-    List<int> productIds = order.productIds
-        .toList(growable: false)
+  Widget _productList(Order order, ProductStatus status,
+      Map<String, ProductImage> productImages) {
+    List<int> productIds = order.productIds.toList(growable: false)
+      ..sort((prevId, nextId) {
+        String productTypeA =
+            productImages['${order.products['$prevId']?.productId}']
+                    ?.productType ??
+                '';
+        String productTypeB =
+            productImages['${order.products['$nextId']?.productId}']
+                    ?.productType ??
+                '';
+        return productTypeA.compareTo(productTypeB);
+      })
       ..sort((prevId, nextId) => order.products['$prevId']!.status
           .toString()
           .compareTo(order.products['$nextId']!.status.toString()));
