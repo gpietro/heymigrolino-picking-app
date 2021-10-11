@@ -15,10 +15,10 @@ For help getting started with Flutter, view our
 [online documentation](https://flutter.dev/docs), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
 
-
-## Build image
-`flutter build apk --split-per-abi`
-
 ## Run dev & prod
 `flutter run --flavor dev -t lib/main.dart`
 `flutter run --flavor prod -t lib/main_prod.dart`
+
+## Build apk image dev & prod
+`flutter build apk --release --flavor dev -t lib/main.dart --split-per-abi`
+`flutter build apk --release --flavor prod -t lib/main_prod.dart --split-per-abi`
