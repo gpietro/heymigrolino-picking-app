@@ -13,10 +13,10 @@ void main() async {
   await ScanditFlutterDataCaptureBarcode.initialize();
   runApp(
     MultiProvider(providers: [
-      Provider<Flavor>.value(value: Flavor.dev),
-      ChangeNotifierProvider(
-        create: (context) => ApplicationState(),
-        child: const AppRouter(),
+      Provider<Flavor>.value(value: Flavor.prod),
+      ChangeNotifierProvider<ApplicationState>(
+        create: (context) => ApplicationState(),        
       )
-    ]));
+    ],
+    child: const AppRouter()));
 }

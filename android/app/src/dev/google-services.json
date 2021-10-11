@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1059525151459",
+    "project_id": "stork-picking-app",
+    "storage_bucket": "stork-picking-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1059525151459:android:aec4037876c0df72d0d3d6",
+        "android_client_info": {
+          "package_name": "ch.stork.picking_app.dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1059525151459-a5manjuuhk3phsciheb7e5boclsh6nnk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBwKI6m6l--wFJehKta4g6cE4yPMBzqDDc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1059525151459-a5manjuuhk3phsciheb7e5boclsh6nnk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
