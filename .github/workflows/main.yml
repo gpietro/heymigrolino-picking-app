@@ -1,0 +1,39 @@
+on: push
+name: Test, Build and Release apk
+jobs:
+  build:
+    name: Build APK
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - uses: actions/setup-java@v1
+      with:
+        java-version: '12.x'
+    - uses: subosito/flutter-action@v1
+      with:
+        flutter-version: '2.5.1'
+    - name: analyze
+      run: flutter analyze
+      continue-on-error: true
+    - name: get packages
+      run: flutter pub get
+    - name: run smoke tests
+      run: flutter test
+    - name: build
+      run: flutter build apk --flavor dev -t lib/main.dart --split-per-abi
+      #todo change flavor dev to branch name?
+      # artifact: build/app/outputs/flutter-apk/app-armeabi-v7a-dev-release.apk
+    - name: build release 
+      run: ./gradlew assembleRelease
+    - name: Set up Cloud SDK
+      uses: google-github-actions/setup-gcloud@master
+      with:
+        project_id: ${{ secrets.GCP_PROJECT_ID_DEV }}
+        service_account_key: ${{ secrets.GCP_SA_KEY_DEV }}
+        export_default_credentials: true
+    - name: upload artifact to Firebase App Distribution
+      uses: wzieba/Firebase-Distribution-Github-Action@v1
+      with:
+        appId: app_from_github_actions
+        groups: testers
+        file: build/app/outputs/flutter-apk/*.apk
