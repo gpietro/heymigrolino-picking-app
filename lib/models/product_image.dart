@@ -6,14 +6,14 @@ class ProductImage {
       required this.src,
       required this.height,
       required this.width,
-      required this.barcode,
+      required this.barcodes,
       required this.productType});
 
   String alt;
   String src;
   int height;
   int width;
-  String barcode;
+  List<int> barcodes;
   String productType;
 
   factory ProductImage.fromJson(Map<String, dynamic> json) => ProductImage(
@@ -21,7 +21,7 @@ class ProductImage {
       src: json["src"],
       height: json["height"],
       width: json['width'],
-      barcode: json['barcode'],
+      barcodes: List<int>.from(json["barcode"].map((x) => x)),
       productType: json['productType'] ?? "");
 
   Map<String, dynamic> toJson() => {
@@ -29,13 +29,13 @@ class ProductImage {
         "src": src,
         "height": height,
         "width": width,
-        "barcode": barcode,
+        "barcode": List<dynamic>.from(barcodes.map((x) => x)),
         "productType": productType,
       };
 
   Barcode? getBarcode() {
     Barcode? result;
-    switch (barcode.length) {
+    switch (barcodes.first.toString().length) {
       case 14:
         result = Barcode.itf14();
         break;

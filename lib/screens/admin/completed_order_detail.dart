@@ -78,7 +78,7 @@ class _CompletedOrderDetailState extends State<CompletedOrderDetail> {
                         ),
                       BarcodeWidget(
                           barcode: productImage!.getBarcode()!,
-                          data: productImage.barcode,
+                          data: productImage.barcodes.first.toString(),
                           width: 160,
                           style: const TextStyle(fontSize: 10))
                     ],

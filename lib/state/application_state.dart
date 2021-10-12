@@ -88,7 +88,7 @@ class ApplicationState extends ChangeNotifier {
     _activeOrders[docId]!.products.forEach((_, product) {
       var productImage = _productImages['${product.productId}'];
       if (productImage != null &&
-          productImage.barcode == barcode &&
+          productImage.barcodes.contains(int.parse(barcode)) &&
           product.status == ProductStatus.available) {
         scannedProduct = product;
       }
