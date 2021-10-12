@@ -61,9 +61,18 @@ class _OrderDetailState extends State<OrderDetail> {
     });
   }
 
-  Widget _itemBuilder(BuildContext context, Product product) {
+  Widget _itemBuilder(
+      BuildContext context, int index, Order order, List<int> productIds) {
     return Consumer<ApplicationState>(builder: (context, appState, _) {
+      Product product = order.products['${productIds[index]}']!;
       var productImage = appState.productImages['${product.productId}'];
+      var previousType = '';
+      Product? previousProduct;
+      if (index > 0) {
+        previousProduct = order.products['${productIds[index - 1]}']!;
+        previousType =
+            appState.productImages['${previousProduct.productId}']!.productType;
+      }
       var counterColor = {
         ProductStatus.available: Colors.orange,
         ProductStatus.unavailable: Colors.grey,
@@ -75,71 +84,27 @@ class _OrderDetailState extends State<OrderDetail> {
         ProductStatus.complete: Colors.green.shade100
       };
 
-      return Slidable(
-        actionPane: const SlidableDrawerActionPane(),
-        actionExtentRatio: 0.25,
-        child: Container(
-            key: Key('product_${product.id}'),
-            child: Card(
-                color: cardColor[product.status],
-                child: ListTile(
-                  title: Text(
-                    product.name,
-                    style: const TextStyle(fontWeight: FontWeight.w500),
-                  ),
-                  subtitle: Text('${product.price} CHF'),
-                  trailing: Text('${product.scannedCount}/${product.quantity}',
-                      style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16,
-                          color: counterColor[product.status])),
-                  leading: productImage != null
-                      ? ImageFullScreenWrapperWidget(
-                          child: CachedNetworkImage(
-                            width: 50,
-                            height: 50,
-                            placeholder: (context, url) =>
-                                const CircularProgressIndicator(),
-                            imageUrl: productImage.src
-                                .replaceAll(".jpg", "_300x300.jpg"),
-                          ),
-                          dark: false)
-                      : null,
-                ))),
-        secondaryActions: <Widget>[
-          if (product.status != ProductStatus.complete)
-            IconSlideAction(
-              caption: product.status == ProductStatus.available
-                  ? 'nicht verfügbar'
-                  : 'verfügbar',
-              color: product.status == ProductStatus.available
-                  ? Colors.red
-                  : Colors.green,
-              icon: product.status == ProductStatus.available
-                  ? Icons.remove_shopping_cart_outlined
-                  : Icons.add_shopping_cart_outlined,
-              onTap: () => {
-                appState.updateProductStatus(
-                    widget.id,
-                    product,
-                    product.status == ProductStatus.available
-                        ? ProductStatus.unavailable
-                        : ProductStatus.available),
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text(
-                      '${product.status == ProductStatus.unavailable ? 'verfügbar' : 'nicht verfügbar'}: ${product.name}',
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    action: SnackBarAction(
-                        label: 'Undo',
-                        onPressed: () {
-                          appState.updateProductStatus(
-                              widget.id, product, product.status);
-                        })))
-              },
-            ),
-        ],
-      );
+      if (product.status == ProductStatus.complete && previousProduct != null && previousProduct.status != ProductStatus.complete) {
+        return Column(children: [
+          _completeHeader(),
+          _listItem(product, productImage!, cardColor, counterColor,
+              appState.updateProductStatus)
+        ]);
+      } else if (product.status == ProductStatus.unavailable && previousProduct != null && previousProduct.status != ProductStatus.unavailable) {
+        return Column(children: [
+          _unavailableHeader(),
+          _listItem(product, productImage!, cardColor, counterColor,
+              appState.updateProductStatus)
+        ]);
+      } else if (product.status == ProductStatus.available && (index == 0 || productImage!.productType != previousType)) {
+        return Column(children: [
+          _listHeader(productImage!),
+          _listItem(product, productImage, cardColor, counterColor,
+              appState.updateProductStatus)
+        ]);
+      }
+      return _listItem(product, productImage!, cardColor, counterColor,
+          appState.updateProductStatus);
     });
   }
 
@@ -242,7 +207,131 @@ class _OrderDetailState extends State<OrderDetail> {
     return ListView.builder(
         itemCount: productIds.length,
         itemBuilder: (context, index) {
-          return _itemBuilder(context, order.products['${productIds[index]}']!);
+          return _itemBuilder(context, index, order, productIds);
         });
+  }
+
+  Widget _completeHeader() {
+    return SizedBox(
+        width: double.infinity,
+        child: Card(
+          margin: const EdgeInsets.all(0),
+          color: Colors.green.shade200,
+          child: Padding(
+              padding: const EdgeInsets.only(
+                  left: 15.0, top: 5.0, bottom: 5.0, right: 15.0),
+              child: Text("Collected products",
+                  style: TextStyle(
+                    color: Colors.green.shade700,
+                    fontWeight: FontWeight.bold,
+                  ))),
+        ));
+  }
+
+  Widget _unavailableHeader() {
+    return SizedBox(
+        width: double.infinity,
+        child: Card(
+          margin: const EdgeInsets.all(0),
+          color: Colors.grey.shade200,
+          child: Padding(
+              padding: const EdgeInsets.only(
+                  left: 15.0, top: 5.0, bottom: 5.0, right: 15.0),
+              child: Text("Unavailable products",
+                  style: TextStyle(
+                    color: Colors.grey.shade700,
+                    fontWeight: FontWeight.bold,
+                  ))),
+        ));
+  }
+  
+  Widget _listHeader(ProductImage productImage) {
+    return SizedBox(
+        width: double.infinity,
+        child: Card(
+          margin: const EdgeInsets.all(0),
+          color: Colors.grey.shade200,
+          child: Padding(
+              padding: const EdgeInsets.only(
+                  left: 15.0, top: 5.0, bottom: 5.0, right: 15.0),
+              child: Text(productImage.productType.split('. ').last,
+                  style: TextStyle(
+                    color: Colors.grey.shade700,
+                    fontWeight: FontWeight.bold,
+                  ))),
+        ));
+  }
+
+  Widget _listItem(Product product, ProductImage productImage, cardColor,
+      counterColor, updateProductStatus) {
+    return Padding(
+        padding: const EdgeInsets.only(bottom: 2.0),
+        child: Slidable(
+          actionPane: const SlidableDrawerActionPane(),
+          actionExtentRatio: 0.25,
+          child: Container(
+              key: Key('product_${product.id}'),
+              child: Card(
+                  margin: const EdgeInsets.all(0),
+                  color: cardColor[product.status],
+                  child: ListTile(
+                    title: Text(
+                      product.name,
+                      style: const TextStyle(fontWeight: FontWeight.w500),
+                    ),
+                    subtitle: Text('${product.price} CHF'),
+                    trailing: Text(
+                        '${product.scannedCount}/${product.quantity}',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 20,
+                            color: counterColor[product.status])),
+                    leading: productImage != null
+                        ? ImageFullScreenWrapperWidget(
+                            child: CachedNetworkImage(
+                              width: 50,
+                              height: 50,
+                              placeholder: (context, url) =>
+                                  const CircularProgressIndicator(),
+                              imageUrl: productImage.src
+                                  .replaceAll(".jpg", "_300x300.jpg"),
+                            ),
+                            dark: false)
+                        : null,
+                  ))),
+          secondaryActions: <Widget>[
+            if (product.status != ProductStatus.complete)
+              IconSlideAction(
+                caption: product.status == ProductStatus.available
+                    ? 'nicht verfügbar'
+                    : 'verfügbar',
+                color: product.status == ProductStatus.available
+                    ? Colors.red
+                    : Colors.green,
+                icon: product.status == ProductStatus.available
+                    ? Icons.remove_shopping_cart_outlined
+                    : Icons.add_shopping_cart_outlined,
+                onTap: () => {
+                  updateProductStatus(
+                      widget.id,
+                      product,
+                      product.status == ProductStatus.available
+                          ? ProductStatus.unavailable
+                          : ProductStatus.available),
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text(
+                        '${product.status == ProductStatus.unavailable ? 'verfügbar' : 'nicht verfügbar'}: ${product.name}',
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      action: SnackBarAction(
+                          label: 'Undo',
+                          onPressed: () {
+                            updateProductStatus(
+                                widget.id, product, product.status);
+                          })))
+                },
+              ),
+          ],
+        ));
   }
 }
