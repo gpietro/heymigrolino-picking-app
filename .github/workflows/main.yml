@@ -19,9 +19,6 @@ jobs:
       continue-on-error: true
     - name: get packages
       run: flutter pub get
-    - name: run smoke tests
-      run: flutter test
-      continue-on-error: true
     - name: build
       run: flutter build apk --flavor dev -t lib/main.dart --split-per-abi
       #todo change flavor dev to branch name?
