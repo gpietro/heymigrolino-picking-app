@@ -34,4 +34,4 @@ jobs:
       with:
         appId: app_from_github_actions
         groups: testers
-        file: build/app/outputs/flutter-apk/*.apk
+        file: build/app/outputs/flutter-apk/app-armeabi-v7a-dev-release.apk
