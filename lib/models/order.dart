@@ -13,6 +13,7 @@ class Order {
     required this.id,
     required this.currency,
     required this.orderNumber,
+    required this.customerName,
     required this.tags,
     required this.totalPrice,
     required this.locationId,
@@ -26,6 +27,7 @@ class Order {
   int id;
   String currency;
   int orderNumber;
+  String? customerName;
   String tags;
   String totalPrice;
   int locationId;
@@ -39,6 +41,7 @@ class Order {
         id: json["id"],
         currency: json["currency"],
         orderNumber: json["orderNumber"],
+        customerName: json["customerName"],
         tags: json["tags"],
         totalPrice: json["totalPrice"],
         locationId: json["locationId"],
@@ -54,6 +57,7 @@ class Order {
         "id": id,
         "currency": currency,
         "orderNumber": orderNumber,
+        "customerName": customerName,
         "tags": tags,
         "totalPrice": totalPrice,
         "locationId": locationId,

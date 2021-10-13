@@ -27,7 +27,7 @@ Widget _itemBuilder(BuildContext context, Order order, String docId) {
       key: Key('order_list_item_${order.id}'),
       child: Card(
           child: ListTile(
-              title: Text('Bestellnummer ${order.orderNumber}'),
+              title: Text('Bestellnummer ${order.orderNumber} - ${order.customerName ?? '...'}'),
               subtitle: Text(
                   '${order.createdTime()} - ${order.products.length} Produkte (${order.totalPrice} ${order.currency})'))));
 }
