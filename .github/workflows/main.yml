@@ -35,3 +35,4 @@ jobs:
         appId: ch.stork.picking_app.dev
         groups: testers
         file: build/app/outputs/flutter-apk/app-armeabi-v7a-dev-release.apk
+        debug: true
