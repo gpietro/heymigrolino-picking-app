@@ -55,13 +55,13 @@ android {
             dimension "flavor-type"
             applicationId "ch.stork.picking_app.dev"
             versionCode 1
-            versionName "1.0"
+            versionName "1.0.1"
         }
         prod {
             dimension "flavor-type"
             applicationId "ch.stork.picking_app.prod"            
             versionCode 1
-            versionName "1.0"
+            versionName "1.0.1"
         }
     }
 
@@ -80,4 +80,6 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation platform('com.google.firebase:firebase-bom:28.4.2')
+    implementation 'com.google.firebase:firebase-analytics'
 }
