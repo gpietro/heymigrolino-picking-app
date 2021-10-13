@@ -12,13 +12,16 @@ jobs:
     - uses: subosito/flutter-action@v1
       with:
         flutter-version: '2.5.1'
+    - name: create dotenv file
+      run: printf SCANDIT_LICENSE_KEY=%s\\n ${{ secrets.SCANDIT_LICENSE_KEY }} > .env
     - name: analyze
       run: flutter analyze
       continue-on-error: true
     - name: get packages
       run: flutter pub get
-    # - name: run smoke tests
-    #   run: flutter test
+    - name: run smoke tests
+      run: flutter test
+      continue-on-error: true
     - name: build
       run: flutter build apk --flavor dev -t lib/main.dart --split-per-abi
       #todo change flavor dev to branch name?
@@ -31,8 +34,6 @@ jobs:
         project_id: ${{ secrets.GCP_PROJECT_ID_DEV }}
         service_account_key: ${{ secrets.GCP_SA_KEY_DEV }}
         export_default_credentials: true
-    - name: create dotenv file
-      run: printf SCANDIT_LICENSE_KEY=%s\\n ${{ secrets.SCANDIT_LICENSE_KEY }} > .env
     - name: upload artifact to Firebase App Distribution
       uses: wzieba/Firebase-Distribution-Github-Action@v1
       with:
