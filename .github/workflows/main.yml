@@ -1,4 +1,7 @@
-on: push
+on:
+  create:
+    tags:
+      - v*
 name: Test, Build and Release apk
 jobs:
   build:
@@ -35,4 +38,5 @@ jobs:
         appId: 1:1059525151459:android:aec4037876c0df72d0d3d6
         groups: jakub
         file: build/app/outputs/flutter-apk/app-armeabi-v7a-dev-release.apk
+        releaseNotesFile: release_notes.txt
         debug: true
