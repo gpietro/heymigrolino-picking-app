@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:demo/models/product.dart';
 import 'package:demo/models/order.dart';
 import 'package:demo/models/product_image.dart';
-import 'package:demo/screens/barcode_scanner/barcode_scanner.dart';
+import 'package:demo/widgets/barcode_scanner.dart';
 import 'package:demo/screens/order_detail/barcode_form.dart';
 import 'package:demo/screens/order_list/order_list.dart';
 import 'package:demo/state/application_state.dart';

@@ -1,5 +1,5 @@
-import 'package:demo/screens/admin/completed_order_detail.dart';
-import 'package:demo/screens/admin/completed_order_detail_arguments.dart';
+import 'package:demo/screens/completed_order_detail/completed_order_detail.dart';
+import 'package:demo/screens/completed_order_detail/completed_order_detail_arguments.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:demo/screens/order_detail/order_detail_arguments.dart';

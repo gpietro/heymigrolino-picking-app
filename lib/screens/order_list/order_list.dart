@@ -1,5 +1,5 @@
 import 'package:demo/models/order.dart';
-import 'package:demo/screens/admin/completed_order_list.dart';
+import 'package:demo/screens/completed_order_list/completed_order_list.dart';
 import 'package:demo/screens/order_detail/order_detail.dart';
 import 'package:demo/screens/order_detail/order_detail_arguments.dart';
 import 'package:demo/state/application_state.dart';
