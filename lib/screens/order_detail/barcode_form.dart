@@ -61,7 +61,7 @@ class BarcodeFormState extends State<BarcodeForm> {
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: const Text('CANCEL'),
+                child: const Text('ZÜRUCK'),
               ),
               TextButton(
                 onPressed: () async {

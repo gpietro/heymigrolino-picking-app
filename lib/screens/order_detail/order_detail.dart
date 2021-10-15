@@ -220,7 +220,7 @@ class _OrderDetailState extends State<OrderDetail> {
           child: Padding(
               padding: const EdgeInsets.only(
                   left: 15.0, top: 5.0, bottom: 5.0, right: 15.0),
-              child: Text("Collected products",
+              child: Text("Eingekaufte Produkte",
                   style: TextStyle(
                     color: Colors.green.shade700,
                     fontWeight: FontWeight.bold,
@@ -237,7 +237,7 @@ class _OrderDetailState extends State<OrderDetail> {
           child: Padding(
               padding: const EdgeInsets.only(
                   left: 15.0, top: 5.0, bottom: 5.0, right: 15.0),
-              child: Text("Unavailable products",
+              child: Text("Nicht verfügbare Produkte",
                   style: TextStyle(
                     color: Colors.grey.shade700,
                     fontWeight: FontWeight.bold,
