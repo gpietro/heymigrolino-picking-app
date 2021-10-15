@@ -319,16 +319,13 @@ class _OrderDetailState extends State<OrderDetail> {
                           ? ProductStatus.unavailable
                           : ProductStatus.available),
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text(
+                    duration: const Duration(seconds: 1),
+                    content: Text(
                         '${product.status == ProductStatus.unavailable ? 'verfügbar' : 'nicht verfügbar'}: ${product.name}',
                         overflow: TextOverflow.ellipsis,
-                      ),
-                      action: SnackBarAction(
-                          label: 'Undo',
-                          onPressed: () {
-                            updateProductStatus(
-                                widget.id, product, product.status);
-                          })))
+                      )
+                    )
+                  )
                 },
               ),
           ],
