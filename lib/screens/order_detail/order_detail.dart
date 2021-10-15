@@ -3,9 +3,10 @@ import 'dart:async';
 import 'package:demo/models/product.dart';
 import 'package:demo/models/order.dart';
 import 'package:demo/models/product_image.dart';
+import 'package:demo/screens/bags_selection/bags_selection.dart';
+import 'package:demo/screens/bags_selection/bags_selection_arguments.dart';
 import 'package:demo/widgets/barcode_scanner.dart';
 import 'package:demo/screens/order_detail/barcode_form.dart';
-import 'package:demo/screens/order_list/order_list.dart';
 import 'package:demo/state/application_state.dart';
 import 'package:demo/widgets/image_full_screen_wrapper_widget.dart';
 import 'package:flutter/material.dart';
@@ -135,46 +136,8 @@ class _OrderDetailState extends State<OrderDetail> {
                       style: TextStyle(fontWeight: FontWeight.bold)),
                   OutlinedButton(
                     onPressed: () async {
-                      Timer timer =
-                          Timer(const Duration(milliseconds: 3000), () {
-                        Navigator.of(context, rootNavigator: true).pop();
-                        Navigator.of(context).pushNamedAndRemoveUntil(
-                            OrderList.routeName,
-                            (Route<dynamic> route) => false);
-                      });
-                      showDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (BuildContext context) => AlertDialog(
-                          content: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: const [
-                                Text('Alles ist gepackt',
-                                    style: TextStyle(fontSize: 20)),
-                                Icon(
-                                  Icons.check_outlined,
-                                  color: Colors.green,
-                                  size: 48.0,
-                                ),
-                                Text('Gut gemacht!')
-                              ]),
-                          actions: <Widget>[
-                            TextButton(
-                              child: const Text('Close'),
-                              onPressed: () {
-                                Navigator.pop(context);
-                                Navigator.of(context).pushNamedAndRemoveUntil(
-                                    OrderList.routeName,
-                                    (Route<dynamic> route) => false);
-                              },
-                            ),
-                          ],
-                        ),
-                      ).then((value) {
-                        timer.cancel();
-                      });
-                      appState.updateOrderStatus(
-                          widget.id, OrderStatus.complete);
+                      Navigator.pushNamed(context, BagsSelection.routeName,
+                        arguments: BagsSelectionArguments(widget.id, order.locationId));                     
                     },
                     child: const Text('Zur Kasse'),
                   )

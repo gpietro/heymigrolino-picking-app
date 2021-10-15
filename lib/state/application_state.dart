@@ -134,6 +134,18 @@ class ApplicationState extends ChangeNotifier {
         .update({'status': status.toString()});
   }
 
+  Future<void> updateOrderBags(String docId, int orderNumber, int locationId,
+      int counterBags, int counterFBags) {
+    return FirebaseFirestore.instance.collection('order-bags')
+      .doc(orderNumber.toString())
+      .set({
+        'orderNumber': orderNumber,
+        'locationId': locationId,
+        'bags': counterBags,
+        'frozenBags': counterFBags
+      });
+  }
+
   Future<void> incrementScannedCounter(String docId, Product product) async {
     return FirebaseFirestore.instance.collection('orders').doc(docId).update(
         {'products.${product.id}.scannedCount': FieldValue.increment(1)});
