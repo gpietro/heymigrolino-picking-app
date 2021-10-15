@@ -11,6 +11,21 @@ import 'package:wakelock/wakelock.dart';
 
 enum ScanResult { ok, full, error }
 
+bool matchProduct(ProductImage? productImage, Product product, String barcode) {
+  if (productImage == null) {
+    return false;
+  }
+  var barcodes = productImage.barcodes.map((barcode) => barcode.toString());
+  if (productImage.isWeighted) {
+    barcodes = barcodes.map((barcode) => barcode.substring(0, 7));
+    barcode = barcode.substring(0, 7);
+  }
+  if (barcodes.contains(barcode)) {
+    return true;
+  }
+  return false;
+}
+
 class ApplicationState extends ChangeNotifier {
   ApplicationState() {
     init();
@@ -87,9 +102,7 @@ class ApplicationState extends ChangeNotifier {
     Product? scannedProduct;
     _activeOrders[docId]!.products.forEach((_, product) {
       var productImage = _productImages['${product.productId}'];
-      if (productImage != null &&
-          productImage.barcodes.contains(int.parse(barcode)) &&
-          product.status == ProductStatus.available) {
+      if (matchProduct(productImage, product, barcode)) {
         scannedProduct = product;
       }
     });

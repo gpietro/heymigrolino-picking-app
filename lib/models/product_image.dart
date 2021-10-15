@@ -7,6 +7,7 @@ class ProductImage {
       required this.height,
       required this.width,
       required this.barcodes,
+      required this.isWeighted,
       required this.productType});
 
   String alt;
@@ -14,6 +15,7 @@ class ProductImage {
   int height;
   int width;
   List<int> barcodes;
+  bool isWeighted;
   String productType;
 
   factory ProductImage.fromJson(Map<String, dynamic> json) => ProductImage(
@@ -22,6 +24,7 @@ class ProductImage {
       height: json["height"],
       width: json['width'],
       barcodes: List<int>.from(json["barcode"].map((x) => x)),
+      isWeighted: json['isWeighted'] ?? false,
       productType: json['productType'] ?? "");
 
   Map<String, dynamic> toJson() => {
@@ -30,6 +33,7 @@ class ProductImage {
         "height": height,
         "width": width,
         "barcode": List<dynamic>.from(barcodes.map((x) => x)),
+        "isWeighted": isWeighted,
         "productType": productType,
       };
 
