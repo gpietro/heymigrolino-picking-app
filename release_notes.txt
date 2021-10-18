@@ -1,1 +1,1 @@
-- Fixed Automatic deployment
+Test release notes description

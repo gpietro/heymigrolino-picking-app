@@ -39,4 +39,5 @@ jobs:
       with:
         appId: 1:1059525151459:android:aec4037876c0df72d0d3d6
         groups: jakub
+	releaseNotesFile: release_notes.txt
         file: build/app/outputs/flutter-apk/app-armeabi-v7a-dev-release.apk
