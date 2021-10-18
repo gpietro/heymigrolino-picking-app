@@ -55,13 +55,11 @@ android {
             dimension "flavor-type"
             applicationId "ch.stork.picking_app.dev"
             versionCode 1
-            versionName "1.0"
         }
         prod {
             dimension "flavor-type"
             applicationId "ch.stork.picking_app.prod"            
             versionCode 1
-            versionName "1.0"
         }
     }
 
