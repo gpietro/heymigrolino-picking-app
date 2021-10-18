@@ -39,7 +39,7 @@ class BagsSelectionState extends State<BagsSelection> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('Wie viele Papiertaschen hast du gepackt?'),
+                const Text('Wie viele Papiertaschen hast du gepackt?', style: TextStyle(fontSize: 16)),
                 NumericStepButton(
                     onChange: (value) {
                       setState(() => {counterBags = value});
@@ -49,7 +49,7 @@ class BagsSelectionState extends State<BagsSelection> {
                   height: 20,
                   thickness: 1,
                 ),
-                const Text('Wie viele Tiefkühltaschen hast du gepackt?'),
+                const Text('Wie viele Tiefkühltaschen hast du gepackt?', style: TextStyle(fontSize: 16)),
                 NumericStepButton(
                     onChange: (value) {
                       setState(() => {counterFBags = value});
@@ -60,7 +60,7 @@ class BagsSelectionState extends State<BagsSelection> {
                   thickness: 1,
                 ),
                 const Text(
-                    'Nachdem die Produkte gepackt wurden, bitte das Handy an der Kasse abgeben!')
+                    'Nachdem die Produkte gepackt wurden, bitte das Handy an der Kasse abgeben!', style: TextStyle(fontSize: 16))
               ],
             )),
         floatingActionButton: FloatingActionButton(
