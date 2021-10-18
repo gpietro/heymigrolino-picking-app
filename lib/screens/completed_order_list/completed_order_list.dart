@@ -1,10 +1,9 @@
 import 'package:demo/models/order.dart';
+import 'package:demo/screens/completed_order_detail/completed_order_detail.dart';
+import 'package:demo/screens/completed_order_detail/completed_order_detail_arguments.dart';
 import 'package:demo/state/application_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import 'completed_order_detail.dart';
-import 'completed_order_detail_arguments.dart';
 
 class CompletedOrderList extends StatefulWidget {
   static const routeName = '/completed_order_list';
@@ -48,7 +47,7 @@ class CompletedOrderListState extends State<CompletedOrderList> {
         key: Key('order_list_item_${order.id}'),
         child: Card(          
           child: ListTile(
-              title: Text('Bestellnummer ${order.orderNumber}'),
+              title: Text('Bestellnummer ${order.orderNumber} - ${order.customerName ?? '...'}'),
               subtitle: Text(
                   '${order.createdTime()} - ${order.products.length} Produkte (${order.totalPrice} ${order.currency})'))));
   }

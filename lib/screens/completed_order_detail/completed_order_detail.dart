@@ -78,7 +78,7 @@ class _CompletedOrderDetailState extends State<CompletedOrderDetail> {
                         ),
                       BarcodeWidget(
                           barcode: productImage!.getBarcode()!,
-                          data: productImage.barcode,
+                          data: productImage.barcodes.first.toString(),
                           width: 160,
                           style: const TextStyle(fontSize: 10))
                     ],
@@ -139,15 +139,8 @@ class _CompletedOrderDetailState extends State<CompletedOrderDetail> {
                         ).then((value) {
                           timer.cancel();
                         });
-                        /*
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content:
-                              Text('Order #${order.orderNumber} verified!'),
-                          duration: const Duration(seconds: 2),
-                        ));
-                        */
                       },
-                      child: const Text('Bestellung abgeschlossen'),
+                      child: const Text('Bestellung abschliessen'),
                     )));
           }
           return _itemBuilder(context, order.products['${productIds[index]}']!);

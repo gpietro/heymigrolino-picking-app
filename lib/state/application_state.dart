@@ -11,6 +11,21 @@ import 'package:wakelock/wakelock.dart';
 
 enum ScanResult { ok, full, error }
 
+bool matchProduct(ProductImage? productImage, Product product, String barcode) {
+  if (productImage == null) {
+    return false;
+  }
+  var barcodes = productImage.barcodes.map((barcode) => barcode.toString());
+  if (productImage.isWeighted) {
+    barcodes = barcodes.map((barcode) => barcode.substring(0, 7));
+    barcode = barcode.substring(0, 7);
+  }
+  if (barcodes.contains(barcode)) {
+    return true;
+  }
+  return false;
+}
+
 class ApplicationState extends ChangeNotifier {
   ApplicationState() {
     init();
@@ -87,9 +102,7 @@ class ApplicationState extends ChangeNotifier {
     Product? scannedProduct;
     _activeOrders[docId]!.products.forEach((_, product) {
       var productImage = _productImages['${product.productId}'];
-      if (productImage != null &&
-          productImage.barcode == barcode &&
-          product.status == ProductStatus.available) {
+      if (matchProduct(productImage, product, barcode)) {
         scannedProduct = product;
       }
     });
@@ -119,6 +132,18 @@ class ApplicationState extends ChangeNotifier {
         .collection('orders')
         .doc(docId)
         .update({'status': status.toString()});
+  }
+
+  Future<void> updateOrderBags(String docId, int orderNumber, int locationId,
+      int counterBags, int counterFBags) {
+    return FirebaseFirestore.instance.collection('order-bags')
+      .doc(orderNumber.toString())
+      .set({
+        'orderNumber': orderNumber,
+        'locationId': locationId,
+        'bags': counterBags,
+        'frozenBags': counterFBags
+      });
   }
 
   Future<void> incrementScannedCounter(String docId, Product product) async {

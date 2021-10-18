@@ -61,14 +61,16 @@ class BarcodeFormState extends State<BarcodeForm> {
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: const Text('CANCEL'),
+                child: const Text('ZÜRUCK'),
               ),
               TextButton(
                 onPressed: () async {
                   _formKey.currentState!.save();
-                  scanResult = await widget.onSubmit(barcode);
                   // Validate returns true if the form is valid, or false otherwise.
-                  if (_formKey.currentState!.validate()) {                    
+                  if (_formKey.currentState!.validate()) {
+                    scanResult = await widget.onSubmit(barcode);
+                  }
+                  if( scanResult == ScanResult.ok) { 
                     Navigator.pop(context);
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                       content: Text('Produkt gescannt!'),

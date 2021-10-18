@@ -15,8 +15,8 @@ void main() async {
     MultiProvider(providers: [
       Provider<Flavor>.value(value: Flavor.dev),
       ChangeNotifierProvider(
-        create: (context) => ApplicationState(),
-        child: const AppRouter(),
+        create: (context) => ApplicationState(),        
       )
-    ]));
+    ],
+    child: const AppRouter()));
 }

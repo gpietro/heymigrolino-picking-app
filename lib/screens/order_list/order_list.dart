@@ -1,5 +1,5 @@
 import 'package:demo/models/order.dart';
-import 'package:demo/screens/admin/completed_order_list.dart';
+import 'package:demo/screens/completed_order_list/completed_order_list.dart';
 import 'package:demo/screens/order_detail/order_detail.dart';
 import 'package:demo/screens/order_detail/order_detail_arguments.dart';
 import 'package:demo/state/application_state.dart';
@@ -27,7 +27,7 @@ Widget _itemBuilder(BuildContext context, Order order, String docId) {
       key: Key('order_list_item_${order.id}'),
       child: Card(
           child: ListTile(
-              title: Text('Bestellnummer ${order.orderNumber}'),
+              title: Text('Bestellnummer ${order.orderNumber} - ${order.customerName ?? '...'}'),
               subtitle: Text(
                   '${order.createdTime()} - ${order.products.length} Produkte (${order.totalPrice} ${order.currency})'))));
 }
