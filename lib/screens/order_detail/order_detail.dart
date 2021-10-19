@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:demo/models/product.dart';
 import 'package:demo/models/order.dart';
 import 'package:demo/models/product_image.dart';
@@ -225,7 +223,7 @@ class _OrderDetailState extends State<OrderDetail> {
         ));
   }
 
-  Widget _listItem(Product product, ProductImage productImage, cardColor,
+  Widget _listItem(Product product, ProductImage? productImage, cardColor,
       counterColor, updateProductStatus) {
     return Padding(
         padding: const EdgeInsets.only(bottom: 2.0),
