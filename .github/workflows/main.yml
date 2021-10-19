@@ -18,17 +18,15 @@ jobs:
     - name: create dotenv file
       run: printf SCANDIT_LICENSE_KEY=%s\\n ${{ secrets.SCANDIT_LICENSE_KEY }} > .env
     - name: Set RELEASE_VERSION env variable
-      run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+      run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/v}" >> $GITHUB_ENV
     - name: analyze
       run: flutter analyze
-      continue-on-error: true
     - name: get packages
       run: flutter pub get
     - name: build
       run: flutter build apk --flavor dev -t lib/main.dart --split-per-abi --build-name=$RELEASE_VERSION
       #todo change flavor dev to branch name?
-      # artifact: build/app/outputs/flutter-apk/app-armeabi-v7a-dev-release.apk
-    - name: Set up Cloud SDK
+      # artifact: build/app/outputs/flutter-apk/app-armeabi-v7a-dev-release.apk - name: Set up Cloud SDK
       uses: google-github-actions/setup-gcloud@master
       with:
         project_id: ${{ secrets.GCP_PROJECT_ID_DEV }}
