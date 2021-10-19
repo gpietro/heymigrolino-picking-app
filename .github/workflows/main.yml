@@ -25,8 +25,7 @@ jobs:
       run: flutter pub get
     - name: build
       run: flutter build apk --flavor dev -t lib/main.dart --split-per-abi --build-name=$RELEASE_VERSION
-      #todo change flavor dev to branch name?
-      # artifact: build/app/outputs/flutter-apk/app-armeabi-v7a-dev-release.apk - name: Set up Cloud SDK
+    - name: Set up Cloud SDK
       uses: google-github-actions/setup-gcloud@master
       with:
         project_id: ${{ secrets.GCP_PROJECT_ID_DEV }}
