@@ -1,1 +1,4 @@
-Test release notes description
+- Add bags selection form
+- Others stuff
+- Testing release CI/CD
+- Etc...
