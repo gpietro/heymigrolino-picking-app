@@ -35,7 +35,7 @@ class ApplicationState extends ChangeNotifier {
   Map<String, Order> _activeOrders = {};
   Map<String, ProductImage> _productImages = {};
   List<OrderLocation> _orderLocations = [];
-  OrderLocation? _selectedLocation;
+  OrderLocation? selectedLocation;
 
   Future<void> init() async {
     await Firebase.initializeApp();
@@ -93,7 +93,7 @@ class ApplicationState extends ChangeNotifier {
       for (final document in snapshot.docs) {
         _orderLocations.add(OrderLocation.fromJson(document.data()));
       }
-      _selectedLocation = _orderLocations.first;
+      selectedLocation = _orderLocations.first;
       notifyListeners();
     });
   }
@@ -156,8 +156,4 @@ class ApplicationState extends ChangeNotifier {
   Map<String, Order> get completeOrders => _completeOrders;
   Map<String, ProductImage> get productImages => _productImages;
   List<OrderLocation> get orderLocations => _orderLocations;
-  // ignore: unnecessary_getters_setters
-  OrderLocation? get selectedLocation => _selectedLocation;
-  set selectedLocation(OrderLocation? orderLocation) =>
-      _selectedLocation = orderLocation;
 }
