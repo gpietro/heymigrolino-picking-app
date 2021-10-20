@@ -19,8 +19,9 @@ samples, guidance on mobile development, and a full API reference.
 `flutter run --flavor dev -t lib/main.dart`
 `flutter run --flavor prod -t lib/main_prod.dart`
 
-## Build apk image dev & prod
+## Build apk image dev environments
 `flutter build apk --release --flavor dev -t lib/main.dart --split-per-abi`
 `flutter build apk --release --flavor dev_gooods -t lib/main_dev_gooods.dart --split-per-abi`
-
+## Build apk image prod environments
 `flutter build apk --release --flavor prod -t lib/main_prod.dart --split-per-abi`
+`flutter build apk --release --flavor prod_gooods -t lib/main_prod_gooods.dart --split-per-abi`

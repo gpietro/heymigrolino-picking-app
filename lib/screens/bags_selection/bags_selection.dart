@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:demo/models/order.dart';
 import 'package:demo/screens/order_list/order_list.dart';

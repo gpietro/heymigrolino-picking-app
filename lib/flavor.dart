@@ -4,4 +4,4 @@
   flutter run --flavor prod -t lib/main_prod.dart
  */
 
-enum Flavor {dev, dev_gooods, prod}
+enum Flavor {dev, dev_gooods, prod, prod_gooods}
