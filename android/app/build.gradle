@@ -69,7 +69,7 @@ android {
         }
         prod_gooods {
             dimension "flavor-type"
-            applicationId "ch.stork.picking_app.prod_gooods"            
+            applicationId "ch.stork.picking_app.prod_gooods"
             versionCode 1
         }
     }
