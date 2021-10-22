@@ -55,12 +55,12 @@ jobs:
         appId: 1:1059525151459:android:aec4037876c0df72d0d3d6
         groups: beta-testers
         releaseNotesFile: release_notes.txt
-        file: build/app/outputs/flutter-apk/app-armeabi-v7a-${{ FLAVOR }}-release.apk
+        file: build/app/outputs/flutter-apk/app-armeabi-v7a-${{ env.FLAVOR }}-release.apk
 
   build_and_deploy_dev_gooods:
     needs: [test]
     env:
-      FLAVOR: dev
+      FLAVOR: dev_gooods
     name: Build APK goods
     runs-on: ubuntu-latest
     steps:
@@ -93,4 +93,4 @@ jobs:
         appId: 1:328583484960:android:77ffe982eb1d59fd528e45
         groups: beta-testers
         releaseNotesFile: release_notes.txt
-        file: build/app/outputs/flutter-apk/app-armeabi-v7a-${{ FLAVOR }}-release.apk
+        file: build/app/outputs/flutter-apk/app-armeabi-v7a-${{ env.FLAVOR }}-release.apk
