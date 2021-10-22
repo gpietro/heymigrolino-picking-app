@@ -90,4 +90,4 @@ jobs:
       with:
         appId: 1:328583484960:android:77ffe982eb1d59fd528e45
         releaseNotesFile: release_notes.txt
-        file: build/app/outputs/flutter-apk/app-armeabi-v7a-${{ FLAVOR }}-release.apk
+        file: build/app/outputs/flutter-apk/app-armeabi-v7a-${{ env.FLAVOR }}-release.apk
