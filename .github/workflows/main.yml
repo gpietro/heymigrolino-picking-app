@@ -17,8 +17,6 @@ jobs:
         flutter-version: '2.5.1'
     - name: create dotenv file
       run: printf SCANDIT_LICENSE_KEY=%s\\n ${{ secrets.SCANDIT_LICENSE_KEY }} > .env
-    - name: Set RELEASE_VERSION env variable
-      run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/v}" >> $GITHUB_ENV
     - name: analyze
       run: flutter analyze
       continue-on-error: true
@@ -37,6 +35,10 @@ jobs:
         flutter-version: '2.5.1'
     - name: get packages
       run: flutter pub get
+    - name: create dotenv file
+      run: printf SCANDIT_LICENSE_KEY=%s\\n ${{ secrets.SCANDIT_LICENSE_KEY }} > .env
+    - name: Set RELEASE_VERSION env variable
+      run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/v}" >> $GITHUB_ENV
     - name: build
       run: flutter build apk --flavor dev -t lib/main.dart --split-per-abi --build-name=$RELEASE_VERSION
     - name: Set up Cloud SDK
@@ -67,6 +69,10 @@ jobs:
         flutter-version: '2.5.1'
     - name: get packages
       run: flutter pub get
+    - name: create dotenv file
+      run: printf SCANDIT_LICENSE_KEY=%s\\n ${{ secrets.SCANDIT_LICENSE_KEY }} > .env
+    - name: Set RELEASE_VERSION env variable
+      run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/v}" >> $GITHUB_ENV
     - name: build
       run: flutter build apk --release --flavor dev_gooods -t lib/main_dev_gooods.dart --split-per-abi --build-name=$RELEASE_VERSION
     - name: Set up Cloud SDK
