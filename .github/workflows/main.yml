@@ -18,7 +18,7 @@ jobs:
     - name: create dotenv file
       run: printf SCANDIT_LICENSE_KEY=%s\\n ${{ secrets.SCANDIT_LICENSE_KEY }} > .env
     - name: analyze
-      run: flutter analyze flutter analyze --no-fatal-infos
+      run: flutter analyze --no-fatal-infos
 
   build_and_deploy_dev:
     needs: [test]
@@ -55,11 +55,11 @@ jobs:
         appId: 1:1059525151459:android:aec4037876c0df72d0d3d6
         groups: beta-testers
         releaseNotesFile: release_notes.txt
-        file: build/app/outputs/flutter-apk/app-armeabi-v7a-$FLAVOR-release.apk
+        file: build/app/outputs/flutter-apk/app-armeabi-v7a-${{ env.FLAVOR }}-release.apk
 
   build_and_deploy_dev_gooods:
     needs: [test]
-    name: Build APK
+    name: Build APK goods
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
@@ -90,4 +90,4 @@ jobs:
       with:
         appId: 1:328583484960:android:77ffe982eb1d59fd528e45
         releaseNotesFile: release_notes.txt
-        file: build/app/outputs/flutter-apk/app-armeabi-v7a-$FLAVOR-release.apk
+        file: build/app/outputs/flutter-apk/app-armeabi-v7a-${{ FLAVOR }}-release.apk
