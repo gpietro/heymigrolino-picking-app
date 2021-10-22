@@ -57,9 +57,19 @@ android {
             applicationId "ch.stork.picking_app.dev"
             versionCode 1
         }
+        dev_gooods {
+            dimension "flavor-type"
+            applicationId "ch.stork.picking_app.dev_gooods"
+            versionCode 1
+        }
         prod {
             dimension "flavor-type"
             applicationId "ch.stork.picking_app.prod"            
+            versionCode 1
+        }
+        prod_gooods {
+            dimension "flavor-type"
+            applicationId "ch.stork.picking_app.prod_gooods"
             versionCode 1
         }
     }

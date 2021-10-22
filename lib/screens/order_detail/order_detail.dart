@@ -133,9 +133,10 @@ class _OrderDetailState extends State<OrderDetail> {
                   const Text('Die Bestellung ist abgeschlossen',
                       style: TextStyle(fontWeight: FontWeight.bold)),
                   OutlinedButton(
-                    onPressed: () async {
+                    onPressed: () {
+                      ApplicationState.analytics.logEvent(name: "picking_tracking", parameters: {"action": "checkout", "orderId": widget.id, "orderNumber": order.orderNumber});
                       Navigator.pushNamed(context, BagsSelection.routeName,
-                        arguments: BagsSelectionArguments(widget.id, order.locationId));                     
+                        arguments: BagsSelectionArguments(widget.id, order.locationId));
                     },
                     child: const Text('Zur Kasse'),
                   )

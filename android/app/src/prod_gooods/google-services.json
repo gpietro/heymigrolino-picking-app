@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "285917359767",
+    "project_id": "gooods-picking-app-prod",
+    "storage_bucket": "gooods-picking-app-prod.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:285917359767:android:fb44c81bcc2b4888de43d2",
+        "android_client_info": {
+          "package_name": "ch.stork.picking_app.prod_gooods"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "285917359767-5o99gq9up4vu331mtg65fjqn8laht412.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAbSf3hLQuOL8AlIHEDGOiKwF2sRiZPy_Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "285917359767-5o99gq9up4vu331mtg65fjqn8laht412.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

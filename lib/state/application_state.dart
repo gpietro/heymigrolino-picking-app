@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:wakelock/wakelock.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 
 enum ScanResult { ok, full, error }
 
@@ -31,6 +33,9 @@ class ApplicationState extends ChangeNotifier {
     init();
   }
 
+  static FirebaseAnalytics analytics = FirebaseAnalytics();
+  static FirebaseAnalyticsObserver observer = FirebaseAnalyticsObserver(analytics: analytics);
+
   Map<String, Order> _completeOrders = {};
   Map<String, Order> _activeOrders = {};
   Map<String, ProductImage> _productImages = {};
@@ -42,7 +47,7 @@ class ApplicationState extends ChangeNotifier {
     await FirebaseAuth.instance.signInAnonymously();
     // !Does not support Firestore yet!
     // await FirebaseAppCheck.instance.activate(webRecaptchaSiteKey: 'recaptcha-v3-site-key');
-    Wakelock.enable();
+    Wakelock.enable();    
 
     // Active orders
     FirebaseFirestore.instance
@@ -155,5 +160,5 @@ class ApplicationState extends ChangeNotifier {
   Map<String, Order> get orders => _activeOrders;
   Map<String, Order> get completeOrders => _completeOrders;
   Map<String, ProductImage> get productImages => _productImages;
-  List<OrderLocation> get orderLocations => _orderLocations;
+  List<OrderLocation> get orderLocations => _orderLocations;  
 }
