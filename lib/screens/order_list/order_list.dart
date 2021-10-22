@@ -23,11 +23,21 @@ void _onTapOrder(BuildContext context, String orderId) {
 
 Widget _itemBuilder(BuildContext context, Order order, String docId) {
   return GestureDetector(
-      onTap: () => _onTapOrder(context, docId),
+      onTap: () {
+        ApplicationState.analytics.logEvent(
+            name: "picking_tracking",
+            parameters: {
+              "action": "select-order",
+              "orderId": docId,
+              "orderNumber": order.orderNumber
+            });
+        _onTapOrder(context, docId);
+      },
       key: Key('order_list_item_${order.id}'),
       child: Card(
           child: ListTile(
-              title: Text('Bestellnummer ${order.orderNumber} - ${order.customerName ?? '...'}'),
+              title: Text(
+                  'Bestellnummer ${order.orderNumber} - ${order.customerName ?? '...'}'),
               subtitle: Text(
                   '${order.createdTime()} - ${order.products.length} Produkte (${order.totalPrice} ${order.currency})'))));
 }

@@ -64,6 +64,8 @@ class BagsSelectionState extends State<BagsSelection> {
             )),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
+            var order = appState.orders[widget.id];
+            ApplicationState.analytics.logEvent(name: "picking_tracking", parameters: {"action": "bags-selection", "orderId": widget.id, "orderNumber": order?.orderNumber});
             Timer timer = Timer(const Duration(milliseconds: 3000), () {
               Navigator.of(context, rootNavigator: true).pop();
               Navigator.of(context).pushNamedAndRemoveUntil(
@@ -97,8 +99,7 @@ class BagsSelectionState extends State<BagsSelection> {
             ).then((value) {
               timer.cancel();
             });
-            appState.updateOrderStatus(widget.id, OrderStatus.complete);
-            var order = appState.orders[widget.id];
+            appState.updateOrderStatus(widget.id, OrderStatus.complete);            
             appState.updateOrderBags(widget.id, order!.orderNumber,
                 order.locationId, counterBags, counterFBags);
           },
