@@ -18,8 +18,7 @@ jobs:
     - name: create dotenv file
       run: printf SCANDIT_LICENSE_KEY=%s\\n ${{ secrets.SCANDIT_LICENSE_KEY }} > .env
     - name: analyze
-      run: flutter analyze
-      continue-on-error: true
+      run: flutter analyze flutter analyze --no-fatal-infos
 
   build_and_deploy_dev:
     needs: [test]
@@ -59,8 +58,6 @@ jobs:
         file: build/app/outputs/flutter-apk/app-armeabi-v7a-$FLAVOR-release.apk
 
   build_and_deploy_dev_gooods:
-    env:
-      FLAVOR: dev
     needs: [test]
     name: Build APK
     runs-on: ubuntu-latest
