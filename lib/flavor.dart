@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 /*
   Available commands:
   flutter run --flavor dev -t lib/main.dart
