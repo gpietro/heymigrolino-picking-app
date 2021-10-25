@@ -1,6 +1,6 @@
-# demo
+# HeyMigrolino Picking App
 
-A new Flutter project.
+Android mobile app for drivers picking products in migrolino.
 
 ## Getting Started
 
