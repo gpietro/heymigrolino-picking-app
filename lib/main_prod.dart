@@ -1,3 +1,4 @@
+import 'package:demo/app_config.dart';
 import 'package:demo/flavor.dart';
 import 'package:provider/provider.dart';
 import 'package:demo/state/application_state.dart';
@@ -11,12 +12,15 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: '.env');
   await ScanditFlutterDataCaptureBarcode.initialize();
-  runApp(
-    MultiProvider(providers: [
-      Provider<Flavor>.value(value: Flavor.prod),
-      ChangeNotifierProvider<ApplicationState>(
-        create: (context) => ApplicationState(),        
-      )
-    ],
-    child: const AppRouter()));
+  const appConfig = AppConfig(
+    appName: AppNames.heymProd,
+    verifyBarcode: 7630048356727,
+    child: AppRouter(),
+  );
+  runApp(MultiProvider(providers: [
+    Provider<Flavor>.value(value: Flavor.prod),
+    ChangeNotifierProvider<ApplicationState>(
+      create: (context) => ApplicationState(),
+    )
+  ], child: appConfig));
 }

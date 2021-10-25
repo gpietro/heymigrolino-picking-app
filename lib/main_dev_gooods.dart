@@ -1,3 +1,4 @@
+import 'package:demo/app_config.dart';
 import 'package:demo/flavor.dart';
 import 'package:provider/provider.dart';
 import 'package:demo/state/application_state.dart';
@@ -11,6 +12,11 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: '.env');
   await ScanditFlutterDataCaptureBarcode.initialize();
+  const appConfig = AppConfig(
+    appName: AppNames.gooodsDev,
+    verifyBarcode: 7630048367525,
+    child: AppRouter(),
+  );
   runApp(
     MultiProvider(providers: [
       Provider<Flavor>.value(value: Flavor.dev_gooods),
@@ -18,5 +24,5 @@ void main() async {
         create: (context) => ApplicationState(),        
       )
     ],
-    child: const AppRouter()));
+    child: appConfig));
 }
