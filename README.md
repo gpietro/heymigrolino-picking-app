@@ -4,9 +4,9 @@ Android mobile app for drivers picking products in migrolino.
 
 ## Project
 
-Tracking of the progress of tasks is done in [https://github.com/orgs/sparrow-ventures/projects/1](POC: Stork Project)
+Tracking of the progress of tasks is done in [POC: Stork Project](https://github.com/orgs/sparrow-ventures/projects/1)
 
-IaC part of the project is covered in [https://github.com/sparrow-ventures/StorkGCPTerraform](StorkGCPTerraform repo)
+IaC part of the project is covered in [StorkGCPTerraform repo](https://github.com/sparrow-ventures/StorkGCPTerraform)
 
 ## Run dev & prod
 
