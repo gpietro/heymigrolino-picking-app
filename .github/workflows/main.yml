@@ -1,8 +1,9 @@
+name: Dev env - Test, Build and Release apk
 on:
   create:
     tags:
       - v*
-name: Test, Build and Release apk
+
 jobs:
   test:
     name: Test APK
