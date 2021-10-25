@@ -45,7 +45,7 @@ jobs:
     - name: create dotenv file
       run: printf SCANDIT_LICENSE_KEY=%s\\n ${{ secrets.SCANDIT_LICENSE_KEY }} > .env
     - name: Set RELEASE_VERSION env variable
-      run: echo "RELEASE_VERSION=${TAG##*/v}" >> $GITHUB_ENV
+      run: echo "RELEASE_VERSION=${TAG#v}" >> $GITHUB_ENV
     - name: get packages
       run: flutter pub get
     - name: build
@@ -84,7 +84,7 @@ jobs:
     - name: create dotenv file
       run: printf SCANDIT_LICENSE_KEY=%s\\n ${{ secrets.SCANDIT_LICENSE_KEY }} > .env
     - name: Set RELEASE_VERSION env variable
-      run: echo "RELEASE_VERSION=${TAG##*/v}" >> $GITHUB_ENV
+      run: echo "RELEASE_VERSION=${TAG#v}" >> $GITHUB_ENV
     - name: get packages
       run: flutter pub get
     - name: build
