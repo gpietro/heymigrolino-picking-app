@@ -1,14 +1,19 @@
+name: picking-app-prod
 on:
-  create:
-    tags:
-      - v*
-name: Test, Build and Release apk
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Which tag to use (provide full tag, eg. v1.0.0-rc.5)'
+        required: true
+  
 jobs:
   test:
-    name: Test APK
+    name: Test APK prod
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
+      with:
+        ref: ${{ github.event.inputs.tag }}
     - uses: actions/setup-java@v1
       with:
         java-version: '12.x'
@@ -20,15 +25,17 @@ jobs:
     - name: analyze
       run: flutter analyze --no-fatal-infos
 
-  build_and_deploy_dev:
+  build_and_deploy_prod_gooods:
     needs: [test]
     env:
-      FLAVOR: dev
-      RELEASE_VERSION: ${GITHUB_REF#refs/*/v}
-    name: Build APK stork
+      FLAVOR: prod_gooods
+      TAG: ${{ github.event.inputs.tag }}
+    name: Build APK prod_gooods
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
+      with:
+        ref: ${{ github.event.inputs.tag }}
     - uses: actions/setup-java@v1
       with:
         java-version: '12.x'
@@ -38,7 +45,7 @@ jobs:
     - name: create dotenv file
       run: printf SCANDIT_LICENSE_KEY=%s\\n ${{ secrets.SCANDIT_LICENSE_KEY }} > .env
     - name: Set RELEASE_VERSION env variable
-      run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/v}" >> $GITHUB_ENV
+      run: echo "RELEASE_VERSION=${TAG#v}" >> $GITHUB_ENV
     - name: get packages
       run: flutter pub get
     - name: build
@@ -46,25 +53,28 @@ jobs:
     - name: Set up Cloud SDK
       uses: google-github-actions/setup-gcloud@master
       with:
-        project_id: ${{ secrets.GCP_PROJECT_ID_DEV }}
-        service_account_key: ${{ secrets.GCP_SA_KEY_DEV }}
+        project_id: gooods-picking-app-prod
+        service_account_key: ${{ secrets.GCP_SA_KEY_GOODS_PROD }}
         export_default_credentials: true
     - name: upload artifact to Firebase App Distribution
       uses: wzieba/Firebase-Distribution-Github-Action@v1
       with:
-        appId: 1:1059525151459:android:aec4037876c0df72d0d3d6
+        appId: 1:285917359767:android:fb44c81bcc2b4888de43d2
         groups: beta-testers
         releaseNotesFile: release_notes.txt
         file: build/app/outputs/flutter-apk/app-armeabi-v7a-${{ env.FLAVOR }}-release.apk
 
-  build_and_deploy_dev_gooods:
+  build_and_deploy_stork_gooods:
     needs: [test]
     env:
-      FLAVOR: dev_gooods
-    name: Build APK goods
+      FLAVOR: prod
+      TAG: ${{ github.event.inputs.tag }}
+    name: Build APK prod stork
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
+      with:
+        ref: ${{ github.event.inputs.tag }}
     - uses: actions/setup-java@v1
       with:
         java-version: '12.x'
@@ -74,9 +84,7 @@ jobs:
     - name: create dotenv file
       run: printf SCANDIT_LICENSE_KEY=%s\\n ${{ secrets.SCANDIT_LICENSE_KEY }} > .env
     - name: Set RELEASE_VERSION env variable
-      run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/v}" >> $GITHUB_ENV
-    - name: Set FLAVOR env variable
-      run: echo "FLAVOR=dev_gooods" >> $GITHUB_ENV
+      run: echo "RELEASE_VERSION=${TAG#v}" >> $GITHUB_ENV
     - name: get packages
       run: flutter pub get
     - name: build
@@ -84,13 +92,13 @@ jobs:
     - name: Set up Cloud SDK
       uses: google-github-actions/setup-gcloud@master
       with:
-        project_id: gooods-picking-app-dev
-        service_account_key: ${{ secrets.GCP_SA_KEY_DEV }}
+        project_id: gooods-picking-app-prod
+        service_account_key: ${{ secrets.GCP_SA_KEY_STORK_PROD }}
         export_default_credentials: true
     - name: upload artifact to Firebase App Distribution
       uses: wzieba/Firebase-Distribution-Github-Action@v1
       with:
-        appId: 1:328583484960:android:77ffe982eb1d59fd528e45
+        appId: 1:130278022684:android:9970ef7149132c7a5309d9
         groups: beta-testers
         releaseNotesFile: release_notes.txt
         file: build/app/outputs/flutter-apk/app-armeabi-v7a-${{ env.FLAVOR }}-release.apk
