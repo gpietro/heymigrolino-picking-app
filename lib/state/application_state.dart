@@ -13,7 +13,7 @@ import 'package:firebase_analytics/observer.dart';
 
 enum ScanResult { ok, full, error }
 
-bool matchProduct(ProductImage? productImage, Product product, String barcode) {
+bool matchProduct(ProductImage? productImage, String barcode) {
   if (productImage == null) {
     return false;
   }
@@ -28,13 +28,26 @@ bool matchProduct(ProductImage? productImage, Product product, String barcode) {
   return false;
 }
 
+productScanValidation(Order order, String docId) {
+  // Fix bug of a delay on notify the firestore change
+  order.products.forEach((key, product) {
+    if (product.scannedCount > product.quantity) {
+      FirebaseFirestore.instance.collection('orders').doc(docId).update({
+        'products.${product.id}.scannedCount': product.quantity,
+        'products.${product.id}.status': ProductStatus.complete.toString()
+      });
+    }
+  });
+}
+
 class ApplicationState extends ChangeNotifier {
   ApplicationState() {
     init();
   }
 
   static FirebaseAnalytics analytics = FirebaseAnalytics();
-  static FirebaseAnalyticsObserver observer = FirebaseAnalyticsObserver(analytics: analytics);
+  static FirebaseAnalyticsObserver observer =
+      FirebaseAnalyticsObserver(analytics: analytics);
 
   Map<String, Order> _completeOrders = {};
   Map<String, Order> _activeOrders = {};
@@ -47,7 +60,7 @@ class ApplicationState extends ChangeNotifier {
     await FirebaseAuth.instance.signInAnonymously();
     // !Does not support Firestore yet!
     // await FirebaseAppCheck.instance.activate(webRecaptchaSiteKey: 'recaptcha-v3-site-key');
-    Wakelock.enable();    
+    Wakelock.enable();
 
     // Active orders
     FirebaseFirestore.instance
@@ -58,7 +71,9 @@ class ApplicationState extends ChangeNotifier {
         .listen((snapshot) {
       _activeOrders = {};
       for (final document in snapshot.docs) {
-        _activeOrders[document.reference.id] = Order.fromJson(document.data());
+        Order order = Order.fromJson(document.data());
+        productScanValidation(order, document.reference.id);
+        _activeOrders[document.reference.id] = order;
       }
       notifyListeners();
     });
@@ -107,7 +122,7 @@ class ApplicationState extends ChangeNotifier {
     Product? scannedProduct;
     _activeOrders[docId]!.products.forEach((_, product) {
       var productImage = _productImages['${product.productId}'];
-      if (matchProduct(productImage, product, barcode)) {
+      if (matchProduct(productImage, barcode)) {
         scannedProduct = product;
       }
     });
@@ -141,14 +156,15 @@ class ApplicationState extends ChangeNotifier {
 
   Future<void> updateOrderBags(String docId, int orderNumber, int locationId,
       int counterBags, int counterFBags) {
-    return FirebaseFirestore.instance.collection('order-bags')
-      .doc(orderNumber.toString())
-      .set({
-        'orderNumber': orderNumber,
-        'locationId': locationId,
-        'bags': counterBags,
-        'frozenBags': counterFBags
-      });
+    return FirebaseFirestore.instance
+        .collection('order-bags')
+        .doc(orderNumber.toString())
+        .set({
+      'orderNumber': orderNumber,
+      'locationId': locationId,
+      'bags': counterBags,
+      'frozenBags': counterFBags
+    });
   }
 
   Future<void> incrementScannedCounter(String docId, Product product) async {
@@ -160,5 +176,5 @@ class ApplicationState extends ChangeNotifier {
   Map<String, Order> get orders => _activeOrders;
   Map<String, Order> get completeOrders => _completeOrders;
   Map<String, ProductImage> get productImages => _productImages;
-  List<OrderLocation> get orderLocations => _orderLocations;  
+  List<OrderLocation> get orderLocations => _orderLocations;
 }
