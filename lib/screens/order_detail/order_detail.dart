@@ -265,10 +265,10 @@ class _OrderDetailState extends State<OrderDetail> {
             if (product.status != ProductStatus.complete)
               IconSlideAction(
                 caption: product.status == ProductStatus.available
-                    ? 'nicht verfügbar'
+                    ? 'nicht mehr verfügbar'
                     : 'verfügbar',
                 color: product.status == ProductStatus.available
-                    ? Colors.red
+                    ? Colors.orange
                     : Colors.green,
                 icon: product.status == ProductStatus.available
                     ? Icons.remove_shopping_cart_outlined
@@ -283,7 +283,7 @@ class _OrderDetailState extends State<OrderDetail> {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     duration: const Duration(seconds: 1),
                     content: Text(
-                        '${product.status == ProductStatus.unavailable ? 'verfügbar' : 'nicht verfügbar'}: ${product.name}',
+                        '${product.status == ProductStatus.unavailable ? 'verfügbar' : 'nicht mehr verfügbar'}: ${product.name}',
                         overflow: TextOverflow.ellipsis,
                       )
                     )

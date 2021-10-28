@@ -1,1 +1,1 @@
-- Gooods integration
+- Rename nicht verfügbar to nicht mehr and change color to orange
