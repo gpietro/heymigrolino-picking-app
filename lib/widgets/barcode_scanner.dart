@@ -185,15 +185,18 @@ class _BarcodeScannerState extends State<BarcodeScanner>
         ? code.rawData
         : code.data;
     ScanResult scanResult = await widget.scanProduct(widget.docId, data);
+    ApplicationState.analytics.logEvent(name: "picking_tracking", parameters: {
+      "action": "scan-product",
+      "result": scanResult.toString(),
+      "orderId": widget.docId,
+      "barcode": data
+    });
     setState(() {
       showScanMessage = scanResult;
     });
 
-    //var humanReadableSymbology =
-    //    SymbologyDescription.forSymbology(code.symbology);
-
     Future.delayed(
-        const Duration(seconds: 1),
+        const Duration(seconds: 2),
         () => {
               _barcodeCapture.isEnabled = true,
               setState(() {

@@ -1,1 +1,2 @@
-- Rename nicht verfügbar to nicht mehr and change color to orange
+- Add more tracking logs
+- Increase scan timeout to 2 seconds
