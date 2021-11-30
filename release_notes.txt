@@ -1,2 +1,1 @@
-- Add more tracking logs
-- Increase scan timeout to 2 seconds
+- Bug fixing product status not updating
