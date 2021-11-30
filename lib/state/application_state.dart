@@ -37,6 +37,11 @@ productScanValidation(Order order, String docId) {
         'products.${product.id}.status': ProductStatus.complete.toString()
       });
     }
+    if (product.scannedCount == product.quantity &&
+        product.status == ProductStatus.available) {
+      FirebaseFirestore.instance.collection('orders').doc(docId).update(
+          {'products.${product.id}.status': ProductStatus.complete.toString()});
+    }
   });
 }
 
