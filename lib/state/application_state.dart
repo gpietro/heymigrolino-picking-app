@@ -177,6 +177,13 @@ class ApplicationState extends ChangeNotifier {
         {'products.${product.id}.scannedCount': FieldValue.increment(1)});
   }
 
+  Future<void> decrementScannedCounter(String docId, Product product) async {
+    return FirebaseFirestore.instance.collection('orders').doc(docId).update({
+      'products.${product.id}.scannedCount': FieldValue.increment(-1),
+      'products.${product.id}.status': ProductStatus.available.toString()
+    });
+  }
+
   // by default: active orders
   Map<String, Order> get orders => _activeOrders;
   Map<String, Order> get completeOrders => _completeOrders;

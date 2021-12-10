@@ -83,27 +83,32 @@ class _OrderDetailState extends State<OrderDetail> {
         ProductStatus.complete: Colors.green.shade100
       };
 
-      if (product.status == ProductStatus.complete && previousProduct != null && previousProduct.status != ProductStatus.complete) {
+      if (product.status == ProductStatus.complete &&
+          previousProduct != null &&
+          previousProduct.status != ProductStatus.complete) {
         return Column(children: [
           _completeHeader(),
           _listItem(product, productImage!, cardColor, counterColor,
-              appState.updateProductStatus)
+              appState.updateProductStatus, appState.decrementScannedCounter)
         ]);
-      } else if (product.status == ProductStatus.unavailable && previousProduct != null && previousProduct.status != ProductStatus.unavailable) {
+      } else if (product.status == ProductStatus.unavailable &&
+          previousProduct != null &&
+          previousProduct.status != ProductStatus.unavailable) {
         return Column(children: [
           _unavailableHeader(),
           _listItem(product, productImage!, cardColor, counterColor,
-              appState.updateProductStatus)
+              appState.updateProductStatus, appState.decrementScannedCounter)
         ]);
-      } else if (product.status == ProductStatus.available && (index == 0 || productImage!.productType != previousType)) {
+      } else if (product.status == ProductStatus.available &&
+          (index == 0 || productImage!.productType != previousType)) {
         return Column(children: [
           _listHeader(productImage!),
           _listItem(product, productImage, cardColor, counterColor,
-              appState.updateProductStatus)
+              appState.updateProductStatus, appState.decrementScannedCounter)
         ]);
       }
       return _listItem(product, productImage!, cardColor, counterColor,
-          appState.updateProductStatus);
+          appState.updateProductStatus, appState.decrementScannedCounter);
     });
   }
 
@@ -134,9 +139,16 @@ class _OrderDetailState extends State<OrderDetail> {
                       style: TextStyle(fontWeight: FontWeight.bold)),
                   OutlinedButton(
                     onPressed: () {
-                      ApplicationState.analytics.logEvent(name: "picking_tracking", parameters: {"action": "checkout", "orderId": widget.id, "orderNumber": order.orderNumber});
+                      ApplicationState.analytics.logEvent(
+                          name: "picking_tracking",
+                          parameters: {
+                            "action": "checkout",
+                            "orderId": widget.id,
+                            "orderNumber": order.orderNumber
+                          });
                       Navigator.pushNamed(context, BagsSelection.routeName,
-                        arguments: BagsSelectionArguments(widget.id, order.locationId));
+                          arguments: BagsSelectionArguments(
+                              widget.id, order.locationId));
                     },
                     child: const Text('Zur Kasse'),
                   )
@@ -206,7 +218,7 @@ class _OrderDetailState extends State<OrderDetail> {
                   ))),
         ));
   }
-  
+
   Widget _listHeader(ProductImage productImage) {
     return SizedBox(
         width: double.infinity,
@@ -225,7 +237,7 @@ class _OrderDetailState extends State<OrderDetail> {
   }
 
   Widget _listItem(Product product, ProductImage? productImage, cardColor,
-      counterColor, updateProductStatus) {
+      counterColor, updateProductStatus, decrementScannedCounter) {
     return Padding(
         padding: const EdgeInsets.only(bottom: 2.0),
         child: Slidable(
@@ -262,35 +274,59 @@ class _OrderDetailState extends State<OrderDetail> {
                         : null,
                   ))),
           secondaryActions: <Widget>[
-            if (product.status != ProductStatus.complete)
-              IconSlideAction(
-                caption: product.status == ProductStatus.available
-                    ? 'nicht mehr verfügbar'
-                    : 'verfügbar',
-                color: product.status == ProductStatus.available
-                    ? Colors.orange
-                    : Colors.green,
-                icon: product.status == ProductStatus.available
-                    ? Icons.remove_shopping_cart_outlined
-                    : Icons.add_shopping_cart_outlined,
-                onTap: () => {
-                  updateProductStatus(
-                      widget.id,
-                      product,
-                      product.status == ProductStatus.available
-                          ? ProductStatus.unavailable
-                          : ProductStatus.available),
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    duration: const Duration(seconds: 1),
-                    content: Text(
-                        '${product.status == ProductStatus.unavailable ? 'verfügbar' : 'nicht mehr verfügbar'}: ${product.name}',
-                        overflow: TextOverflow.ellipsis,
-                      )
-                    )
-                  )
-                },
-              ),
+            _swipeAction(product, updateProductStatus, decrementScannedCounter)
           ],
         ));
+  }
+
+  Widget _swipeAction(
+      Product product, updateProductStatus, decrementScannedCounter) {
+    if (product.status == ProductStatus.available) {
+      return IconSlideAction(
+        caption: 'nicht mehr verfügbar',
+        color: Colors.orange,
+        icon: Icons.remove_shopping_cart_outlined,
+        onTap: () => {
+          updateProductStatus(widget.id, product, ProductStatus.unavailable),
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              duration: const Duration(seconds: 1),
+              content: Text(
+                'nicht mehr verfügbar: ${product.name}',
+                overflow: TextOverflow.ellipsis,
+              )))
+        },
+      );
+    }
+    if (product.status == ProductStatus.unavailable) {
+      return IconSlideAction(
+        caption: 'verfügbar',
+        color: Colors.green,
+        icon: Icons.add_shopping_cart_outlined,
+        onTap: () => {
+          updateProductStatus(widget.id, product, ProductStatus.available),
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              duration: const Duration(seconds: 1),
+              content: Text(
+                'verfügbar: ${product.name}',
+                overflow: TextOverflow.ellipsis,
+              )))
+        },
+      );
+    }
+    // else status complete
+    return IconSlideAction(
+      caption: 'Gegenstand entfernen',
+      color: Colors.orange,
+      icon: Icons.remove_shopping_cart_outlined,
+      onTap: () => {
+        decrementScannedCounter(widget.id, product),
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            duration: const Duration(seconds: 1),
+            content: Text(
+              'entfernt: ${product.name}',
+              overflow: TextOverflow.ellipsis,
+            )))
+      },
+    );
   }
 }
