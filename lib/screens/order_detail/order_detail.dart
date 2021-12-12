@@ -126,36 +126,50 @@ class _OrderDetailState extends State<OrderDetail> {
           .toList()
           .isEmpty;
       return Column(children: <Widget>[
-        SizedBox.fromSize(
-          child: Stack(children: <Widget>[Positioned(child: barcodeScanner)]),
-          size: widgets.Size(MediaQuery.of(context).size.width,
-              MediaQuery.of(context).size.height * 0.25),
-        ),
+        if (!isOrderComplete)
+          SizedBox.fromSize(
+            child: Stack(children: <Widget>[Positioned(child: barcodeScanner)]),
+            size: widgets.Size(MediaQuery.of(context).size.width,
+                MediaQuery.of(context).size.height * 0.25),
+          ),
         if (isOrderComplete)
-          Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text('Die Bestellung ist abgeschlossen',
-                      style: TextStyle(fontWeight: FontWeight.bold)),
-                  OutlinedButton(
-                    onPressed: () {
-                      ApplicationState.analytics.logEvent(
-                          name: "picking_tracking",
-                          parameters: {
-                            "action": "checkout",
-                            "orderId": widget.id,
-                            "orderNumber": order.orderNumber
-                          });
-                      Navigator.pushNamed(context, BagsSelection.routeName,
-                          arguments: BagsSelectionArguments(
-                              widget.id, order.locationId));
-                    },
-                    child: const Text('Zur Kasse'),
-                  )
-                ],
-              )),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(15),
+                child: ElevatedButton(
+                  onPressed: () {
+                    ApplicationState.analytics.logEvent(
+                        name: "picking_tracking",
+                        parameters: {
+                          "action": "checkout",
+                          "orderId": widget.id,
+                          "orderNumber": order.orderNumber
+                        });
+                    Navigator.pushNamed(context, BagsSelection.routeName,
+                        arguments: BagsSelectionArguments(
+                            widget.id, order.locationId));
+                  },
+                  child: const Text('ZUR KASSE'),
+                ),
+              ),
+              SizedBox(
+                  width: double.infinity,
+                  child: Card(
+                    margin: const EdgeInsets.all(0),
+                    color: Colors.orange.shade200,
+                    child: Padding(
+                        padding: const EdgeInsets.only(
+                            left: 15.0, top: 5.0, bottom: 5.0, right: 15.0),
+                        child: Text("Die Bestellung ist abgeschlossen",
+                            style: TextStyle(
+                              color: Colors.orange.shade700,
+                              fontWeight: FontWeight.bold,
+                            ))),
+                  ))
+            ],
+          ),
         Expanded(
             child: _productList(
                 order, ProductStatus.available, appState.productImages)),
