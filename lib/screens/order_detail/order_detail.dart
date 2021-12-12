@@ -72,43 +72,45 @@ class _OrderDetailState extends State<OrderDetail> {
         previousType =
             appState.productImages['${previousProduct.productId}']!.productType;
       }
-      var counterColor = {
-        ProductStatus.available: Colors.orange,
-        ProductStatus.unavailable: Colors.grey,
-        ProductStatus.complete: Colors.green
-      };
-
-      var cardColor = {
-        ProductStatus.unavailable: Colors.grey.shade300,
-        ProductStatus.complete: Colors.green.shade100
-      };
 
       if (product.status == ProductStatus.complete &&
           previousProduct != null &&
           previousProduct.status != ProductStatus.complete) {
         return Column(children: [
           _completeHeader(),
-          _listItem(product, productImage!, cardColor, counterColor,
-              appState.updateProductStatus, appState.decrementScannedCounter)
+          _listItem(
+              product,
+              productImage!,
+              appState.updateProductStatus,
+              appState.incrementScannedCounter,
+              appState.decrementScannedCounter)
         ]);
       } else if (product.status == ProductStatus.unavailable &&
           previousProduct != null &&
           previousProduct.status != ProductStatus.unavailable) {
         return Column(children: [
           _unavailableHeader(),
-          _listItem(product, productImage!, cardColor, counterColor,
-              appState.updateProductStatus, appState.decrementScannedCounter)
+          _listItem(
+              product,
+              productImage!,
+              appState.updateProductStatus,
+              appState.incrementScannedCounter,
+              appState.decrementScannedCounter)
         ]);
       } else if (product.status == ProductStatus.available &&
           (index == 0 || productImage!.productType != previousType)) {
         return Column(children: [
           _listHeader(productImage!),
-          _listItem(product, productImage, cardColor, counterColor,
-              appState.updateProductStatus, appState.decrementScannedCounter)
+          _listItem(
+              product,
+              productImage,
+              appState.updateProductStatus,
+              appState.incrementScannedCounter,
+              appState.decrementScannedCounter)
         ]);
       }
-      return _listItem(product, productImage!, cardColor, counterColor,
-          appState.updateProductStatus, appState.decrementScannedCounter);
+      return _listItem(product, productImage!, appState.updateProductStatus,
+          appState.incrementScannedCounter, appState.decrementScannedCounter);
     });
   }
 
@@ -236,97 +238,176 @@ class _OrderDetailState extends State<OrderDetail> {
         ));
   }
 
-  Widget _listItem(Product product, ProductImage? productImage, cardColor,
-      counterColor, updateProductStatus, decrementScannedCounter) {
+  Widget _listItem(Product product, ProductImage? productImage,
+      updateProductStatus, incrementScannedCounter, decrementScannedCounter) {
     return Padding(
         padding: const EdgeInsets.only(bottom: 2.0),
         child: Slidable(
           actionPane: const SlidableDrawerActionPane(),
           actionExtentRatio: 0.25,
-          child: Container(
-              key: Key('product_${product.id}'),
-              child: Card(
-                  margin: const EdgeInsets.all(0),
-                  color: cardColor[product.status],
-                  child: ListTile(
-                    title: Text(
-                      product.name,
-                      style: const TextStyle(fontWeight: FontWeight.w500),
-                    ),
-                    subtitle: Text('${product.price} CHF'),
-                    trailing: Text(
-                        '${product.scannedCount}/${product.quantity}',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 20,
-                            color: counterColor[product.status])),
-                    leading: productImage != null
-                        ? ImageFullScreenWrapperWidget(
-                            child: CachedNetworkImage(
-                              width: 50,
-                              height: 50,
-                              placeholder: (context, url) =>
-                                  const CircularProgressIndicator(),
-                              imageUrl: productImage.src
-                                  .replaceAll(".jpg", "_300x300.jpg"),
-                            ),
-                            dark: false)
-                        : null,
-                  ))),
-          secondaryActions: <Widget>[
-            _swipeAction(product, updateProductStatus, decrementScannedCounter)
-          ],
+          child: _productRow(product, productImage),
+          actions: _leftSwipeActions(product, incrementScannedCounter),
+          secondaryActions: _rightSwipeActions(
+              product, updateProductStatus, decrementScannedCounter),
         ));
   }
 
-  Widget _swipeAction(
+  Widget _productRow(Product product, ProductImage? productImage) {
+    var cardColor = {
+      ProductStatus.unavailable: Colors.grey.shade300,
+      ProductStatus.complete: Colors.green.shade100
+    };
+
+    var counterColor = {
+      ProductStatus.available: Colors.orange,
+      ProductStatus.unavailable: Colors.grey,
+      ProductStatus.complete: Colors.green
+    };
+
+    return Container(
+        key: Key('product_${product.id}'),
+        child: Card(
+            margin: const EdgeInsets.all(0),
+            color: cardColor[product.status],
+            child: ListTile(
+              title: Text(
+                product.name,
+                style: const TextStyle(fontWeight: FontWeight.w500),
+              ),
+              subtitle: Text('${product.price} CHF'),
+              trailing: Text('${product.scannedCount}/${product.quantity}',
+                  style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 20,
+                      color: counterColor[product.status])),
+              leading: productImage != null
+                  ? ImageFullScreenWrapperWidget(
+                      child: CachedNetworkImage(
+                        width: 50,
+                        height: 50,
+                        placeholder: (context, url) =>
+                            const CircularProgressIndicator(),
+                        imageUrl:
+                            productImage.src.replaceAll(".jpg", "_300x300.jpg"),
+                      ),
+                      dark: false)
+                  : null,
+            )));
+  }
+
+  List<Widget> _leftSwipeActions(Product product, incrementScannedCounter) {
+    if (product.status == ProductStatus.available) {
+      if (product.scannedCount > 0) {
+        return [
+          IconSlideAction(
+            caption: 'Hinzufügen',
+            color: Colors.green,
+            icon: Icons.add,
+            onTap: () => {
+              incrementScannedCounter(widget.id, product),
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  duration: const Duration(seconds: 1),
+                  content: Text(
+                    'Produkt hinzugefügt: ${product.name}',
+                    overflow: TextOverflow.ellipsis,
+                  )))
+            },
+          )
+        ];
+      }
+    }
+    return [];
+  }
+
+  List<Widget> _rightSwipeActions(
       Product product, updateProductStatus, decrementScannedCounter) {
     if (product.status == ProductStatus.available) {
-      return IconSlideAction(
-        caption: 'nicht mehr verfügbar',
-        color: Colors.orange,
-        icon: Icons.remove_shopping_cart_outlined,
-        onTap: () => {
-          updateProductStatus(widget.id, product, ProductStatus.unavailable),
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              duration: const Duration(seconds: 1),
-              content: Text(
-                'nicht mehr verfügbar: ${product.name}',
-                overflow: TextOverflow.ellipsis,
-              )))
-        },
-      );
+      if (product.scannedCount == 0) {
+        return [
+          IconSlideAction(
+            caption: 'Nicht verfügbar',
+            color: Colors.red,
+            icon: Icons.remove_shopping_cart_outlined,
+            onTap: () => {
+              updateProductStatus(
+                  widget.id, product, ProductStatus.unavailable),
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  duration: const Duration(seconds: 1),
+                  content: Text(
+                    'Nicht verfügbar: ${product.name}',
+                    overflow: TextOverflow.ellipsis,
+                  )))
+            },
+          )
+        ];
+      } else {
+        return [
+          IconSlideAction(
+            caption: 'Entfernen',
+            color: Colors.orange,
+            icon: Icons.remove,
+            onTap: () => {
+              decrementScannedCounter(widget.id, product),
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  duration: const Duration(seconds: 1),
+                  content: Text(
+                    'Entfernt: ${product.name}',
+                    overflow: TextOverflow.ellipsis,
+                  )))
+            },
+          ),
+          IconSlideAction(
+            caption: 'Fertig',
+            color: Colors.green,
+            icon: Icons.check,
+            onTap: () => {
+              updateProductStatus(
+                  widget.id, product, ProductStatus.unavailable),
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  duration: const Duration(seconds: 1),
+                  content: Text(
+                    'Produkt fertig: ${product.name}',
+                    overflow: TextOverflow.ellipsis,
+                  )))
+            },
+          )
+        ];
+      }
     }
     if (product.status == ProductStatus.unavailable) {
-      return IconSlideAction(
-        caption: 'verfügbar',
-        color: Colors.green,
-        icon: Icons.add_shopping_cart_outlined,
+      return [
+        IconSlideAction(
+          caption: 'verfügbar',
+          color: Colors.green,
+          icon: Icons.add_shopping_cart_outlined,
+          onTap: () => {
+            updateProductStatus(widget.id, product, ProductStatus.available),
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                duration: const Duration(seconds: 1),
+                content: Text(
+                  'verfügbar: ${product.name}',
+                  overflow: TextOverflow.ellipsis,
+                )))
+          },
+        )
+      ];
+    }
+    // else status complete
+    return [
+      IconSlideAction(
+        caption: 'Entfernen',
+        color: Colors.orange,
+        icon: Icons.remove,
         onTap: () => {
-          updateProductStatus(widget.id, product, ProductStatus.available),
+          decrementScannedCounter(widget.id, product),
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               duration: const Duration(seconds: 1),
               content: Text(
-                'verfügbar: ${product.name}',
+                'Entfernt: ${product.name}',
                 overflow: TextOverflow.ellipsis,
               )))
         },
-      );
-    }
-    // else status complete
-    return IconSlideAction(
-      caption: 'Gegenstand entfernen',
-      color: Colors.orange,
-      icon: Icons.remove_shopping_cart_outlined,
-      onTap: () => {
-        decrementScannedCounter(widget.id, product),
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            duration: const Duration(seconds: 1),
-            content: Text(
-              'entfernt: ${product.name}',
-              overflow: TextOverflow.ellipsis,
-            )))
-      },
-    );
+      )
+    ];
   }
 }
