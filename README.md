@@ -45,3 +45,12 @@ This application was written using Flutter, here are some additinal resourses wh
 - [Flutter Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
 - [Flutter Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
 - [Flutter online documentation](https://flutter.dev/docs)
+
+
+# Project Transfer
+
+## TODO
+- [ ] Clone github project project
+- [ ] Create new instances of Firebase with setup for: Auth, Firestore, Analytics, Webhooks...
+- [ ] Update Scandit license (ownership?)
+
