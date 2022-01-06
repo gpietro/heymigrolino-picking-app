@@ -10,19 +10,17 @@ import 'app_router.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await dotenv.load(fileName: '.env');
+  await dotenv.load(fileName: '.env.prod_gooods');
   await ScanditFlutterDataCaptureBarcode.initialize();
   const appConfig = AppConfig(
     appName: AppNames.gooodsProd,
     verifyBarcode: 7630048367525,
     child: AppRouter(),
   );
-  runApp(
-    MultiProvider(providers: [
-      Provider<Flavor>.value(value: Flavor.prod_gooods),
-      ChangeNotifierProvider(
-        create: (context) => ApplicationState(),        
-      )
-    ],
-    child: appConfig));
+  runApp(MultiProvider(providers: [
+    Provider<Flavor>.value(value: Flavor.prod_gooods),
+    ChangeNotifierProvider(
+      create: (context) => ApplicationState(),
+    )
+  ], child: appConfig));
 }
