@@ -1,1 +1,1 @@
-- Bug fixing product status not updating
+- Updated Scandit license
