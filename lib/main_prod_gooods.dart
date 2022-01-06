@@ -10,7 +10,7 @@ import 'app_router.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await dotenv.load(fileName: '.env.prod_gooods');
+  await dotenv.load(fileName: '.env');
   await ScanditFlutterDataCaptureBarcode.initialize();
   const appConfig = AppConfig(
     appName: AppNames.gooodsProd,
